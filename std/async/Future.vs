@@ -390,9 +390,8 @@ public:
     /**
      * Call the future failed completion handlers.
      */
-    private void handleFailed(Error error) {
-        for (|T| handler in completionCallbacks) 
-            handler.accept(value)
+    private void handleFailed(Error error) = for (|T| handler in completionCallbacks) {
+        handler.accept(value)
     }
 
     /**
@@ -984,21 +983,20 @@ public:
         // create a new future that is failed if the execution exceeds the specified timeout
         let future = new Future<T>()
         // create a new task that to
-        let task = new Task()
+        // fail the future if the completion did not arrive in time
+        let task = new RepeatingTask(|| {
+            future.fail(new FutureTimeoutError(timeout))
+        }, timeout)
         // proxy the completion handler to the new future and kill the timeout task
         completionCallbacks.add(|value| {
             future.complete(value)
-            task.kill()
+            task.cancel()
         })
         // proxy the error handler to the new future and kill the timeout task
         errorCallbacks.add(|error| {
             future.fail(error)
-            task.kill()
+            task.cancel()
         })
-        // fail the future if the completion did not arrive in time
-        task.delay(|| {
-            future.fail(new FutureTimeoutError(timeout))
-        }, timeout)
     }
 
     /**
@@ -1083,7 +1081,7 @@ public:
      * @see #completed()
      * @see #failed()
      */
-    bool Empty {
+    bool empty() {
         return state is Empty
     }
 
@@ -1179,74 +1177,6 @@ public:
         // mark the future as failed
         future.state = Failed(error)
         return future
-    }
-
-    /**
-     * Create a new future, that will be completed automatically on a different thread using the specified value.
-     * 
-     * Note that if the new future is completed faster, than the current one is able to append any callbacks on it,
-     * then some callbacks might be executed on the current thread.
-     * Therefore, make sure to register the callbacks to this future first.
-     * 
-     * If the result object is not a constant, consider using `#completeAsync(T||)` instead,
-     * as it does allow dynamic object creation.
-     * 
-     * # Examples
-     * ```
-     * Future<string> getBalance(string user) {
-     *     return Future.completeAsync(user)
-     * }
-     * 
-     * getBalance("test").then(|balance| {
-     *     println($"Got balance async {balance}")
-     * })
-     * ```
-     *
-     * @param result the value that is used to complete the future with
-     * @param task the executor used to complete the future on
-     * @return a new Future
-     */
-    static Future<T> completeAsync<T>(T result, Task task) {
-        // create a new empty future to complete asynchronously
-        let future = new Future<T>()
-        // complete the future using the specified task
-        task.run(|| {
-            future.complete(result)
-        })
-    }
-
-    /**
-     * Create a new future, that will be completed automatically on a different thread using the specified value.
-     * 
-     * Note that if the new future is completed faster, than the current one is able to append any callbacks on it,
-     * then some callbacks might be executed on the current thread.
-     * Therefore, make sure to register the callbacks to this future first.
-     * 
-     * If the result object is not a constant, consider using `#completeAsync(T||)` instead,
-     * as it does allow dynamic object creation.
-     * 
-     * # Examples
-     * ```
-     * Future<string> getBalance(string user) {
-     *     return Future.completeAsync(user)
-     * }
-     * 
-     * getBalance("test").then(|balance| {
-     *     println($"Got balance async {balance}")
-     * })
-     * ```
-     *
-     * @param result the value that is used to complete the future with
-     * @param task the executor used to complete the future on
-     * @return a new Future
-     */
-    static Future<T> completeAsync<T>(T || supplier, Task task) {
-        // create a new empty future to complete asynchronously
-        let future = new Future<T>()
-        // complete the future using the specified task
-        task.run(|| {
-            future.complete(supplier())
-        })
     }
 
     /**
