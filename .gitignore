@@ -34,3 +34,6 @@
 # Visual Studio Files
 /.vs
 /x64
+
+# IntelliJ IDEA
+.idea
