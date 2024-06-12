@@ -10,15 +10,23 @@ java {
 group = "org.voidlang"
 version = System.getenv("VERSION") ?: "1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
-}
+allprojects {
+    if (!project.buildFile.isFile || project == rootProject)
+        return@allprojects
 
-dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-}
+    plugins.apply("java-library")
+    plugins.apply("java")
 
-tasks.test {
-    useJUnitPlatform()
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testImplementation(platform("org.junit:junit-bom:5.10.0"))
+        testImplementation("org.junit.jupiter:junit-jupiter")
+    }
+
+    tasks.test {
+        useJUnitPlatform()
+    }
 }
