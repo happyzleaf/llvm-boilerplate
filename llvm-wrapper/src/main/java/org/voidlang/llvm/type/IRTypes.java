@@ -2,7 +2,7 @@ package org.voidlang.llvm.type;
 
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
-import org.voidlang.llvm.llvm.module.IRContext;
+import org.voidlang.llvm.module.IRContext;
 
 import static org.bytedeco.llvm.global.LLVM.*;
 

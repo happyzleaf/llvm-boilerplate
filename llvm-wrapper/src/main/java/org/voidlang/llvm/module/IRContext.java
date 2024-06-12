@@ -1,4 +1,4 @@
-package org.voidlang.llvm.llvm.module;
+package org.voidlang.llvm.module;
 
 import org.bytedeco.llvm.LLVM.LLVMContextRef;
 import org.jetbrains.annotations.NotNull;

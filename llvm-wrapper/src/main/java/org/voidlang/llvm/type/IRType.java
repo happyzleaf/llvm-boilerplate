@@ -3,7 +3,7 @@ package org.voidlang.llvm.type;
 import org.bytedeco.llvm.LLVM.LLVMTypeRef;
 
 import org.jetbrains.annotations.NotNull;
-import org.voidlang.llvm.llvm.module.IRContext;
+import org.voidlang.llvm.module.IRContext;
 
 /**
  * Represents an LLVM value type in a module context.
