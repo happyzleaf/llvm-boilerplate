@@ -27,8 +27,11 @@ allprojects {
 
         compileOnly("org.projectlombok:lombok:1.18.32")
         annotationProcessor("org.projectlombok:lombok:1.18.32")
+        testCompileOnly("org.projectlombok:lombok:1.18.32")
+        testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
 
         compileOnly("org.jetbrains:annotations:24.0.1")
+        testCompileOnly("org.jetbrains:annotations:24.0.1")
     }
 
     tasks.test {
