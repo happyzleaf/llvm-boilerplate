@@ -203,10 +203,10 @@ public enum TokenType {
     INFO,
 
     /**
-     * `FINISH` represents the end of the content.
+     * `EOF` represents the end of the content.
      * Example: {@code content finished}
      */
-    FINISH,
+    EOF,
 
     /**
      * `UNEXPECTED` represents a syntax error.
