@@ -11,4 +11,8 @@ package org.voidlang.compiler.token;
  * @param lineNumber the number of the current line being processed for the token
  */
 public record TokenMeta(int beginIndex, int endIndex, int lineIndex, int lineNumber) {
+    /**
+     * An empty token meta, used for dummy token creation.
+     */
+    public static final TokenMeta EMPTY = new TokenMeta(0, 0, 0, 0);
 }
