@@ -9,7 +9,7 @@ import static org.bytedeco.llvm.global.LLVM.*;
 /**
  * Represents a per-module LLVM context that can be used to create and manage IR values.
  *
- * @param handle The handle to the LLVM context.
+ * @param handle the handle to the LLVM context.
  */
 public record IRContext(@NotNull LLVMContextRef handle) implements Disposable {
     /**
