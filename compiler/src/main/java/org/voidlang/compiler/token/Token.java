@@ -23,6 +23,17 @@ public record Token(@NotNull TokenType type, @NotNull String value, @NotNull Tok
     }
 
     /**
+     * Indicate, whether this token has the specified type and value.
+     *
+     * @param type the type of the token
+     * @param value the value of the token
+     * @return {@code true} if the type and value matches, {@code false} otherwise
+     */
+    public boolean is(@NotNull TokenType type, @NotNull String value) {
+        return this.type == type && this.value.equals(value);
+    }
+
+    /**
      * Indicate, whether this token is not a finish token, and there are more tokens expected to be parsed.
      *
      * @return {@code true} if there are more tokens to be parsed, {@code false} otherwise
