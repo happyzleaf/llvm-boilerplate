@@ -47,4 +47,14 @@ public class MutableReferencing implements Referencing {
     public int depth() {
         return 0;
     }
+
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        return "mut ";
+    }
 }

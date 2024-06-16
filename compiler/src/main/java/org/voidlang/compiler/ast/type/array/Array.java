@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.type.Type;
+import org.voidlang.compiler.util.debug.Printable;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents a multidimensional array specifier of a {@link Type}.
@@ -24,7 +26,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class Array {
+public class Array implements Printable {
     /**
      * A placeholder for retrieving empty arrays.
      */
@@ -52,5 +54,15 @@ public class Array {
      */
     public static @NotNull Array noArray() {
         return NO_ARRAY;
+    }
+
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        return dimensions.stream().map(Dimension::print).collect(Collectors.joining());
     }
 }

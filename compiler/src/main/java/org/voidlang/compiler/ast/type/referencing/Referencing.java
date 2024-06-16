@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.type.referencing.impl.DefaultReferencing;
 import org.voidlang.compiler.ast.type.referencing.impl.MutablePointerReferencing;
 import org.voidlang.compiler.ast.type.referencing.impl.MutableReferencing;
+import org.voidlang.compiler.util.debug.Printable;
 
 /**
  * Represents an interface, that indicates, how a type should be treated as.
@@ -12,7 +13,7 @@ import org.voidlang.compiler.ast.type.referencing.impl.MutableReferencing;
  * Method {@link #pointer()} indicates, whether the underlying type should be treated as a pointer.
  * Method {@link #depth()} describes the dept of the pointer. It is {@code 0} if {@link #pointer()} is false.
  */
-public interface Referencing {
+public interface Referencing extends Printable {
     /**
      * Retrieve the type of the referencing.
      *

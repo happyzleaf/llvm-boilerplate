@@ -2,6 +2,7 @@ package org.voidlang.compiler.ast.type;
 
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.type.referencing.Referencing;
+import org.voidlang.compiler.util.debug.Printable;
 
 /**
  * Represents the base type of any elements within the Void type hierarchy.
@@ -10,7 +11,7 @@ import org.voidlang.compiler.ast.type.referencing.Referencing;
  * <p>
  * For example: `int value`, `(int, bool) tuple`, `int |T| predicate` and `MyType myType`.
  */
-public interface Type {
+public interface Type extends Printable {
     /**
      * Retrieve the referencing of the type, that describes how the type should be treated.
      *

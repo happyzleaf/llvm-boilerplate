@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.ast.type.name.primitive.PrimitiveType;
 import org.voidlang.compiler.ast.type.name.primitive.PrimitiveTypeName;
+import org.voidlang.compiler.util.debug.Printable;
 
 /**
  * Represents a full qualified name access to a {@link Type} in the Abstract Syntax Tree.
@@ -21,7 +22,7 @@ import org.voidlang.compiler.ast.type.name.primitive.PrimitiveTypeName;
  *     </li>
  * </ul>
  */
-public interface TypeName {
+public interface TypeName extends Printable {
     /**
      * Retrieve the kind of the type name access. This may be {@link TypeNameKind#PRIMITIVE},
      * {@link TypeNameKind#SINGLE}, or {@link TypeNameKind#COMPLEX}.

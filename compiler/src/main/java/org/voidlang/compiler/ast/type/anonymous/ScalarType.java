@@ -17,4 +17,13 @@ import org.voidlang.compiler.ast.type.referencing.Referencing;
 public record ScalarType(
     @NotNull Referencing referencing, @NotNull TypeName name, @NotNull Array array, @Nullable String memberName
 ) implements AnonymousType {
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        return referencing.print() + name.print() + array.print() + (memberName != null ? " " + memberName : "");
+    }
 }

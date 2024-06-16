@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.ast.type.array.Array;
 import org.voidlang.compiler.ast.type.referencing.Referencing;
+import org.voidlang.compiler.util.debug.Printable;
 
 import java.util.List;
 
@@ -20,4 +21,16 @@ public record TupleType(
     @NotNull Referencing referencing, @NotNull List<@NotNull Type> members, @NotNull Array array,
     @Nullable String memberName
 ) implements AnonymousType {
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        String children = members.stream()
+            .map(Printable::print)
+            .reduce((a, b) -> a + ", " + b).orElse("");
+        return "(" + children + ")" + array.print() + (memberName != null ? " " + memberName : "");
+    }
 }

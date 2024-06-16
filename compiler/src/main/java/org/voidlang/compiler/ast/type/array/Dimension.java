@@ -2,6 +2,7 @@ package org.voidlang.compiler.ast.type.array;
 
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.type.array.impl.ConstantDimension;
+import org.voidlang.compiler.util.debug.Printable;
 
 /**
  * Represents an array dimension that specifies the length of an array dimension level.
@@ -22,7 +23,7 @@ import org.voidlang.compiler.ast.type.array.impl.ConstantDimension;
  *     </li>
  * </ul>
  */
-public interface Dimension {
+public interface Dimension extends Printable {
     /**
      * Retrieve the type of this array dimension.
      *

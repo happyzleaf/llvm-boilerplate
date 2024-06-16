@@ -1,32 +1,34 @@
 package org.voidlang.compiler.parser;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-import org.voidlang.compiler.ast.Node;
+import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.exception.ParserException;
 import org.voidlang.compiler.token.Token;
 import org.voidlang.compiler.token.TokenType;
-import org.voidlang.compiler.token.Tokenizer;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
- * Represents a class, that utilises methods to resolve tokens from the token stream.
- * <p>
- * The implementations of the {@link ParserAlgorithm} use this class to parse a part of the token stream.
+ * Represents an abstract parser algorithm, that is used to convert a part of the token stream into a {@link T node}
+ * for the Abstract Syntax Tree.
+ *
+ * @param <T> the type of the node that is created by the parser algorithm
  */
-@RequiredArgsConstructor
-public class ParserContext {
+@Setter
+public abstract class ParserAlgorithm<T> {
     /**
-     * The list of tokens received by the {@link Tokenizer}, to be parsed to a tree of {@link Node}s.
+     * Parse the next {@link T} node from the token stream.
+     *
+     * @param parser the AST node parser
+     * @param context the token parser context
+     *
+     * @return the next {@link T} node from the token stream
      */
-    private final @NotNull List<@NotNull Token> tokens;
+    public abstract @NotNull T parse(@NotNull AstParser parser, @NotNull ParserContext context);
 
     /**
-     * The index of the currently parsed token.
+     * The parser context that is used to retrieve tokens from the token stream.
      */
-    private int cursor;
+    private @Nullable ParserContext context;
 
     /**
      * Retrieve the token at the current cursor position from the token stream.
@@ -34,7 +36,7 @@ public class ParserContext {
      * @return the token at the current cursor position, or {@code EOF} if the cursor is out of bounds
      */
     public @NotNull Token peek() {
-        return at(cursor);
+        return useContext().peek();
     }
 
     /**
@@ -43,7 +45,7 @@ public class ParserContext {
      * @return the token at the current cursor position, or {@code EOF} if the cursor is out of bounds
      */
     public @NotNull Token get() {
-        return at(cursor++);
+        return useContext().get();
     }
 
     /**
@@ -53,7 +55,7 @@ public class ParserContext {
      * @return the token at the specified index, or {@code EOF} if the index is out of bounds
      */
     public @NotNull Token at(int index) {
-        return has(index) ? tokens.get(index) : Token.of(TokenType.EOF);
+        return useContext().at(index);
     }
 
     /**
@@ -63,7 +65,7 @@ public class ParserContext {
      * @return {@code true} if the token is present, {@code false} otherwise
      */
     public boolean has(int index) {
-        return index >= 0 && index < tokens.size();
+        return useContext().has(index);
     }
 
     /**
@@ -75,10 +77,7 @@ public class ParserContext {
      * @throws ParserException if the token is not of the specified type
      */
     public @NotNull Token peek(@NotNull TokenType type) {
-        Token token = peek();
-        if (token.is(type))
-            return token;
-        throw new ParserException("Invalid token. Expected " + type + " but found " + token);
+        return useContext().peek(type);
     }
 
     /**
@@ -90,12 +89,7 @@ public class ParserContext {
      * @throws ParserException if the token is not of the specified types
      */
     public @NotNull Token peek(@NotNull TokenType @NotNull ... types) {
-        Token token = peek();
-        for (TokenType type : types) {
-            if (token.is(type))
-                return token;
-        }
-        throw new ParserException("Invalid token. Expected " + Arrays.toString(types) + " but found " + token);
+        return useContext().peek(types);
     }
 
     /**
@@ -107,10 +101,7 @@ public class ParserContext {
      * @throws ParserException if the token is not of the specified type
      */
     public @NotNull Token get(@NotNull TokenType type) {
-        Token token = get();
-        if (token.is(type))
-            return token;
-        throw new ParserException("Invalid token. Expected " + type + " but found " + token);
+        return useContext().get(type);
     }
 
     /**
@@ -123,10 +114,7 @@ public class ParserContext {
      * @throws ParserException if the token is not of the specified type and value
      */
     public @NotNull Token get(@NotNull TokenType type, @NotNull String value) {
-        Token token = get();
-        if (token.is(type, value))
-            return token;
-        throw new ParserException("Invalid token. Expected " + Token.of(type, value) + " but found " + token);
+        return useContext().get(type, value);
     }
 
     /**
@@ -138,11 +126,19 @@ public class ParserContext {
      * @throws ParserException if the token is not of the specified types
      */
     public @NotNull Token get(@NotNull TokenType @NotNull ... types) {
-        Token token = get();
-        for (TokenType type : types) {
-            if (token.is(type))
-                return token;
-        }
-        throw new ParserException("Invalid token. Expected " + Arrays.toString(types) + " but found " + token);
+        return useContext().get(types);
+    }
+
+    /**
+     * Retrieve the currently using parser context.
+     *
+     * @return the parser context implementation
+     *
+     * @throws UnsupportedOperationException if the parser context is not set
+     */
+    private @NotNull ParserContext useContext() {
+        if (context == null)
+            throw new UnsupportedOperationException("Parser context is not set");
+        return context;
     }
 }

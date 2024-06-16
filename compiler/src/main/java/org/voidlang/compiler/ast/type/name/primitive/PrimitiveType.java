@@ -88,13 +88,13 @@ public enum PrimitiveType {
     // initialize the lookup table for primitive types by their name
     static {
         for (PrimitiveType type : values())
-            BY_NAME.put(type.name, type);
+            BY_NAME.put(type.realName, type);
     }
 
     /**
      * The name of the primitive type associated with a keyword in the Void language.
      */
-    private final @NotNull String name;
+    private final @NotNull String realName;
 
     /**
      * The priority of the primitive type, that is accounted for when performing mathematical operations on
@@ -116,7 +116,7 @@ public enum PrimitiveType {
      * @param name the name of the primitive type
      * @return the primitive type associated with the name
      */
-    public @NotNull PrimitiveType of(@NotNull String name) {
+    public static @NotNull PrimitiveType of(@NotNull String name) {
         return BY_NAME.getOrDefault(name, UNKNOWN);
     }
 }

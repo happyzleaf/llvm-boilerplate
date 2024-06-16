@@ -39,4 +39,14 @@ public record MutablePointerReferencing(int depth) implements Referencing {
     public boolean pointer() {
         return true;
     }
+
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        return "ref" + "*".repeat(depth - 1) + " ";
+    }
 }

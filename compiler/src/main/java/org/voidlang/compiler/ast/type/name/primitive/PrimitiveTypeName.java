@@ -22,4 +22,14 @@ public record PrimitiveTypeName(@NotNull PrimitiveType type) implements TypeName
     public @NotNull TypeNameKind kind() {
         return TypeNameKind.PRIMITIVE;
     }
+
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        return type.realName();
+    }
 }

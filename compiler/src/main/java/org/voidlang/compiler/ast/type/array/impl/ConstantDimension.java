@@ -50,4 +50,14 @@ public record ConstantDimension(int size) implements Dimension {
     public int constantSize() {
         return size;
     }
+
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        return "[" + size + "]";
+    }
 }

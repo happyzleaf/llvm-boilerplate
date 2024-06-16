@@ -23,6 +23,20 @@ public record Token(@NotNull TokenType type, @NotNull String value, @NotNull Tok
     }
 
     /**
+     * Indicate, whether this token is of the specified types.
+     *
+     * @param types the types to compare with
+     * @return {@code true} if this token is of the specified types, {@code false} otherwise
+     */
+    public boolean is(@NotNull TokenType @NotNull ... types) {
+        for (TokenType type : types) {
+            if (is(type))
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Indicate, whether this token has the specified type and value.
      *
      * @param type the type of the token
@@ -31,6 +45,20 @@ public record Token(@NotNull TokenType type, @NotNull String value, @NotNull Tok
      */
     public boolean is(@NotNull TokenType type, @NotNull String value) {
         return this.type == type && this.value.equals(value);
+    }
+
+    /**
+     * Indicate, whether this token has any of the specified values.
+     *
+     * @param values the types to compare with
+     * @return {@code true} if this token is of the specified values, {@code false} otherwise
+     */
+    public boolean val(@NotNull String @NotNull ... values) {
+        for (String value : values) {
+            if (this.value.equals(value))
+                return true;
+        }
+        return false;
     }
 
     /**
