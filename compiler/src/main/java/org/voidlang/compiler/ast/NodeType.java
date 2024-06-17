@@ -8,6 +8,10 @@ public enum NodeType {
     STATEMENT,
     EXPRESSION,
 
+    LITERAL,
+
+    IMMUTABLE_LOCAL_DECLARE_ASSIGN,
+
     METHOD,
 
     EMPTY,
