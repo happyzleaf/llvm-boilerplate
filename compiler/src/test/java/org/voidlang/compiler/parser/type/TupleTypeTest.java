@@ -1,10 +1,11 @@
-package org.voidlang.compiler.parser;
+package org.voidlang.compiler.parser.type;
 
 import org.junit.jupiter.api.Test;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.ast.type.anonymous.ScalarType;
 import org.voidlang.compiler.ast.type.anonymous.TupleType;
 import org.voidlang.compiler.ast.type.referencing.ReferencingType;
+import org.voidlang.compiler.parser.AstParser;
 import org.voidlang.compiler.util.Parsers;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -2,6 +2,7 @@ package org.voidlang.compiler.parser;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.voidlang.compiler.ast.element.Method;
 import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
@@ -11,6 +12,7 @@ import org.voidlang.compiler.ast.type.array.Array;
 import org.voidlang.compiler.ast.type.name.TypeName;
 import org.voidlang.compiler.ast.type.referencing.Referencing;
 import org.voidlang.compiler.exception.ParserException;
+import org.voidlang.compiler.parser.impl.element.MethodParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
 import org.voidlang.compiler.parser.impl.type.*;
 
@@ -58,6 +60,10 @@ public class AstParser {
 
     public @NotNull Statement nextStatement() {
         return parse(StatementParser.class, Statement.class);
+    }
+
+    public @NotNull Method nextMethod() {
+        return parse(MethodParser.class, Method.class);
     }
 
     /**

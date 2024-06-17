@@ -1,7 +1,8 @@
-package org.voidlang.compiler.parser;
+package org.voidlang.compiler.parser.type;
 
 import org.junit.jupiter.api.Test;
 import org.voidlang.compiler.ast.scope.Scope;
+import org.voidlang.compiler.parser.AstParser;
 import org.voidlang.compiler.util.Parsers;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,6 +18,6 @@ public class ScopeTest {
         AstParser parser = assertDoesNotThrow(() -> Parsers.of(source));
 
         Scope scope = assertDoesNotThrow(parser::nextScope);
-        assertEquals(0, scope.getBody().size());
+        assertEquals(0, scope.statements().size());
     }
 }
