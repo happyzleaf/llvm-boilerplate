@@ -3,6 +3,7 @@ package org.voidlang.compiler.parser;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.exception.ParserException;
+import org.voidlang.compiler.parser.impl.element.MethodParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
 import org.voidlang.compiler.parser.impl.type.*;
 
@@ -28,7 +29,8 @@ public class ParserRegistry {
             ArrayParser.class,
             ScalarTypeParser.class,
             StatementParser.class,
-            ScopeParser.class
+            ScopeParser.class,
+            MethodParser.class
         };
 
         for (Class<?> parser : parsers) {

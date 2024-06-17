@@ -3,6 +3,7 @@ package org.voidlang.compiler.parser.impl.element;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.element.Method;
 import org.voidlang.compiler.ast.element.MethodParameter;
+import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.parser.AstParser;
 import org.voidlang.compiler.parser.ParserAlgorithm;
@@ -12,6 +13,26 @@ import org.voidlang.compiler.token.TokenType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the parser algorithm for parsing a {@link Method} node from the token stream.
+ * <p>
+ * A method is a function that is defined in a specific context.
+ * <p>
+ * For example:
+ * <pre>
+ *     void foo() {
+ *         println("Hello, World!")
+ *     }
+ * </pre>
+ * The method `foo` is defined with the return type `void`, and the body of the method contains the statement
+ * `println("Hello, World!")`.
+ * <p>
+ * The method is defined by the return type, the name of the method, the parameter list, and the body of the method.
+ * <p>
+ * The method can have multiple return types, that are placed in between parenthesis.
+ *
+ * @see Method
+ */
 public class MethodParser extends ParserAlgorithm<Method> {
     /**
      * Parse the next {@link Method} node from the token stream.
@@ -72,6 +93,11 @@ public class MethodParser extends ParserAlgorithm<Method> {
 
         get(TokenType.CLOSE);
 
-        throw new UnsupportedOperationException("Not implemented yet");
+        // TODO handle body-less methods
+
+        // parse the body of the method
+        Scope scope = parser.nextScope();
+
+        return new Method(returnType, name, parameters, scope);
     }
 }
