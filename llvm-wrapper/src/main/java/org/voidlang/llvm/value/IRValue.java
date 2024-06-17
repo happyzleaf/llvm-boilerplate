@@ -1,5 +1,8 @@
 package org.voidlang.llvm.value;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.bytedeco.llvm.LLVM.LLVMValueRef;
 import static org.bytedeco.llvm.global.LLVM.*;
 
@@ -9,10 +12,16 @@ import org.voidlang.llvm.type.IRType;
 
 /**
  * Represents an LLVM value in a module context.
- *
- * @param handle the handle to the LLVM value
  */
-public record IRValue(@NotNull LLVMValueRef handle) {
+@RequiredArgsConstructor
+@Accessors(fluent = true)
+@Getter
+public class IRValue {
+    /**
+     * The handle to the LLVM value.
+     */
+    private final @NotNull LLVMValueRef handle;
+
     /**
      * Retrieve the LLVM type of the value.
      *
