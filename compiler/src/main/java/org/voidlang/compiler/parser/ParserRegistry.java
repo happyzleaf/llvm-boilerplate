@@ -6,6 +6,7 @@ import org.voidlang.compiler.exception.ParserException;
 import org.voidlang.compiler.parser.impl.element.MethodParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
 import org.voidlang.compiler.parser.impl.type.*;
+import org.voidlang.compiler.parser.impl.value.LiteralParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,8 @@ public class ParserRegistry {
             TupleTypeParser.class,
             StatementParser.class,
             ScopeParser.class,
-            MethodParser.class
+            MethodParser.class,
+            LiteralParser.class
         };
 
         for (Class<?> parser : parsers) {

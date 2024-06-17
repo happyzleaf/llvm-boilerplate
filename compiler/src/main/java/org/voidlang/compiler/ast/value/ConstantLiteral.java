@@ -17,7 +17,7 @@ import org.voidlang.compiler.token.Token;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.LITERAL)
-public class Literal extends Value {
+public class ConstantLiteral extends Value {
     /**
      * The held constant value of the literal.
      */

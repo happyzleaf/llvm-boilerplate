@@ -11,10 +11,12 @@ import org.voidlang.compiler.ast.type.anonymous.TupleType;
 import org.voidlang.compiler.ast.type.array.Array;
 import org.voidlang.compiler.ast.type.name.TypeName;
 import org.voidlang.compiler.ast.type.referencing.Referencing;
+import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.exception.ParserException;
 import org.voidlang.compiler.parser.impl.element.MethodParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
 import org.voidlang.compiler.parser.impl.type.*;
+import org.voidlang.compiler.parser.impl.value.LiteralParser;
 
 /**
  * Represents a class that simplifies calls for specific parser algorithms.
@@ -60,6 +62,10 @@ public class AstParser {
 
     public @NotNull Statement nextStatement() {
         return parse(StatementParser.class, Statement.class);
+    }
+
+    public @NotNull Value nextLiteral() {
+        return parse(LiteralParser.class, Value.class);
     }
 
     public @NotNull Method nextMethod() {
