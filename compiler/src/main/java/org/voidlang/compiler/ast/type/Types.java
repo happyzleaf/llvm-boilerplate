@@ -27,6 +27,16 @@ public class Types {
     public final @NotNull Type VOID_PTR = primitivePtr(PrimitiveType.VOID);
 
     /**
+     * The type wrapper for a boolean type.
+     */
+    public final @NotNull Type BOOL = primitive(PrimitiveType.BOOL);
+
+    /**
+     * The type wrapper for a boolean pointer type.
+     */
+    public final @NotNull Type BOOL_PTR = primitivePtr(PrimitiveType.BOOL);
+
+    /**
      * The type wrapper for a signed 8-bit integer.
      */
     public final @NotNull Type BYTE = primitive(PrimitiveType.BYTE);
