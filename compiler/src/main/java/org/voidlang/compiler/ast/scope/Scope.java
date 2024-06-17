@@ -21,5 +21,5 @@ public class Scope extends Node {
     /**
      * The list of instructions that are associated with the scope.
      */
-    private final @NotNull List<@NotNull Statement> instructions;
+    private final @NotNull List<@NotNull Statement> body;
 }
