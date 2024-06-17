@@ -9,6 +9,17 @@ import org.voidlang.compiler.ast.type.referencing.ReferencingType;
  */
 public class MutableReferencing implements Referencing {
     /**
+     * The singleton instance of the mutable referencing.
+     */
+    public static final @NotNull Referencing INSTANCE = new MutableReferencing();
+
+    /**
+     * The private constructor to prevent instantiation.
+     */
+    private MutableReferencing() {
+    }
+
+    /**
      * Retrieve the type of the referencing.
      *
      * @return the referencing type
@@ -56,5 +67,16 @@ public class MutableReferencing implements Referencing {
     @Override
     public @NotNull String print() {
         return "mut ";
+    }
+
+    /**
+     * Indicate, whether the specified node matches the criteria of the matcher.
+     *
+     * @param other the node to compare to
+     * @return {@code true} if the node matches the criteria, {@code false} otherwise
+     */
+    @Override
+    public boolean matches(@NotNull Referencing other) {
+        return other == INSTANCE;
     }
 }

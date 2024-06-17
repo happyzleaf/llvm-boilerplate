@@ -60,4 +60,21 @@ public record ConstantDimension(int size) implements Dimension {
     public @NotNull String print() {
         return "[" + size + "]";
     }
+
+    /**
+     * Indicate, whether the specified node matches the criteria of the matcher.
+     *
+     * @param other the node to compare to
+     * @return {@code true} if the node matches the criteria, {@code false} otherwise
+     */
+    @Override
+    public boolean matches(@NotNull Dimension other) {
+        if (other == this)
+            return true;
+
+        if (!(other instanceof ConstantDimension constant))
+            return false;
+
+        return size == constant.size;
+    }
 }

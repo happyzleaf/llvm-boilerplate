@@ -33,4 +33,32 @@ public record TupleType(
             .reduce((a, b) -> a + ", " + b).orElse("");
         return "(" + children + ")" + array.print() + (memberName != null ? " " + memberName : "");
     }
+
+    /**
+     * Indicate, whether the specified node matches the criteria of the matcher.
+     *
+     * @param other the node to compare to
+     * @return {@code true} if the node matches the criteria, {@code false} otherwise
+     */
+    @Override
+    public boolean matches(@NotNull Type other) {
+        if (other == this)
+            return true;
+
+        if (!(other instanceof TupleType tuple))
+            return false;
+
+        if (!referencing.matches(tuple.referencing))
+            return false;
+
+        if (members.size() != tuple.members.size())
+            return false;
+
+        for (int i = 0; i < members.size(); i++) {
+            if (!members.get(i).matches(tuple.members.get(i)))
+                return false;
+        }
+
+        return array.matches(tuple.array);
+    }
 }

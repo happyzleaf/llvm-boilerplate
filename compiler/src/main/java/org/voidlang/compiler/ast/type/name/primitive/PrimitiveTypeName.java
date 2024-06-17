@@ -32,4 +32,21 @@ public record PrimitiveTypeName(@NotNull PrimitiveType type) implements TypeName
     public @NotNull String print() {
         return type.realName();
     }
+
+    /**
+     * Indicate, whether the specified node matches the criteria of the matcher.
+     *
+     * @param other the node to compare to
+     * @return {@code true} if the node matches the criteria, {@code false} otherwise
+     */
+    @Override
+    public boolean matches(@NotNull TypeName other) {
+        if (other == this)
+            return true;
+
+        if (!(other instanceof PrimitiveTypeName primitive))
+            return false;
+
+        return type == primitive.type;
+    }
 }

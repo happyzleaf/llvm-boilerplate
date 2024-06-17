@@ -5,6 +5,7 @@ import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.ast.type.name.primitive.PrimitiveType;
 import org.voidlang.compiler.ast.type.name.primitive.PrimitiveTypeName;
 import org.voidlang.compiler.util.debug.Printable;
+import org.voidlang.compiler.util.node.Matcher;
 
 /**
  * Represents a full qualified name access to a {@link Type} in the Abstract Syntax Tree.
@@ -22,7 +23,7 @@ import org.voidlang.compiler.util.debug.Printable;
  *     </li>
  * </ul>
  */
-public interface TypeName extends Printable {
+public interface TypeName extends Printable, Matcher<TypeName> {
     /**
      * Retrieve the kind of the type name access. This may be {@link TypeNameKind#PRIMITIVE},
      * {@link TypeNameKind#SINGLE}, or {@link TypeNameKind#COMPLEX}.
@@ -37,7 +38,7 @@ public interface TypeName extends Printable {
      * @param type the primitive type to wrap
      * @return the new type name wrapper
      */
-    static @NotNull TypeName ofPrimitive(@NotNull PrimitiveType type) {
+    static @NotNull TypeName primitive(@NotNull PrimitiveType type) {
         return new PrimitiveTypeName(type);
     }
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.util.debug.Printable;
+import org.voidlang.compiler.util.node.Matcher;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class Array implements Printable {
+public class Array implements Printable, Matcher<Array> {
     /**
      * A placeholder for retrieving empty arrays.
      */
@@ -64,5 +65,27 @@ public class Array implements Printable {
     @Override
     public @NotNull String print() {
         return dimensions.stream().map(Dimension::print).collect(Collectors.joining());
+    }
+
+    /**
+     * Indicate, whether the specified node matches the criteria of the matcher.
+     *
+     * @param other the node to compare to
+     * @return {@code true} if the node matches the criteria, {@code false} otherwise
+     */
+    @Override
+    public boolean matches(@NotNull Array other) {
+        if (other == this)
+            return true;
+
+        if (dimensions.size() != other.dimensions.size())
+            return false;
+
+        for (int i = 0; i < dimensions.size(); i++) {
+            if (!dimensions.get(i).matches(other.dimensions.get(i)))
+                return false;
+        }
+
+        return true;
     }
 }

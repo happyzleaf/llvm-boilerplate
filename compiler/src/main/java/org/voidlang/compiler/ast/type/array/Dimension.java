@@ -3,6 +3,7 @@ package org.voidlang.compiler.ast.type.array;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.type.array.impl.ConstantDimension;
 import org.voidlang.compiler.util.debug.Printable;
+import org.voidlang.compiler.util.node.Matcher;
 
 /**
  * Represents an array dimension that specifies the length of an array dimension level.
@@ -23,7 +24,7 @@ import org.voidlang.compiler.util.debug.Printable;
  *     </li>
  * </ul>
  */
-public interface Dimension extends Printable {
+public interface Dimension extends Printable, Matcher<Dimension> {
     /**
      * Retrieve the type of this array dimension.
      *

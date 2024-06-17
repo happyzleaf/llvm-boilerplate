@@ -49,4 +49,21 @@ public record MutablePointerReferencing(int depth) implements Referencing {
     public @NotNull String print() {
         return "ref" + "*".repeat(depth - 1) + " ";
     }
+
+    /**
+     * Indicate, whether the specified node matches the criteria of the matcher.
+     *
+     * @param other the node to compare to
+     * @return {@code true} if the node matches the criteria, {@code false} otherwise
+     */
+    @Override
+    public boolean matches(@NotNull Referencing other) {
+        if (other == this)
+            return true;
+
+        if (!(other instanceof MutablePointerReferencing mut))
+            return false;
+
+        return mut.depth == depth;
+    }
 }

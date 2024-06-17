@@ -11,6 +11,17 @@ import org.voidlang.compiler.ast.type.referencing.ReferencingType;
  */
 public class DefaultReferencing implements Referencing {
     /**
+     * The singleton instance of the default referencing.
+     */
+    public static final @NotNull Referencing INSTANCE = new DefaultReferencing();
+
+    /**
+     * The private constructor to prevent instantiation.
+     */
+    private DefaultReferencing() {
+    }
+
+    /**
      * Retrieve the type of the referencing.
      *
      * @return the referencing type
@@ -58,5 +69,16 @@ public class DefaultReferencing implements Referencing {
     @Override
     public @NotNull String print() {
         return "";
+    }
+
+    /**
+     * Indicate, whether the specified node matches the criteria of the matcher.
+     *
+     * @param other the node to compare to
+     * @return {@code true} if the node matches the criteria, {@code false} otherwise
+     */
+    @Override
+    public boolean matches(@NotNull Referencing other) {
+        return other == INSTANCE;
     }
 }

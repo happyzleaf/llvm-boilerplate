@@ -16,6 +16,11 @@ import java.util.Map;
 @Getter
 public enum PrimitiveType {
     /**
+     * `VOID` represents an empty type, that is used to indicate that a function does not return a value.
+     */
+    VOID("void", -1, false),
+
+    /**
      * `BOOL` represents a 1-bit logical value, that is either {@code true} or {@code false}.
      */
     BOOL("bool", 0, false),
@@ -66,12 +71,12 @@ public enum PrimitiveType {
     ULONG("ulong", 5, false),
 
     /**
-     * `FLOAT` represents a 32-bit floating point number.
+     * `FLOAT` represents a 32-bit signed floating point number.
      */
     FLOAT("float", 6, true),
 
     /**
-     * `DOUBLE` represents a 64-bit floating point number.
+     * `DOUBLE` represents a 64-bit signed floating point number.
      */
     DOUBLE("double", 7, true),
 

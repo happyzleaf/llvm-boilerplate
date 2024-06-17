@@ -5,6 +5,7 @@ import org.voidlang.compiler.ast.type.referencing.impl.DefaultReferencing;
 import org.voidlang.compiler.ast.type.referencing.impl.MutablePointerReferencing;
 import org.voidlang.compiler.ast.type.referencing.impl.MutableReferencing;
 import org.voidlang.compiler.util.debug.Printable;
+import org.voidlang.compiler.util.node.Matcher;
 
 /**
  * Represents an interface, that indicates, how a type should be treated as.
@@ -13,7 +14,7 @@ import org.voidlang.compiler.util.debug.Printable;
  * Method {@link #pointer()} indicates, whether the underlying type should be treated as a pointer.
  * Method {@link #depth()} describes the dept of the pointer. It is {@code 0} if {@link #pointer()} is false.
  */
-public interface Referencing extends Printable {
+public interface Referencing extends Printable, Matcher<Referencing> {
     /**
      * Retrieve the type of the referencing.
      *
@@ -50,7 +51,7 @@ public interface Referencing extends Printable {
      * @return the default type referencing
      */
     static @NotNull Referencing none() {
-        return new DefaultReferencing();
+        return DefaultReferencing.INSTANCE;
     }
 
     /**
@@ -59,7 +60,7 @@ public interface Referencing extends Printable {
      * @return the mutable type referencing
      */
     static @NotNull Referencing mut() {
-        return new MutableReferencing();
+        return MutableReferencing.INSTANCE;
     }
 
     /**
