@@ -11,14 +11,14 @@ import org.voidlang.compiler.util.Parsers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AnonymousTypeTest {
+public class ScalarTypeTest {
     @Test
     public void test_primitive_type() {
         String source =
             """
             int
             """;
-        AstParser parser = Parsers.of(source);
+        AstParser parser = assertDoesNotThrow(() -> Parsers.of(source));
 
         AnonymousType type = assertDoesNotThrow(parser::nextAnonymousType);
         assertInstanceOf(ScalarType.class, type);
@@ -36,7 +36,7 @@ public class AnonymousTypeTest {
             int[10]
             """;
 
-        AstParser parser = Parsers.of(source);
+        AstParser parser = assertDoesNotThrow(() -> Parsers.of(source));
 
         AnonymousType type = assertDoesNotThrow(parser::nextAnonymousType);
         assertInstanceOf(ScalarType.class, type);
@@ -60,7 +60,7 @@ public class AnonymousTypeTest {
             ref int
             """;
 
-        AstParser parser = Parsers.of(source);
+        AstParser parser = assertDoesNotThrow(() -> Parsers.of(source));
 
         AnonymousType type = assertDoesNotThrow(parser::nextAnonymousType);
         assertInstanceOf(ScalarType.class, type);
@@ -79,7 +79,7 @@ public class AnonymousTypeTest {
             mut int
             """;
 
-        AstParser parser = Parsers.of(source);
+        AstParser parser = assertDoesNotThrow(() -> Parsers.of(source));
 
         AnonymousType type = assertDoesNotThrow(parser::nextAnonymousType);
         assertInstanceOf(ScalarType.class, type);

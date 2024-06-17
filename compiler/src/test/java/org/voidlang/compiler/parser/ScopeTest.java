@@ -14,7 +14,7 @@ public class ScopeTest {
             {
             }
             """;
-        AstParser parser = Parsers.of(source);
+        AstParser parser = assertDoesNotThrow(() -> Parsers.of(source));
 
         Scope scope = assertDoesNotThrow(parser::nextScope);
         assertEquals(0, scope.getBody().size());
