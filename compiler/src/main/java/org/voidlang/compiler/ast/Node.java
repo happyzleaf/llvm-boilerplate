@@ -3,6 +3,8 @@ package org.voidlang.compiler.ast;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import org.voidlang.compiler.ast.common.EOF;
+import org.voidlang.compiler.ast.common.Error;
 
 /**
  * Represents the base class for all element of the Abstract Syntax Tree.
@@ -28,5 +30,15 @@ public abstract class Node {
         if (info == null)
             throw new IllegalStateException(getClass().getSimpleName() + " does not have @NodeInfo");
         nodeType = info.type();
+    }
+
+    /**
+     * Indicate, whether this node is not a finish node.
+     *
+     * @return {@code true} if there are more nodes to be parsed
+     */
+    public boolean hasNext() {
+        return !(this instanceof Error)
+            && !(this instanceof EOF);
     }
 }

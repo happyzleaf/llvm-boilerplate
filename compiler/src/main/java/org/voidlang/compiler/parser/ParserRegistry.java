@@ -3,6 +3,7 @@ package org.voidlang.compiler.parser;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.exception.ParserException;
+import org.voidlang.compiler.parser.impl.scope.ScopeParser;
 import org.voidlang.compiler.parser.impl.type.*;
 
 import java.util.HashMap;
@@ -25,7 +26,9 @@ public class ParserRegistry {
             TypeNameParser.class,
             AnonymousTypeParser.class,
             ArrayParser.class,
-            ScalarTypeParser.class
+            ScalarTypeParser.class,
+            StatementParser.class,
+            ScopeParser.class
         };
 
         for (Class<?> parser : parsers) {
