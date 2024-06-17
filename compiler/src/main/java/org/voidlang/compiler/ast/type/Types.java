@@ -17,6 +17,11 @@ import org.voidlang.compiler.util.node.Matcher;
 @UtilityClass
 public class Types {
     /**
+     * The placeholder type wrapper for a type that should be inferred by the value that was specified.
+     */
+    public final @NotNull Type INFERRED = primitive(PrimitiveType.UNKNOWN);
+
+    /**
      * The type wrapper for a void type.
      */
     public final @NotNull Type VOID = primitive(PrimitiveType.VOID);
