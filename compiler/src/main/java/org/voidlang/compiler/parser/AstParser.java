@@ -6,6 +6,7 @@ import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.ast.type.anonymous.ScalarType;
+import org.voidlang.compiler.ast.type.anonymous.TupleType;
 import org.voidlang.compiler.ast.type.array.Array;
 import org.voidlang.compiler.ast.type.name.TypeName;
 import org.voidlang.compiler.ast.type.referencing.Referencing;
@@ -45,6 +46,10 @@ public class AstParser {
 
     public @NotNull ScalarType nextScalarType() {
         return parse(ScalarTypeParser.class, ScalarType.class);
+    }
+
+    public @NotNull TupleType nextTupleType() {
+        return parse(TupleTypeParser.class, TupleType.class);
     }
 
     public @NotNull Scope nextScope() {

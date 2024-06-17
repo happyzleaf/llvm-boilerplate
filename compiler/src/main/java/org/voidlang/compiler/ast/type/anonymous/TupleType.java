@@ -18,7 +18,7 @@ import java.util.List;
  * @param memberName the name of the member, if this type is a member of a {@link TupleType}
  */
 public record TupleType(
-    @NotNull Referencing referencing, @NotNull List<@NotNull Type> members, @NotNull Array array,
+    @NotNull Referencing referencing, @NotNull List<@NotNull AnonymousType> members, @NotNull Array array,
     @Nullable String memberName
 ) implements AnonymousType {
     /**

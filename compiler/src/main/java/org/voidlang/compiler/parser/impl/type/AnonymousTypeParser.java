@@ -3,6 +3,7 @@ package org.voidlang.compiler.parser.impl.type;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.parser.*;
+import org.voidlang.compiler.token.TokenType;
 
 /**
  * Represents a token parser algorithm that resolves a user-defined non-structure-like type.
@@ -20,7 +21,8 @@ public class AnonymousTypeParser extends ParserAlgorithm<AnonymousType> {
      */
     @Override
     public @NotNull AnonymousType parse(@NotNull AstParser parser, @NotNull ParserContext context) {
-        // TODO handle tuple type
+        if (peek().is(TokenType.OPEN))
+            return parser.nextTupleType();
 
         return parser.nextScalarType();
     }

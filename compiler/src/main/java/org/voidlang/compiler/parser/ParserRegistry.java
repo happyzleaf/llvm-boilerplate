@@ -28,6 +28,7 @@ public class ParserRegistry {
             AnonymousTypeParser.class,
             ArrayParser.class,
             ScalarTypeParser.class,
+            TupleTypeParser.class,
             StatementParser.class,
             ScopeParser.class,
             MethodParser.class

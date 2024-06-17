@@ -27,7 +27,7 @@ public class ScalarTypeParser extends ParserAlgorithm<ScalarType> {
 
         // parse the referencing of the type
         // mut int x
-        // ^^^ `mut7 indicates, that `x` can be mutated
+        // ^^^ `mut` indicates, that `x` can be mutated
         // ref int y
         // ^^^ `ref` indicates, that `y` should be taken as a pointer
         // ref* int z
@@ -42,6 +42,8 @@ public class ScalarTypeParser extends ParserAlgorithm<ScalarType> {
         // TODO handle generic argument list
 
         // parse the array dimensions of the type
+        // int[] myArray
+        //    ^^  square brackets indicate that the type is an array
         Array array = parser.nextArray();
 
         // create the scalar type wrapper
