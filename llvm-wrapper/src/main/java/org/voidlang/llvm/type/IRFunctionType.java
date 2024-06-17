@@ -1,11 +1,10 @@
-package org.voidlang.llvm.function;
+package org.voidlang.llvm.type;
 
 import lombok.Getter;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.LLVMTypeRef;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.llvm.module.IRContext;
-import org.voidlang.llvm.type.IRType;
 
 import java.util.List;
 

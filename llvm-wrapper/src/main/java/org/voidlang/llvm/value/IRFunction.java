@@ -1,4 +1,4 @@
-package org.voidlang.llvm.function;
+package org.voidlang.llvm.value;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -6,7 +6,7 @@ import org.bytedeco.llvm.LLVM.LLVMValueRef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.voidlang.llvm.module.IRModule;
-import org.voidlang.llvm.value.IRValue;
+import org.voidlang.llvm.type.IRFunctionType;
 
 import static org.bytedeco.llvm.global.LLVM.*;
 
