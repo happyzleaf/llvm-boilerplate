@@ -70,4 +70,23 @@ public class AnonymousTypeTest {
         assertEquals(TypeNameKind.PRIMITIVE, scalar.name().kind());
         assertEquals(0, scalar.array().getDimensions().size());
     }
+
+
+    @Test
+    public void test_mut_primitive() {
+        String source =
+            """
+            mut int
+            """;
+
+        AstParser parser = Parsers.of(source);
+
+        AnonymousType type = assertDoesNotThrow(parser::nextAnonymousType);
+        assertInstanceOf(ScalarType.class, type);
+
+        ScalarType scalar = (ScalarType) type;
+        assertEquals(ReferencingType.MUT, scalar.referencing().type());
+        assertEquals(TypeNameKind.PRIMITIVE, scalar.name().kind());
+        assertEquals(0, scalar.array().getDimensions().size());
+    }
 }
