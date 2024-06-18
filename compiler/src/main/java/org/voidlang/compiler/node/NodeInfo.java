@@ -1,4 +1,4 @@
-package org.voidlang.compiler.ast;
+package org.voidlang.compiler.node;
 
 import org.jetbrains.annotations.NotNull;
 

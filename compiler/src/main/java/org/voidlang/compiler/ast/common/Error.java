@@ -1,12 +1,12 @@
 package org.voidlang.compiler.ast.common;
 
 import org.jetbrains.annotations.NotNull;
-import org.voidlang.compiler.ast.NodeInfo;
-import org.voidlang.compiler.ast.NodeType;
+import org.voidlang.compiler.node.NodeInfo;
+import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.ast.type.Types;
 import org.voidlang.compiler.ast.value.Value;
-import org.voidlang.compiler.generator.Generator;
+import org.voidlang.compiler.node.Generator;
 import org.voidlang.llvm.value.IRValue;
 
 import java.util.Optional;

@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.Node;
-import org.voidlang.compiler.ast.NodeInfo;
-import org.voidlang.compiler.ast.NodeType;
+import org.voidlang.compiler.node.NodeInfo;
+import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
-import org.voidlang.compiler.generator.Generator;
+import org.voidlang.compiler.node.Generator;
 import org.voidlang.llvm.type.IRFunctionType;
 import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRFunction;
@@ -43,6 +44,8 @@ public class Method extends Node {
      */
     private final @NotNull Scope body;
 
+    private @Nullable IRFunction function;
+
     /**
      * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
      * <p>
@@ -62,10 +65,10 @@ public class Method extends Node {
             .toList();
 
         // create a signature for the method type
-        IRFunctionType signature = IRFunctionType.create(generator.context(), returnType, paramTypes, false);
+        IRFunctionType signature = IRFunctionType.create(returnType.context(), returnType, paramTypes, false);
 
         // create an LLVM function for the method
-        IRFunction function = IRFunction.create(generator.module(), name, signature);
+        function = IRFunction.create(generator.module(), name, signature);
 
         // generate the LLVM IR code for the body of the method, and assign the function to the generator
         body.codegen(generator.enterFunction(function));

@@ -13,6 +13,7 @@ import org.voidlang.compiler.ast.type.name.TypeName;
 import org.voidlang.compiler.ast.type.referencing.Referencing;
 import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.exception.ParserException;
+import org.voidlang.compiler.parser.impl.control.ReturnParser;
 import org.voidlang.compiler.parser.impl.element.MethodParser;
 import org.voidlang.compiler.parser.impl.local.ImmutableLocalDeclarationParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
@@ -76,6 +77,10 @@ public class AstParser {
 
     public @NotNull Statement nextImmutableLocalDeclaration() {
         return parse(ImmutableLocalDeclarationParser.class, Statement.class);
+    }
+
+    public @NotNull Statement nextReturnStatement() {
+        return parse(ReturnParser.class, Statement.class);
     }
 
     public @NotNull Method nextMethod() {

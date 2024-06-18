@@ -1,4 +1,4 @@
-package org.voidlang.compiler.generator;
+package org.voidlang.compiler.node;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.CheckReturnValue;
@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.voidlang.llvm.behaviour.Disposable;
 import org.voidlang.llvm.instruction.IRBuilder;
 import org.voidlang.llvm.module.IRContext;
 import org.voidlang.llvm.module.IRModule;
@@ -19,7 +20,7 @@ import org.voidlang.llvm.value.IRFunction;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class Generator {
+public class Generator implements Disposable {
     /**
      * The LLVM context associated with the file.
      */
@@ -64,5 +65,15 @@ public class Generator {
     public @NotNull Generator exitFunction() {
         this.function = null;
         return this;
+    }
+
+    /**
+     * Dispose of the value handle held by this object.
+     */
+    @Override
+    public void dispose() {
+        builder.dispose();
+        module.dispose();
+        context.dispose();
     }
 }

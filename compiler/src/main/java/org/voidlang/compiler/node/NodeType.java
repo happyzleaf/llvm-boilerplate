@@ -1,4 +1,4 @@
-package org.voidlang.compiler.ast;
+package org.voidlang.compiler.node;
 
 /**
  * Represents an enumeration of the types of nodes that can be present in the AST.
@@ -11,6 +11,8 @@ public enum NodeType {
     LITERAL,
 
     IMMUTABLE_LOCAL_DECLARE_ASSIGN,
+
+    RETURN,
 
     METHOD,
 

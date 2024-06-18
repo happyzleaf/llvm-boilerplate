@@ -3,10 +3,11 @@ package org.voidlang.compiler.ast;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.common.EOF;
 import org.voidlang.compiler.ast.common.Error;
-import org.voidlang.compiler.generator.Generator;
+import org.voidlang.compiler.node.Generator;
+import org.voidlang.compiler.node.NodeInfo;
+import org.voidlang.compiler.node.NodeType;
 import org.voidlang.llvm.value.IRValue;
 
 import java.util.Optional;

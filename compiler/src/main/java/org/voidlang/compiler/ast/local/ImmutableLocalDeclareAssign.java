@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.voidlang.compiler.ast.NodeInfo;
-import org.voidlang.compiler.ast.NodeType;
+import org.voidlang.compiler.node.NodeInfo;
+import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.ast.value.Value;
-import org.voidlang.compiler.generator.Generator;
+import org.voidlang.compiler.node.Generator;
 import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRValue;
 
@@ -63,7 +63,7 @@ public class ImmutableLocalDeclareAssign extends Statement implements LocalVaria
     @Override
     public @NotNull Optional<@NotNull IRValue> codegen(@NotNull Generator generator) {
         // generate the LLVM type of the held value
-        pointerType = type.codegen(generator.context());
+        pointerType = value.getValueType().codegen(generator.context());
 
         // allocate memory on the stack of the size of the value type
         pointer = generator.builder().alloc(pointerType, "let (ptr) " + name);
