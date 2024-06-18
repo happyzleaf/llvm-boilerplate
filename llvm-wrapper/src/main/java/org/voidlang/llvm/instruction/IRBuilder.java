@@ -2,6 +2,7 @@ package org.voidlang.llvm.instruction;
 
 import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.voidlang.llvm.behaviour.Disposable;
 import org.voidlang.llvm.module.IRContext;
 import org.voidlang.llvm.type.IRType;
@@ -290,6 +291,87 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      */
     public @NotNull IRValue alloc(@NotNull IRType type) {
         return alloc(type, "");
+    }
+
+    /**
+     * Load a value from a pointer. It is used to load a value from a memory location pointed to by a pointer.
+     * <br>
+     * This function is used to load a value from a memory location pointed to by a pointer. The type parameter
+     * specifies the type of the value to be loaded. The pointer parameter is an IRValue that represents the
+     * pointer to the memory location.
+     * <br>
+     * The name parameter is an optional name for the instruction, which can be used for debugging purposes.
+     * <br>
+     * The function returns an IRValue that represents the loaded value. You can use this value in subsequent
+     * instructions or store it in a variable.
+     * <br>
+     * Note that the load operation reads the value from the memory location pointed to by the pointer.
+     * If the memory location is not initialized, the behavior is undefined.
+     * <br>
+     * For storing a value to a memory location, you can use the {@link #store(IRValue, IRValue)} function.
+     * <br>
+     * For more information on the load instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#load-instruction">LLVM documentation</a>
+     *
+     * @param type the LLVM type of the value to be loaded
+     * @param pointer an IRValue that represents the pointer to the memory location
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the loaded value
+     */
+    public @NotNull IRValue load(@NotNull IRType type, @NotNull IRValue pointer, @NotNull String name) {
+        return new IRValue(LLVMBuildLoad2(handle, type.handle(), pointer.handle(), name));
+    }
+
+    /**
+     * Load a value from a pointer. It is used to load a value from a memory location pointed to by a pointer.
+     * <br>
+     * This function is used to load a value from a memory location pointed to by a pointer. The type parameter
+     * specifies the type of the value to be loaded. The pointer parameter is an IRValue that represents the
+     * pointer to the memory location.
+     * <br>
+     * The function returns an IRValue that represents the loaded value. You can use this value in subsequent
+     * instructions or store it in a variable.
+     * <br>
+     * Note that the load operation reads the value from the memory location pointed to by the pointer.
+     * If the memory location is not initialized, the behavior is undefined.
+     * <br>
+     * For storing a value to a memory location, you can use the {@link #store(IRValue, IRValue)} function.
+     * <br>
+     * For more information on the load instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#load-instruction">LLVM documentation</a>
+     *
+     * @param type the LLVM type of the value to be loaded
+     * @param pointer an IRValue that represents the pointer to the memory location
+     * @return an IRValue that represents the loaded value
+     */
+    public @NotNull IRValue load(@NotNull IRType type, @NotNull IRValue pointer) {
+        return load(type, pointer, "");
+    }
+
+    /**
+     * Store a value to a memory location. It is used to store a value to a memory location pointed to by a pointer.
+     * <br>
+     * This function is used to store a value to a memory location pointed to by a pointer. The value parameter
+     * specifies the value to be stored. The pointer parameter is an IRValue that represents the pointer to the
+     * memory location.
+     * <br>
+     * The function returns an IRValue that represents the stored value. You can use this value in subsequent
+     * instructions or store it in a variable.
+     * <br>
+     * Note that the store operation writes the value to the memory location pointed to by the pointer.
+     * If the memory location is not initialized, the behavior is undefined.
+     * <br>
+     * For loading a value from a memory location, you can use the {@link #load(IRType, IRValue)} function.
+     * <br>
+     * For more information on the store instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#store-instruction">LLVM documentation</a>
+     *
+     * @param value the value to be stored
+     * @param pointer an IRValue that represents the pointer to the memory location
+     * @return an IRValue that represents the stored value
+     */
+    public @NotNull IRValue store(@NotNull IRValue value, @Unmodifiable IRValue pointer) {
+        return new IRValue(LLVMBuildStore(handle, value.handle(), pointer.handle()));
     }
 
     /**
