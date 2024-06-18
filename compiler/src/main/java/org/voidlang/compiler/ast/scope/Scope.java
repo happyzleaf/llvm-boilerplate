@@ -8,6 +8,8 @@ import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.NodeInfo;
 import org.voidlang.compiler.ast.NodeType;
 import org.voidlang.compiler.generator.Generator;
+import org.voidlang.llvm.instruction.IRBlock;
+import org.voidlang.llvm.value.IRFunction;
 import org.voidlang.llvm.value.IRValue;
 
 import java.util.List;
@@ -37,6 +39,18 @@ public class Scope extends Node {
      * @return the LLVM IR value representing the result of the node, that is empty if the result is not used
      */
     public @NotNull Optional<@NotNull IRValue> codegen(@NotNull Generator generator) {
-        throw new UnsupportedOperationException("Not implemented");
+        IRFunction function = generator.function();
+        if (function == null)
+            throw new IllegalStateException("Cannot create a scope outside a function");
+
+        // create a new block for the scope
+        IRBlock block = IRBlock.create(generator.context(), function, "scope");
+        generator.builder().positionAtEnd(block);
+
+        // generate the LLVM instructions for the statements
+        for (Statement statement : statements)
+            statement.codegen(generator);
+
+        return Optional.empty();
     }
 }
