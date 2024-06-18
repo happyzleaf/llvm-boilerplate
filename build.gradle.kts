@@ -32,6 +32,8 @@ allprojects {
 
         compileOnly("org.jetbrains:annotations:24.0.1")
         testCompileOnly("org.jetbrains:annotations:24.0.1")
+
+        implementation("com.google.guava:guava:33.2.1-jre")
     }
 
     tasks.test {
