@@ -4,6 +4,7 @@ import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.llvm.behaviour.Disposable;
 import org.voidlang.llvm.module.IRContext;
+import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRValue;
 
 import static org.bytedeco.llvm.global.LLVM.*;
@@ -242,6 +243,53 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      */
     public @NotNull IRValue addNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
         return new IRValue(LLVMBuildNUWAdd(handle, left.handle(), right.handle(), ""));
+    }
+
+    /**
+     * Allocate memory on the stack for a new variable. It is used to create a new stack-allocated variable
+     * of the specified type.
+     * <br>
+     * This function is used to allocate memory on the stack for a new variable of the specified type.
+     * The type of the variable is specified using the type parameter. The name parameter is an optional
+     * name for the variable, which can be used for debugging purposes.
+     * <br>
+     * The function returns an IRValue that represents the pointer to the newly allocated variable.
+     * You can use this pointer to access and modify the variable's value.
+     * <br>
+     * Note that the allocated memory is stack-allocated, which means that it is automatically deallocated
+     * when the function returns.
+     * <br>
+     * For heap-allocated memory that persists beyond the function's lifetime, you can use the malloc function.
+     *
+     * @param type the LLVM type of the variable to be allocated
+     * @param name an optional name for the variable (can be set to "" if not needed)
+     * @return an IRValue that represents the pointer to the newly allocated variable
+     */
+    public @NotNull IRValue alloc(@NotNull IRType type, @NotNull String name) {
+        return new IRValue(LLVMBuildAlloca(handle, type.handle(), name));
+    }
+
+    /**
+     * Allocate memory on the stack for a new variable. It is used to create a new stack-allocated variable
+     * of the specified type.
+     * <br>
+     * This function is used to allocate memory on the stack for a new variable of the specified type.
+     * The type of the variable is specified using the type parameter. The name parameter is an optional
+     * name for the variable, which can be used for debugging purposes.
+     * <br>
+     * The function returns an IRValue that represents the pointer to the newly allocated variable.
+     * You can use this pointer to access and modify the variable's value.
+     * <br>
+     * Note that the allocated memory is stack-allocated, which means that it is automatically deallocated
+     * when the function returns.
+     * <br>
+     * For heap-allocated memory that persists beyond the function's lifetime, you can use the malloc function.
+     *
+     * @param type the LLVM type of the variable to be allocated
+     * @return an IRValue that represents the pointer to the newly allocated variable
+     */
+    public @NotNull IRValue alloc(@NotNull IRType type) {
+        return alloc(type, "");
     }
 
     /**
