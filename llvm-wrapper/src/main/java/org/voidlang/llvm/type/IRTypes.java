@@ -93,7 +93,7 @@ public class IRTypes {
      * @param context the context in which the type is defined
      * @return a new 64-bit integer type
      */
-    public @NotNull IRType int64(@NotNull IRContext context) {
+    public @NotNull IRType ofInt64(@NotNull IRContext context) {
         return new IRType(LLVMInt64Type(), context);
     }
 

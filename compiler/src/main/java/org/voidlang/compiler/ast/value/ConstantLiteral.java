@@ -10,6 +10,9 @@ import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.ast.type.Types;
 import org.voidlang.compiler.generator.Generator;
 import org.voidlang.compiler.token.Token;
+import org.voidlang.compiler.token.TokenType;
+import org.voidlang.llvm.module.IRContext;
+import org.voidlang.llvm.type.IRTypes;
 import org.voidlang.llvm.value.IRValue;
 
 /**
@@ -33,7 +36,21 @@ public class ConstantLiteral extends Value {
      */
     @Override
     public @NotNull IRValue codegen(@NotNull Generator generator) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        TokenType type = value().type();
+        String value = value().value();
+
+        IRContext context = generator.context();
+
+        return switch (type) {
+            case BYTE, UBYTE -> IRTypes.ofInt8(context).constInt(Byte.parseByte(value));
+            case SHORT, USHORT -> IRTypes.ofInt16(context).constInt(Short.parseShort(value));
+            case INT, UINT -> IRTypes.ofInt32(context).constInt(Integer.parseInt(value));
+            case LONG, ULONG -> IRTypes.ofInt64(context).constInt(Long.parseLong(value));
+            case FLOAT -> IRTypes.ofFloat(context).constFloat(Float.parseFloat(value));
+            case DOUBLE -> IRTypes.ofDouble(context).constFloat(Double.parseDouble(value));
+            case BOOL -> IRTypes.ofInt1(context).constInt("true".equals(value) ? 1 : 0);
+            default -> throw new IllegalStateException("Unable to generate literal value for type " + type);
+        };
     }
 
     /**
