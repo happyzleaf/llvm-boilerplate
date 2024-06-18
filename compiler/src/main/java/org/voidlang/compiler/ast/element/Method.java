@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.Node;
+import org.voidlang.compiler.ast.scope.ScopeContainer;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.ast.scope.Scope;
@@ -23,7 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class Method extends Node {
+public class Method extends Node implements ScopeContainer {
     /**
      * The return type of the method.
      */
@@ -76,5 +77,29 @@ public class Method extends Node {
         generator.exitFunction();
 
         return Optional.of(function);
+    }
+
+    /**
+     * Retrieve the parent scope of this scope.
+     * <p>
+     * This method will return {@code null}, only if {@code this} scope is the root scope.
+     *
+     * @return the parent scope of this scope, or {@code null} if {@code this} scope is the root scope
+     */
+    @Override
+    public @Nullable ScopeContainer getParentScope() {
+        return null;
+    }
+
+    /**
+     * Retrieve the list of child scopes of this scope.
+     * <p>
+     * If {@code this} scope has no child scopes, this method will return an empty list.
+     *
+     * @return the list of child scopes of this scope
+     */
+    @Override
+    public @NotNull List<@NotNull ScopeContainer> getChildrenScopes() {
+        return List.of(body);
     }
 }

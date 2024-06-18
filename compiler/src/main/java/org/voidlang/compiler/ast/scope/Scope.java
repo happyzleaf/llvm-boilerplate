@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
@@ -24,11 +25,13 @@ import java.util.Optional;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.SCOPE)
-public class Scope extends Node {
+public class Scope extends Node implements ScopeContainer {
     /**
      * The list of instructions that are associated with the scope.
      */
-    private final @NotNull List<@NotNull Statement> statements;
+    private final @NotNull List<@NotNull Node> statements;
+
+    private @Nullable ScopeContainer parent;
 
     /**
      * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
@@ -48,9 +51,38 @@ public class Scope extends Node {
         generator.builder().positionAtEnd(block);
 
         // generate the LLVM instructions for the statements
-        for (Statement statement : statements)
+        for (Node statement : statements)
             statement.codegen(generator);
 
         return Optional.empty();
+    }
+
+    /**
+     * Retrieve the parent scope of this scope.
+     * <p>
+     * This method will return {@code null}, only if {@code this} scope is the root scope.
+     *
+     * @return the parent scope of this scope, or {@code null} if {@code this} scope is the root scope
+     */
+    @Override
+    public @Nullable ScopeContainer getParentScope() {
+        return parent;
+    }
+
+    /**
+     * Retrieve the list of child scopes of this scope.
+     * <p>
+     * If {@code this} scope has no child scopes, this method will return an empty list.
+     *
+     * @return the list of child scopes of this scope
+     */
+    @Override
+    public @NotNull List<@NotNull ScopeContainer> getChildrenScopes() {
+        // purposely checking for `Scope` only and not including anonymous methods,
+        // as they work a completely different way
+        return statements.stream()
+            .filter(node -> node instanceof Scope)
+            .map(node -> (ScopeContainer) node)
+            .toList();
     }
 }
