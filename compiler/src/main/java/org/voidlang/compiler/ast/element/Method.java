@@ -9,6 +9,8 @@ import org.voidlang.compiler.ast.NodeInfo;
 import org.voidlang.compiler.ast.NodeType;
 import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
+import org.voidlang.compiler.generator.Generator;
+import org.voidlang.llvm.value.IRValue;
 
 import java.util.List;
 
@@ -36,4 +38,15 @@ public class Method extends Node {
      * The body of the method.
      */
     private final @NotNull Scope body;
+
+    /**
+     * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
+     *
+     * @param generator the generation context to use for the code generation
+     * @return the LLVM IR value representing the result of the node
+     */
+    @Override
+    public @NotNull IRValue codegen(@NotNull Generator generator) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }

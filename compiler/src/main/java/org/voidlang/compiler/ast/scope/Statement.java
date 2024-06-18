@@ -8,5 +8,5 @@ import org.voidlang.compiler.ast.NodeType;
  * Represents an instruction node in a {@link Scope} that can be executed, but is not associated with a value.
  */
 @NodeInfo(type = NodeType.STATEMENT)
-public class Statement extends Node {
+public abstract class Statement extends Node {
 }

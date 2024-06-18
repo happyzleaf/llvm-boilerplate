@@ -9,6 +9,8 @@ import org.voidlang.compiler.ast.NodeType;
 import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.ast.value.Value;
+import org.voidlang.compiler.generator.Generator;
+import org.voidlang.llvm.value.IRValue;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
@@ -31,4 +33,15 @@ public class ImmutableLocalDeclareAssign extends Statement implements LocalVaria
      * The value assigned to the variable.
      */
     private final @NotNull Value value;
+
+    /**
+     * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
+     *
+     * @param generator the generation context to use for the code generation
+     * @return the LLVM IR value representing the result of the node
+     */
+    @Override
+    public @NotNull IRValue codegen(@NotNull Generator generator) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }
