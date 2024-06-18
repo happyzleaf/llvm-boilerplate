@@ -10,6 +10,9 @@ import org.voidlang.compiler.ast.NodeType;
 import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.generator.Generator;
+import org.voidlang.llvm.type.IRFunctionType;
+import org.voidlang.llvm.type.IRType;
+import org.voidlang.llvm.value.IRFunction;
 import org.voidlang.llvm.value.IRValue;
 
 import java.util.List;
@@ -49,6 +52,26 @@ public class Method extends Node {
      * @return the LLVM IR value representing the result of the node, that is empty if the result is not used
      */
     public @NotNull Optional<@NotNull IRValue> codegen(@NotNull Generator generator) {
-        return body.codegen(generator);
+        // generate the LLVM type for the return type
+        IRType returnType = returnType().codegen(generator.context());
+
+        // generate the LLVM types for the parameters
+        List<IRType> paramTypes = parameters.stream()
+            .map(MethodParameter::type)
+            .map(type -> type.codegen(generator.context()))
+            .toList();
+
+        // create a signature for the method type
+        IRFunctionType signature = IRFunctionType.create(generator.context(), returnType, paramTypes, false);
+
+        // create an LLVM function for the method
+        IRFunction function = IRFunction.create(generator.module(), name, signature);
+
+        // generate the LLVM IR code for the body of the method, and assign the function to the generator
+        body.codegen(generator.enterFunction(function));
+        // unset the function from the generator
+        generator.exitFunction();
+
+        return Optional.of(function);
     }
 }
