@@ -5,6 +5,7 @@ import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.parser.AstParser;
 import org.voidlang.compiler.parser.ParserAlgorithm;
 import org.voidlang.compiler.parser.ParserContext;
+import org.voidlang.compiler.token.TokenType;
 
 public class StatementParser extends ParserAlgorithm<Statement> {
     /**
@@ -16,6 +17,9 @@ public class StatementParser extends ParserAlgorithm<Statement> {
      */
     @Override
     public @NotNull Statement parse(@NotNull AstParser parser, @NotNull ParserContext context) {
+        if (peek().is(TokenType.TYPE, "let"))
+            return parser.nextImmutableLocalDeclaration();
+
         throw new UnsupportedOperationException("Not implemented");
     }
 }
