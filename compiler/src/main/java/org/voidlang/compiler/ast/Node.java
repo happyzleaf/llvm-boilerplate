@@ -8,6 +8,7 @@ import org.voidlang.compiler.ast.common.Error;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
+import org.voidlang.compiler.node.hierarchy.NodeVisitor;
 import org.voidlang.llvm.value.IRValue;
 
 import java.util.Optional;
@@ -32,10 +33,14 @@ public abstract class Node {
      * Initialize the node and retrieve the type from the annotation.
      */
     public Node() {
+        // resolve the metadata of the node
         NodeInfo info = getClass().getAnnotation(NodeInfo.class);
         if (info == null)
             throw new IllegalStateException(getClass().getSimpleName() + " does not have @NodeInfo");
         nodeType = info.type();
+
+        // register the node for the node hierarchy
+        NodeVisitor.register(this);
     }
 
     /**

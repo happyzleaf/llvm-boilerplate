@@ -6,9 +6,12 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.Node;
+import org.voidlang.compiler.ast.element.Method;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.node.Generator;
+import org.voidlang.compiler.node.hierarchy.NodeVisitor;
+import org.voidlang.compiler.node.hierarchy.Parent;
 import org.voidlang.llvm.instruction.IRBlock;
 import org.voidlang.llvm.value.IRFunction;
 import org.voidlang.llvm.value.IRValue;
@@ -31,6 +34,12 @@ public class Scope extends Node implements ScopeContainer {
      */
     private final @NotNull List<@NotNull Node> statements;
 
+    /**
+     * The parent scope container of this scope, that might be a {@link Method} or another {@link Scope}.
+     * <p>
+     * This field is initially {@code null}, and it is set be the {@link NodeVisitor} after initialization.
+     */
+    @Parent
     private @Nullable ScopeContainer parent;
 
     /**

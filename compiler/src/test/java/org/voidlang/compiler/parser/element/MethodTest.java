@@ -1,6 +1,7 @@
 package org.voidlang.compiler.parser.element;
 
 import org.junit.jupiter.api.Test;
+import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.element.Method;
 import org.voidlang.compiler.ast.element.MethodParameter;
 import org.voidlang.compiler.ast.local.ImmutableLocalDeclareAssign;
@@ -76,10 +77,10 @@ public class MethodTest {
         assertEquals("foo", method.name());
         assertEquals(0, method.parameters().size());
 
-        List<Statement> statements = method.body().statements();
+        List<Node> statements = method.body().statements();
         assertEquals(2, statements.size());
 
-        Statement statementA = statements.get(0);
+        Node statementA = statements.get(0);
         assertInstanceOf(ImmutableLocalDeclareAssign.class, statementA);
 
         ImmutableLocalDeclareAssign localA = (ImmutableLocalDeclareAssign) statementA;
@@ -89,7 +90,7 @@ public class MethodTest {
         Value valueA = localA.value();
         assertTrue(valueA.getValueType().matches(Types.INT));
 
-        Statement statementB = statements.get(1);
+        Node statementB = statements.get(1);
         assertInstanceOf(ImmutableLocalDeclareAssign.class, statementB);
 
         ImmutableLocalDeclareAssign localB = (ImmutableLocalDeclareAssign) statementB;

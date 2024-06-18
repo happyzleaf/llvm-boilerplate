@@ -1,6 +1,7 @@
 package org.voidlang.compiler.parser.impl.scope;
 
 import org.jetbrains.annotations.NotNull;
+import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.parser.AstParser;
@@ -48,7 +49,7 @@ public class ScopeParser extends ParserAlgorithm<Scope> {
         get(TokenType.BEGIN);
 
         // parse the list of statements in the scope
-        List<Statement> statements = new ArrayList<>();
+        List<Node> statements = new ArrayList<>();
         while (!peek().is(TokenType.END)) {
             // parse the next statement of the scope
             Statement statement = parser.nextStatement();

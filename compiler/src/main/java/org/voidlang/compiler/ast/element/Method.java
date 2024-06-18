@@ -12,6 +12,7 @@ import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.node.Generator;
+import org.voidlang.compiler.node.hierarchy.Children;
 import org.voidlang.llvm.type.IRFunctionType;
 import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRFunction;
@@ -41,10 +42,16 @@ public class Method extends Node implements ScopeContainer {
     private final @NotNull List<MethodParameter> parameters;
 
     /**
-     * The body of the method.
+     * The body of the method, that holds the list of instructions.
+     * <p>
+     * The scope may contain nested scopes.
      */
+    @Children
     private final @NotNull Scope body;
 
+    /**
+     * The LLVM function that represents the method.
+     */
     private @Nullable IRFunction function;
 
     /**
