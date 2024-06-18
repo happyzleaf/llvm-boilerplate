@@ -74,6 +74,31 @@ public record Token(@NotNull TokenType type, @NotNull String value, @NotNull Tok
     }
 
     /**
+     * Indicate, whether the type of this token is a number.
+     *
+     * @return {@code true} if this token is a number
+     */
+    public boolean isNumber() {
+        return switch (type) {
+            case BYTE, UBYTE, SHORT, USHORT, INT, UINT, LONG,
+                 ULONG, FLOAT, DOUBLE, HEXADECIMAL, BINARY -> true;
+            default -> false;
+        };
+    }
+
+    /**
+     * Indicate, whether the type of this token is a literal token type.
+     *
+     * @return {@code true} if this token is a constant literal
+     */
+    public boolean isLiteral() {
+        return switch (type) {
+            case STRING, CHARACTER, BOOL -> true;
+            default -> isNumber();
+        };
+    }
+
+    /**
      * Indicate, whether this token is of the specified type.
      *
      * @param o the reference object with which to compare

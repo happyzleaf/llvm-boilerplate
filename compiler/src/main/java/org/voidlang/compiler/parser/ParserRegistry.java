@@ -4,9 +4,11 @@ import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.exception.ParserException;
 import org.voidlang.compiler.parser.impl.element.MethodParser;
+import org.voidlang.compiler.parser.impl.local.ImmutableLocalDeclarationParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
 import org.voidlang.compiler.parser.impl.type.*;
 import org.voidlang.compiler.parser.impl.value.LiteralParser;
+import org.voidlang.compiler.parser.impl.value.ValueParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +35,9 @@ public class ParserRegistry {
             StatementParser.class,
             ScopeParser.class,
             MethodParser.class,
-            LiteralParser.class
+            LiteralParser.class,
+            ValueParser.class,
+            ImmutableLocalDeclarationParser.class
         };
 
         for (Class<?> parser : parsers) {

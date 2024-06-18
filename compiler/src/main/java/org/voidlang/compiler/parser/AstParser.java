@@ -14,9 +14,11 @@ import org.voidlang.compiler.ast.type.referencing.Referencing;
 import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.exception.ParserException;
 import org.voidlang.compiler.parser.impl.element.MethodParser;
+import org.voidlang.compiler.parser.impl.local.ImmutableLocalDeclarationParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
 import org.voidlang.compiler.parser.impl.type.*;
 import org.voidlang.compiler.parser.impl.value.LiteralParser;
+import org.voidlang.compiler.parser.impl.value.ValueParser;
 
 /**
  * Represents a class that simplifies calls for specific parser algorithms.
@@ -66,6 +68,14 @@ public class AstParser {
 
     public @NotNull Value nextLiteral() {
         return parse(LiteralParser.class, Value.class);
+    }
+
+    public @NotNull Value nextValue() {
+        return parse(ValueParser.class, Value.class);
+    }
+
+    public @NotNull Statement nextImmutableLocalDeclaration() {
+        return parse(ImmutableLocalDeclarationParser.class, Statement.class);
     }
 
     public @NotNull Method nextMethod() {
