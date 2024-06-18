@@ -61,6 +61,7 @@ public class ConstantLiteral extends Value {
     @Override
     public @NotNull Type getValueType() {
         return switch (value.type()) {
+            case BOOL -> Types.BOOL;
             case BYTE -> Types.BYTE;
             case UBYTE -> Types.UBYTE;
             case SHORT -> Types.SHORT;
