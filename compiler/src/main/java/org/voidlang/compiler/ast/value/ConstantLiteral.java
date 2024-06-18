@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.NodeInfo;
 import org.voidlang.compiler.ast.NodeType;
 import org.voidlang.compiler.ast.type.Type;
@@ -12,8 +13,11 @@ import org.voidlang.compiler.generator.Generator;
 import org.voidlang.compiler.token.Token;
 import org.voidlang.compiler.token.TokenType;
 import org.voidlang.llvm.module.IRContext;
+import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.type.IRTypes;
 import org.voidlang.llvm.value.IRValue;
+
+import java.util.Optional;
 
 /**
  * Represents a value node in the Abstract Syntax Tree, that holds a constant value.
@@ -30,18 +34,20 @@ public class ConstantLiteral extends Value {
 
     /**
      * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
+     * <p>
+     * This method should return {@link Optional#empty()}, if the parent node should not use the result of this node.
      *
      * @param generator the generation context to use for the code generation
-     * @return the LLVM IR value representing the result of the node
+     * @return the LLVM IR value representing the result of the node, that is empty if the result is not used
      */
     @Override
-    public @NotNull IRValue codegen(@NotNull Generator generator) {
+    public @NotNull Optional<@NotNull IRValue> codegen(@NotNull Generator generator) {
         TokenType type = value().type();
         String value = value().value();
 
         IRContext context = generator.context();
 
-        return switch (type) {
+        IRValue irValue = switch (type) {
             case BYTE, UBYTE -> IRTypes.ofInt8(context).constInt(Byte.parseByte(value));
             case SHORT, USHORT -> IRTypes.ofInt16(context).constInt(Short.parseShort(value));
             case INT, UINT -> IRTypes.ofInt32(context).constInt(Integer.parseInt(value));
@@ -51,6 +57,8 @@ public class ConstantLiteral extends Value {
             case BOOL -> IRTypes.ofInt1(context).constInt("true".equals(value) ? 1 : 0);
             default -> throw new IllegalStateException("Unable to generate literal value for type " + type);
         };
+
+        return Optional.of(irValue);
     }
 
     /**
