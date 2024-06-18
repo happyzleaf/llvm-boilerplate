@@ -78,6 +78,10 @@ public class Method extends Node implements ScopeContainer {
         // create an LLVM function for the method
         function = IRFunction.create(generator.module(), name, signature);
 
+        // set the names for the parameters of the function
+        for (int i = 0; i < parameters.size(); i++)
+            function.parameter(i).setName(parameters.get(i).name());
+
         // generate the LLVM IR code for the body of the method, and assign the function to the generator
         body.codegen(generator.enterFunction(function));
         // unset the function from the generator

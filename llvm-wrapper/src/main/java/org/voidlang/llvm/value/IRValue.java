@@ -49,4 +49,22 @@ public class IRValue {
     public int alignment() {
         return LLVMGetAlignment(handle);
     }
+
+    /**
+     * Assign a new name to the value.
+     *
+     * @param name the new name of the value
+     */
+    public void setName(@NotNull String name) {
+        LLVMSetValueName(handle, name);
+    }
+
+    /**
+     * Retrieve the current name of the value.
+     *
+     * @return the name of the value
+     */
+    public @NotNull String getName() {
+        return LLVMGetValueName(handle).getString();
+    }
 }
