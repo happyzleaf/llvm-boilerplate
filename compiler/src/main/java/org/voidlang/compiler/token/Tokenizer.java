@@ -748,8 +748,8 @@ public class Tokenizer {
      */
     private boolean isType(@NotNull String token) {
         return switch (token) {
-            case "let", "mut", "ref", "deref", "byte", "ubyte", "short", "ushort", "int", "uint", "double", "udouble",
-                 "float", "ufloat", "long", "ulong", "void", "bool", "char", "string" -> true;
+            case "let", "mut", "ref", "deref", "byte", "ubyte", "short", "ushort", "int", "uint", "double",
+                 "float", "long", "ulong", "void", "bool", "char", "string" -> true;
             default -> false;
         };
     }

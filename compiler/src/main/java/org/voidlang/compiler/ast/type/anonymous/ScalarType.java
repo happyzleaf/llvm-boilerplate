@@ -5,7 +5,12 @@ import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.ast.type.array.Array;
 import org.voidlang.compiler.ast.type.name.TypeName;
+import org.voidlang.compiler.ast.type.name.TypeNameKind;
+import org.voidlang.compiler.ast.type.name.primitive.PrimitiveTypeName;
 import org.voidlang.compiler.ast.type.referencing.Referencing;
+import org.voidlang.llvm.module.IRContext;
+import org.voidlang.llvm.type.IRType;
+import org.voidlang.llvm.type.IRTypes;
 
 /**
  * Represents the most primitive type in the Abstract Syntax Tree, which only holds a single type, therefore is
@@ -49,5 +54,33 @@ public record ScalarType(
             return false;
 
         return array.matches(scalar.array);
+    }
+
+    /**
+     * Generate an LLVM type wrapper for this type.
+     *
+     * @param context the context in which the type is generated
+     * @return the LLVM type wrapper
+     */
+    @Override
+    public @NotNull IRType codegen(@NotNull IRContext context) {
+        if (!(name instanceof PrimitiveTypeName primitive))
+            throw new UnsupportedOperationException("Not implemented scalar type: " + name.kind());
+
+        // TODO handle array types
+        // TODO handle pointer types
+
+        // convert the primitive type to an LLVM type wrapper
+        return switch (primitive.type()) {
+            case VOID -> IRTypes.ofVoid(context);
+            case BOOL -> IRTypes.ofInt1(context);
+            case BYTE, UBYTE -> IRTypes.ofInt8(context);
+            case SHORT, USHORT -> IRTypes.ofInt16(context);
+            case INT, UINT -> IRTypes.ofInt32(context);
+            case LONG, ULONG -> IRTypes.ofInt64(context);
+            case FLOAT -> IRTypes.ofFloat(context);
+            case DOUBLE -> IRTypes.ofDouble(context);
+            default -> throw new IllegalStateException("Unexpected primitive type: " + primitive.type());
+        };
     }
 }

@@ -47,6 +47,6 @@ public class Method extends Node {
      */
     @Override
     public @NotNull IRValue codegen(@NotNull Generator generator) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return body.codegen(generator);
     }
 }

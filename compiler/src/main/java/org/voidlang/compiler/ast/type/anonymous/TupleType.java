@@ -6,6 +6,8 @@ import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.ast.type.array.Array;
 import org.voidlang.compiler.ast.type.referencing.Referencing;
 import org.voidlang.compiler.util.debug.Printable;
+import org.voidlang.llvm.module.IRContext;
+import org.voidlang.llvm.type.IRType;
 
 import java.util.List;
 
@@ -60,5 +62,16 @@ public record TupleType(
         }
 
         return array.matches(tuple.array);
+    }
+
+    /**
+     * Generate an LLVM type wrapper for this type.
+     *
+     * @param context the context in which the type is generated
+     * @return the LLVM type wrapper
+     */
+    @Override
+    public @NotNull IRType codegen(@NotNull IRContext context) {
+        throw new UnsupportedOperationException("Not implemented tuple type");
     }
 }
