@@ -4,15 +4,15 @@ Any fool can write code that a computer can understand. Good programmers write c
 – Martin Fowler.
 
 # Disclaimer
-Void has been recently changed paradigma, and now is willing to enter the world of native code.
+Void has been recently changed paradigm, and now is willing to enter the world of native code.
 This opens up a new era of being able to write blazingly fast applications.
-Void aims to offer an easy and reliable syntax, that ensures that you can sill write safe and simple code, without having to use a heavy runtime.
-If you want to try Void, or want to see the current progress, check [The Void Compiler](https://github.com/voidlang/void-compiler).
+Void aims to offer an easy and reliable syntax, that ensures that you can still write safe and simple code, without having to use a heavy runtime.
+The [old compiler](https://github.com/VoidLang/void/tree/legacy) has been deprecated, and a [new one](https://github.com/VoidLang/void/tree/nextgen) is being developed at.
 
 ## What is Void?
 Void is an LLVM-based native programming language that is designed for developers to be able to create clean, fast and stable multi-platform applications with the power that native provides.
 
-It has has a relatively easy syntax, that follows most of the already existing code conventions.
+It has a relatively easy syntax, that follows most of the already existing code conventions.
 
 Void features many utilities that enchant the experience of coding, such as object destruction, variable redeclaration, multi-returning, and much more.
 
@@ -94,10 +94,10 @@ or having long lines of type conversion is both considered a bad practice.
 ```java
 // bad code
 int balance = database.getUser("username").balance
-String balanceStr = $"{balance} USD"
+string balanceStr = $"{balance} USD"
 
 // also bad code
-String balance = String.from(database.getUser("username").balance) + " USD"
+string balance = string.from(database.getUser("username").balance) + " USD"
 ```
 ```rust
 // simplified code with variable redeclaration
@@ -115,10 +115,10 @@ without the need of making structs holding multiple values for return.
 // overcomplicated code
 struct HttpResponse {
     public int code
-    public String message
+    public string message
 }
 
-HttpResponse fetchURL(String url) {
+HttpResponse fetchURL(string url) {
     return new HttpResponse {
         code: 404,
         message: "Not found."
@@ -126,7 +126,7 @@ HttpResponse fetchURL(String url) {
 }
 
 // simplified code
-(int, String) fetchURL(String url) {
+(int, string) fetchURL(string url) {
     return (404, "Not found.")
 }
 ```
@@ -153,7 +153,7 @@ Void allows you to name tuple members.
 Member names are specified inside the method return type declaration.
 ```
 ```c#
-(boolean success, String token) authenticate(String username, String password) {
+(boolean success, string token) authenticate(String username, string password) {
     return (true, "Authenticated.")
 }
 ```
@@ -206,7 +206,7 @@ It has the capatibility of holding methods, implementations, fileds, and much mo
 ```
 ```java
 class Car {
-    String type
+    string type
     int speed
 
     void move() {
@@ -262,9 +262,9 @@ enum MimeType {
     IMAGE("image/png"),
     VIDEO("video/mp4")
 
-    String data;
+    string data;
 
-    MimeType(String data) {
+    MimeType(string data) {
         this.data = data;
     }
 }
@@ -274,7 +274,7 @@ You can decorate classes, fields, methods or code blocks with annotations.
 ```
 ```java
 @interface Subscribe {
-    String event
+    string event
 }
 
 @Subscribe(event = "playerJoin")
@@ -380,7 +380,7 @@ and a default() method must be declared as well.
 ```
 ```java
 default class Credentials {
-    String username, password
+    string username, password
 	
     default() {
         return {
@@ -511,7 +511,7 @@ Therefore you don't need two extra lines to do a negated method guard.
 ```
 ```c#
 // previously you had to use two lines of code to return
-void handleCommand(Player p, String command) {
+void handleCommand(Player p, string command) {
     if (!p.hasPermission("use")) {
         p.sendMessage("no perms")
         return
@@ -702,7 +702,7 @@ println($"Data: {json}")
 let data = "{ \"name\": \"admin\", \"userId\": 12345 }"
 
 struct User {
-    String name
+    string name
     int userId
 }
 
