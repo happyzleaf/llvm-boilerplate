@@ -16,9 +16,11 @@ import org.voidlang.llvm.jit.IRGenericValue;
 import org.voidlang.llvm.jit.JitCompilerOptions;
 import org.voidlang.llvm.module.IRContext;
 import org.voidlang.llvm.module.IRModule;
+import org.voidlang.llvm.type.IRTypes;
 import org.voidlang.llvm.value.IRFunction;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.bytedeco.llvm.global.LLVM.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +35,7 @@ public class JitMethodTest {
             }
             """;
 
-        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source));
+        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, new ArrayList<>()));
         assertEquals(1337, result.toInt());
     }
 
@@ -47,24 +49,27 @@ public class JitMethodTest {
             }
             """;
 
-        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source));
+        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, new ArrayList<>()));
         assertEquals(10, result.toInt());
     }
 
     @Test
-    public void test_method_with_parameters() {
+    public void test_method_return_parameter() {
         String source =
             """
-            int bar(int a, int b) {
-                return 10
+            int bar(int val) {
+                return val
             }
             """;
 
-        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source));
-        assertEquals(10, result.toInt());
+        IRGenericValue param = IRGenericValue.ofInt(IRTypes.ofInt32(), 69, true);
+        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, List.of(param)));
+        assertEquals(69, result.toInt());
     }
 
-    private @NotNull IRGenericValue compileAndRunMethod(@NotNull String source) {
+    private @NotNull IRGenericValue compileAndRunMethod(
+        @NotNull String source, @NotNull List<@NotNull IRGenericValue> parameters
+    ) {
         LLVMInitializeCore(LLVMGetGlobalPassRegistry());
         LLVMLinkInMCJIT();
         LLVMInitializeNativeAsmPrinter();
@@ -104,7 +109,7 @@ public class JitMethodTest {
         IRFunction function = method.function();
         assert function != null;
 
-        IRGenericValue result = engine.runFunction(function, new ArrayList<>());
+        IRGenericValue result = engine.runFunction(function, parameters);
 
         generator.dispose();
 
