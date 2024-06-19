@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.voidlang.compiler.ast.Node;
+import org.voidlang.compiler.ast.element.parameter.ImmutableParameterAccess;
+import org.voidlang.compiler.ast.local.Variable;
 import org.voidlang.compiler.ast.scope.ScopeContainer;
+import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.ast.scope.Scope;
@@ -18,7 +20,9 @@ import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRFunction;
 import org.voidlang.llvm.value.IRValue;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @NodeInfo(type = NodeType.METHOD)
@@ -26,6 +30,8 @@ import java.util.Optional;
 @Accessors(fluent = true)
 @Getter
 public class Method extends ScopeContainer {
+    private final @NotNull Map<@NotNull String, @NotNull Variable> parameterAccessors = new HashMap<>();
+
     /**
      * The return type of the method.
      */
@@ -88,6 +94,37 @@ public class Method extends ScopeContainer {
         generator.exitFunction();
 
         return Optional.of(function);
+    }
+
+    /**
+     * Resolve a local variable or a global constant by its specified name.
+     * <p>
+     * If a node does not override this logic, by default it will try to resolve the value from the {@link #parent}
+     * node.
+     * <p>
+     * A {@link Scope} will initially try to resolve the value from itself, and then from the parent scope.
+     *
+     * @param name the name of the variable or constant to resolve
+     * @return the value of the variable or constant, or {@code null} if the name is not found
+     */
+    @Override
+    public @Nullable Variable resolveName(@NotNull String name) {
+        // resolve method parameters
+        for (int i = 0; i < parameters.size(); i++) {
+            MethodParameter parameter = parameters.get(i);
+
+            // skip the parameter if the name does not match
+            if (!parameter.name().equals(name))
+                continue;
+
+            final int index = i;
+            assert function != null;
+            return parameterAccessors.computeIfAbsent(name, k -> new ImmutableParameterAccess(
+                function.parameter(index), parameter.name(), parameter.type()
+            ));
+        }
+
+        return super.resolveName(name);
     }
 
     /**

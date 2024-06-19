@@ -14,6 +14,8 @@ public enum NodeType {
 
     NAME_ACCESS,
 
+    IMMUTABLE_PARAMETER_ACCESS,
+
     RETURN,
 
     METHOD,
