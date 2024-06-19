@@ -3,6 +3,7 @@ package org.voidlang.compiler.parser;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.exception.ParserException;
+import org.voidlang.compiler.parser.impl.access.AccessParser;
 import org.voidlang.compiler.parser.impl.control.ReturnParser;
 import org.voidlang.compiler.parser.impl.element.MethodParser;
 import org.voidlang.compiler.parser.impl.local.ImmutableLocalDeclarationParser;
@@ -38,6 +39,7 @@ public class ParserRegistry {
             MethodParser.class,
             LiteralParser.class,
             ValueParser.class,
+            AccessParser.class,
             ImmutableLocalDeclarationParser.class,
             ReturnParser.class
         };

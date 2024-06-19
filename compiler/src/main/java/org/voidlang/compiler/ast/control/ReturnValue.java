@@ -4,12 +4,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
-import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.node.Generator;
+import org.voidlang.compiler.node.hierarchy.Children;
 import org.voidlang.llvm.value.IRValue;
 
 import java.util.Optional;
@@ -19,6 +19,7 @@ import java.util.Optional;
 @Getter
 @NodeInfo(type = NodeType.RETURN)
 public class ReturnValue extends Statement {
+    @Children
     private final @NotNull Value value;
 
     /**

@@ -12,6 +12,8 @@ public enum NodeType {
 
     IMMUTABLE_LOCAL_DECLARE_ASSIGN,
 
+    NAME_ACCESS,
+
     RETURN,
 
     METHOD,

@@ -1,8 +1,8 @@
 package org.voidlang.compiler.parser.local;
 
 import org.junit.jupiter.api.Test;
+import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.local.ImmutableLocalDeclareAssign;
-import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.ast.type.Types;
 import org.voidlang.compiler.ast.value.ConstantLiteral;
 import org.voidlang.compiler.ast.value.Value;
@@ -21,7 +21,7 @@ public class ImmutableLocalDeclareAssignTest {
 
         AstParser parser = assertDoesNotThrow(() -> Parsers.of(source));
 
-        Statement statement = assertDoesNotThrow(parser::nextImmutableLocalDeclaration);
+        Node statement = assertDoesNotThrow(parser::nextImmutableLocalDeclaration);
         assertInstanceOf(ImmutableLocalDeclareAssign.class, statement);
 
         ImmutableLocalDeclareAssign local = (ImmutableLocalDeclareAssign) statement;

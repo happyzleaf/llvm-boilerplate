@@ -1,6 +1,7 @@
 package org.voidlang.compiler.parser.impl.type;
 
 import org.jetbrains.annotations.NotNull;
+import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.parser.AstParser;
 import org.voidlang.compiler.parser.ParserAlgorithm;
@@ -12,7 +13,7 @@ import org.voidlang.compiler.token.TokenType;
  *
  * @see Statement
  */
-public class StatementParser extends ParserAlgorithm<Statement> {
+public class StatementParser extends ParserAlgorithm<Node> {
     /**
      * Parse the next {@link Statement} node from the token stream.
      *
@@ -21,7 +22,7 @@ public class StatementParser extends ParserAlgorithm<Statement> {
      * @return the next {@link Statement} node from the token stream
      */
     @Override
-    public @NotNull Statement parse(@NotNull AstParser parser, @NotNull ParserContext context) {
+    public @NotNull Node parse(@NotNull AstParser parser, @NotNull ParserContext context) {
         // handle immutable local variable declaration
         // let name = "John Doe"
         // ^^^ the let keyword indicates, that a local variable is declared

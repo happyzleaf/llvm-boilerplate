@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.voidlang.compiler.ast.element.Method;
 import org.voidlang.compiler.node.Generator;
+import org.voidlang.compiler.node.hierarchy.NodeVisitor;
 import org.voidlang.compiler.parser.AstParser;
 import org.voidlang.compiler.util.Parsers;
 import org.voidlang.llvm.error.VerificationFailureAction;
@@ -36,6 +37,33 @@ public class JitMethodTest {
         assertEquals(1337, result.toInt());
     }
 
+    @Test
+    public void test_method_with_variable() {
+        String source =
+            """
+            int foo() {
+                let a = 10
+                return a
+            }
+            """;
+
+        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source));
+        assertEquals(10, result.toInt());
+    }
+
+    @Test
+    public void test_method_with_parameters() {
+        String source =
+            """
+            int bar(int a, int b) {
+                return 10
+            }
+            """;
+
+        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source));
+        assertEquals(10, result.toInt());
+    }
+
     private @NotNull IRGenericValue compileAndRunMethod(@NotNull String source) {
         LLVMInitializeCore(LLVMGetGlobalPassRegistry());
         LLVMLinkInMCJIT();
@@ -52,6 +80,8 @@ public class JitMethodTest {
         AstParser parser = assertDoesNotThrow(() -> Parsers.of(source));
 
         Method method = parser.nextMethod();
+
+        NodeVisitor.initHierarchy();
         method.codegen(generator);
 
         BytePointer error = new BytePointer((Pointer) null);
@@ -60,6 +90,8 @@ public class JitMethodTest {
             LLVMDisposeMessage(error);
             throw new IllegalStateException("Failed to verify module");
         }
+
+        module.dump();
 
         ExecutionEngine engine = ExecutionEngine.create();
         JitCompilerOptions options = JitCompilerOptions.create();

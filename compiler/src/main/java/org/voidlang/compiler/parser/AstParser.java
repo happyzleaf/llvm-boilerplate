@@ -2,6 +2,7 @@ package org.voidlang.compiler.parser;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.element.Method;
 import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.scope.Statement;
@@ -13,6 +14,7 @@ import org.voidlang.compiler.ast.type.name.TypeName;
 import org.voidlang.compiler.ast.type.referencing.Referencing;
 import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.exception.ParserException;
+import org.voidlang.compiler.parser.impl.access.AccessParser;
 import org.voidlang.compiler.parser.impl.control.ReturnParser;
 import org.voidlang.compiler.parser.impl.element.MethodParser;
 import org.voidlang.compiler.parser.impl.local.ImmutableLocalDeclarationParser;
@@ -33,7 +35,6 @@ public class AstParser {
      * The context of the token stream parsing.
      */
     private final @NotNull ParserContext context;
-
 
     public @NotNull Referencing nextReferencing() {
         return parse(ReferencingParser.class, Referencing.class);
@@ -63,8 +64,8 @@ public class AstParser {
         return parse(ScopeParser.class, Scope.class);
     }
 
-    public @NotNull Statement nextStatement() {
-        return parse(StatementParser.class, Statement.class);
+    public @NotNull Node nextStatement() {
+        return parse(StatementParser.class, Node.class);
     }
 
     public @NotNull Value nextLiteral() {
@@ -75,8 +76,12 @@ public class AstParser {
         return parse(ValueParser.class, Value.class);
     }
 
-    public @NotNull Statement nextImmutableLocalDeclaration() {
-        return parse(ImmutableLocalDeclarationParser.class, Statement.class);
+    public @NotNull Node nextImmutableLocalDeclaration() {
+        return parse(ImmutableLocalDeclarationParser.class, Node.class);
+    }
+
+    public @NotNull Value nextAccess() {
+        return parse(AccessParser.class, Value.class);
     }
 
     public @NotNull Statement nextReturnStatement() {

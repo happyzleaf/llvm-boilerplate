@@ -25,7 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class Method extends Node implements ScopeContainer {
+public class Method extends ScopeContainer {
     /**
      * The return type of the method.
      */

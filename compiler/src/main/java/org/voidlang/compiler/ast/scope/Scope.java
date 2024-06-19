@@ -7,9 +7,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.element.Method;
+import org.voidlang.compiler.ast.local.Variable;
+import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.node.Generator;
+import org.voidlang.compiler.node.hierarchy.Children;
 import org.voidlang.compiler.node.hierarchy.NodeVisitor;
 import org.voidlang.compiler.node.hierarchy.Parent;
 import org.voidlang.llvm.instruction.IRBlock;
@@ -28,10 +31,11 @@ import java.util.Optional;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.SCOPE)
-public class Scope extends Node implements ScopeContainer {
+public class Scope extends ScopeContainer {
     /**
      * The list of instructions that are associated with the scope.
      */
+    @Children
     private final @NotNull List<@NotNull Node> statements;
 
     /**
@@ -64,6 +68,27 @@ public class Scope extends Node implements ScopeContainer {
             statement.codegen(generator);
 
         return Optional.empty();
+    }
+
+    /**
+     * Resolve a local variable or a global constant by its specified name.
+     * <p>
+     * If a node does not override this logic, by default it will try to resolve the value from the {@link #parent}
+     * node.
+     * <p>
+     * A {@link Scope} will initially try to resolve the value from itself, and then from the parent scope.
+     *
+     * @param name the name of the variable or constant to resolve
+     * @return the value of the variable or constant, or {@code null} if the name is not found
+     */
+    @Override
+    public @Nullable Variable resolveName(@NotNull String name) {
+        // try to resolve the value from this scope
+        for (Node statement : statements) {
+            if (statement instanceof Variable variable && variable.name().equals(name))
+                return variable;
+        }
+        return parent != null ? parent.resolveName(name) : null;
     }
 
     /**

@@ -52,7 +52,7 @@ public class ScopeParser extends ParserAlgorithm<Scope> {
         List<Node> statements = new ArrayList<>();
         while (!peek().is(TokenType.END)) {
             // parse the next statement of the scope
-            Statement statement = parser.nextStatement();
+            Node statement = parser.nextStatement();
 
             // ignore unexpected auto-inserted semicolon
             if (peek().is(TokenType.SEMICOLON, "auto")) {

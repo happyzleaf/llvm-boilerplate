@@ -2,13 +2,14 @@ package org.voidlang.compiler.ast.scope;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.voidlang.compiler.ast.Node;
 
 import java.util.List;
 
 /**
  * Represents an interface that describes, that the implementing class is responsible for managing scopes.
  */
-public interface ScopeContainer {
+public abstract class ScopeContainer extends Node {
     /**
      * Retrieve the parent scope of this scope.
      * <p>
@@ -16,7 +17,7 @@ public interface ScopeContainer {
      *
      * @return the parent scope of this scope, or {@code null} if {@code this} scope is the root scope
      */
-    @Nullable ScopeContainer getParentScope();
+    public abstract @Nullable ScopeContainer getParentScope();
 
     /**
      * Retrieve the list of child scopes of this scope.
@@ -25,5 +26,5 @@ public interface ScopeContainer {
      *
      * @return the list of child scopes of this scope
      */
-    @NotNull List<@NotNull ScopeContainer> getChildrenScopes();
+    public abstract @NotNull List<@NotNull ScopeContainer> getChildrenScopes();
 }

@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
-import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.node.Generator;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.IMMUTABLE_LOCAL_DECLARE_ASSIGN)
-public class ImmutableLocalDeclareAssign extends Statement implements LocalVariable {
+public class ImmutableLocalDeclareAssign extends Variable {
     /**
      * The declared type of the variable.
      * <p>
@@ -78,5 +78,33 @@ public class ImmutableLocalDeclareAssign extends Statement implements LocalVaria
         generator.builder().store(value.get(), pointer);
 
         return Optional.empty();
+    }
+
+    /**
+     * Load the value of the local variable.
+     *
+     * @param generator the generation context to use for the code generation
+     * @param strategy the access strategy to use for the code generation
+     * @param name the name of the variable to load
+     * @return the LLVM IR value representing the result of the node
+     */
+    @Override
+    public @NotNull IRValue load(@NotNull Generator generator, @NotNull AccessStrategy strategy, @NotNull String name) {
+        assert pointerType != null;
+        assert pointer != null;
+        return switch (strategy) {
+            case KEEP_POINTER -> pointer;
+            case LOAD_POINTER -> generator.builder().load(pointerType, pointer, name);
+        };
+    }
+
+    /**
+     * Retrieve the type of the held value. This result will be used to inter types for untyped variables.
+     *
+     * @return the resolved value of the type
+     */
+    @Override
+    public @NotNull Type getValueType() {
+        return value.getValueType();
     }
 }

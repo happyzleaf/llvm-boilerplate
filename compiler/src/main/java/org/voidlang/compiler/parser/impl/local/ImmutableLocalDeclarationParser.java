@@ -1,6 +1,7 @@
 package org.voidlang.compiler.parser.impl.local;
 
 import org.jetbrains.annotations.NotNull;
+import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.local.ImmutableLocalDeclareAssign;
 import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.ast.type.Types;
@@ -15,7 +16,7 @@ import org.voidlang.compiler.token.TokenType;
  *
  * @see ImmutableLocalDeclareAssign
  */
-public class ImmutableLocalDeclarationParser extends ParserAlgorithm<Statement> {
+public class ImmutableLocalDeclarationParser extends ParserAlgorithm<Node> {
     /**
      * Parse the next {@link Statement} node from the token stream.
      *
@@ -24,7 +25,7 @@ public class ImmutableLocalDeclarationParser extends ParserAlgorithm<Statement> 
      * @return the next {@link Statement} node from the token stream
      */
     @Override
-    public @NotNull Statement parse(@NotNull AstParser parser, @NotNull ParserContext context) {
+    public @NotNull Node parse(@NotNull AstParser parser, @NotNull ParserContext context) {
         // skip the `let` keyword
         // let name = "John Doe"
         // ^^^ the `let` keyword indicates, that a local variable is being declared

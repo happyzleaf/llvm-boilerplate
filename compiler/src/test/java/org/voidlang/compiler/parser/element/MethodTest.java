@@ -5,7 +5,6 @@ import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.element.Method;
 import org.voidlang.compiler.ast.element.MethodParameter;
 import org.voidlang.compiler.ast.local.ImmutableLocalDeclareAssign;
-import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.ast.type.Types;
 import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.parser.AstParser;
