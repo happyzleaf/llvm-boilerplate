@@ -5,8 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.Node;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents a utility class that visits the node hierarchy and initializes the parent-child relationships.
@@ -37,7 +36,7 @@ public class NodeVisitor {
         // iterate each node registered in the hierarchy
         for (Node node : NODES) {
             // iterate each field of the node, including the inherited fields
-            for (Field field : node.getClass().getFields()) {
+            for (Field field : getFields(node.getClass())) {
                 // check if the field is annotated with the children annotation
                 if (!field.isAnnotationPresent(Children.class))
                     continue;
@@ -94,7 +93,7 @@ public class NodeVisitor {
      */
     private void processParent(@NotNull Node parent, @NotNull Node child) {
         // iterate each field of the child node, including the inherited fields
-        for (Field field : child.getClass().getFields()) {
+        for (Field field : getFields(child.getClass())) {
             // check if the field is annotated with the parent annotation
             if (!field.isAnnotationPresent(Parent.class))
                 continue;
@@ -114,5 +113,20 @@ public class NodeVisitor {
      */
     public void clear() {
         NODES.clear();
+    }
+
+    /**
+     * Resolve the declared and inherited fields of the specified {@param type}.
+     *
+     * @param type the type to resolve the fields for
+     * @return the list of declared and inherited fields of the type
+     */
+    public @NotNull List<@NotNull Field> getFields(@NotNull Class<?> type) {
+        List<Field> fields = new ArrayList<>();
+        while (type != null) {
+            Collections.addAll(fields, type.getDeclaredFields());
+            type = type.getSuperclass();
+        }
+        return fields;
     }
 }
