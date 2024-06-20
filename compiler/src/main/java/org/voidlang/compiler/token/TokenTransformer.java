@@ -135,8 +135,9 @@ public class TokenTransformer {
             // and the token after the new line is not one of the forbidden tokens
             if (requiredBefore && !forbiddenAfter)
                 // add a dummy "auto" value for the token, therefore the AST handle user-defined semicolons and
-                // automatically inserted semicolons properly
-                result.add(Token.of(TokenType.SEMICOLON, "auto"));
+                // automatically inserted semicolons properly.
+                // let's just copy the new line's token metadata to the semicolon, considering they are of the same size
+                result.add(new Token(TokenType.SEMICOLON, "auto", token.meta()));
 
             // if the requirements do not meet, we are just going to ignore the token
             // there is no need to put a semicolon, because it seems like the expression
