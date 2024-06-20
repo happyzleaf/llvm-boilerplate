@@ -81,7 +81,7 @@ public class LiteralParser extends ParserAlgorithm<Value> {
 
         // TODO handle indexing
 
-        System.out.println(ConsoleFormat.RED + "Error (Literal) " + peek());
+        context.syntaxError(peek(), "Invalid literal value");
         return new Error();
     }
 }

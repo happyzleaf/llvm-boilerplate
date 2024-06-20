@@ -28,6 +28,7 @@ public class TypeNameParser extends ParserAlgorithm<TypeName> {
         if (first.is(TokenType.TYPE))
             return TypeName.primitive(PrimitiveType.of(first.value()));
 
+        context.syntaxError(first, "Invalid type name");
         throw new UnsupportedOperationException("Not implemented type name");
     }
 }

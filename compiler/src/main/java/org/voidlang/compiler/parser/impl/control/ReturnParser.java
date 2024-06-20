@@ -7,6 +7,7 @@ import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.parser.AstParser;
 import org.voidlang.compiler.parser.ParserAlgorithm;
 import org.voidlang.compiler.parser.ParserContext;
+import org.voidlang.compiler.token.Token;
 import org.voidlang.compiler.token.TokenType;
 
 /**
@@ -28,10 +29,12 @@ public class ReturnParser extends ParserAlgorithm<Statement> {
         // return 42
         // ^^^^^^ the return keyword indicates, that the execution should be stopped, and the method should
         // return a value to the caller
-        get(TokenType.EXPRESSION, "return");
+        Token token = get(TokenType.EXPRESSION, "return");
 
-        if (peek().is(TokenType.SEMICOLON))
+        if (peek().is(TokenType.SEMICOLON)) {
+            context.syntaxError(token, "Void return not implemented yet");
             throw new UnsupportedOperationException("Void return not implemented yet");
+        }
 
         // parse the value to return.
         // return 42

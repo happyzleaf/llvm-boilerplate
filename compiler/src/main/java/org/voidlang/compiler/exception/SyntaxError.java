@@ -1,4 +1,4 @@
-package org.voidlang.compiler.token;
+package org.voidlang.compiler.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public enum TokenError {
+public enum SyntaxError {
     /**
      * `UNEXPECTED_CHARACTER` indicates, that the tokenizer encountered an unexpected character.
      */
@@ -41,7 +41,12 @@ public enum TokenError {
      * `CANNOT_HAVE_DECIMAL_POINT` indicates, that the tokenizer detected a decimal point in a number literal that
      * cannot have a decimal point.
      */
-    CANNOT_HAVE_DECIMAL_POINT(106);
+    CANNOT_HAVE_DECIMAL_POINT(106),
+
+    /**
+     * `UNEXPECTED_TOKEN` indicates, that the tokenizer encountered an unexpected token.
+     */
+    UNEXPECTED_TOKEN(107);
 
     /**
      * The error code of the token error.

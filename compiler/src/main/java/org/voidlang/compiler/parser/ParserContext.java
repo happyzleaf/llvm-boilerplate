@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.exception.ParserException;
+import org.voidlang.compiler.exception.SyntaxError;
 import org.voidlang.compiler.token.Token;
+import org.voidlang.compiler.token.TokenMeta;
 import org.voidlang.compiler.token.TokenType;
 import org.voidlang.compiler.token.Tokenizer;
+import org.voidlang.compiler.util.console.ConsoleFormat;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Represents a class, that utilises methods to resolve tokens from the token stream.
@@ -22,6 +26,11 @@ public class ParserContext {
      * The list of tokens received by the {@link Tokenizer}, to be parsed to a tree of {@link Node}s.
      */
     private final @NotNull List<@NotNull Token> tokens;
+
+    /**
+     * The content of the source file that is being parsed.
+     */
+    private final @NotNull String data;
 
     /**
      * The index of the currently parsed token.
@@ -78,6 +87,7 @@ public class ParserContext {
         Token token = peek();
         if (token.is(type))
             return token;
+        syntaxError(token, Token.of(type));
         throw new ParserException("Invalid token. Expected " + type + " but found " + token);
     }
 
@@ -95,6 +105,7 @@ public class ParserContext {
             if (token.is(type))
                 return token;
         }
+        syntaxError(token, Arrays.stream(types).map(Token::of).toArray(Token[]::new));
         throw new ParserException("Invalid token. Expected " + Arrays.toString(types) + " but found " + token);
     }
 
@@ -110,6 +121,7 @@ public class ParserContext {
         Token token = get();
         if (token.is(type))
             return token;
+        syntaxError(token, Token.of(type));
         throw new ParserException("Invalid token. Expected " + type + " but found " + token);
     }
 
@@ -126,6 +138,7 @@ public class ParserContext {
         Token token = get();
         if (token.is(type, value))
             return token;
+        syntaxError(token, Token.of(type, value));
         throw new ParserException("Invalid token. Expected " + Token.of(type, value) + " but found " + token);
     }
 
@@ -143,6 +156,71 @@ public class ParserContext {
             if (token.is(type))
                 return token;
         }
+        syntaxError(token, Arrays.stream(types).map(Token::of).toArray(Token[]::new));
         throw new ParserException("Invalid token. Expected " + Arrays.toString(types) + " but found " + token);
+    }
+
+    private @NotNull String formatToken(@NotNull Token token) {
+        String name = token.type().name();
+        if (!token.value().isEmpty())
+            name += " `" + token.value() + "`";
+        return ConsoleFormat.WHITE + name;
+    }
+
+    public void syntaxError(@NotNull Token token, @NotNull Token @NotNull ... expected) {
+        String expectedTokens = Stream.of(expected)
+            .map(this::formatToken)
+            .reduce((a, b) -> a + ConsoleFormat.LIGHT_GRAY + ", " + b)
+            .orElse("");
+
+        syntaxError(token, "Expected: " + expectedTokens);
+    }
+
+    public void syntaxError(@NotNull Token token, @NotNull String message) {
+        System.err.println(
+            ConsoleFormat.RED + "error[E" + SyntaxError.UNEXPECTED_TOKEN.code() + "]" + ConsoleFormat.WHITE + ": " +
+            "Unexpected token: " + formatToken(token)
+        );
+        TokenMeta meta = token.meta();
+        System.err.println(
+            ConsoleFormat.CYAN + " --> " + ConsoleFormat.LIGHT_GRAY + "filename.void" + ":" + meta.lineNumber() + ":" +
+            meta.lineIndex()
+        );
+
+        int lineSize = String.valueOf(meta.lineNumber()).length();
+
+        // display the line number
+        System.err.print(ConsoleFormat.CYAN + " ".repeat(lineSize + 1));
+        System.err.println(" | ");
+
+        System.err.print(" " + meta.lineNumber() + " | ");
+
+        // get the line of the error
+        String line = data.split("\n")[meta.lineNumber() - 1];
+
+        // get the start and end index of the line
+        int start = Math.max(0, meta.lineIndex() - Tokenizer.MAX_ERROR_LINE_LENGTH);
+        int end = Math.min(line.length(), meta.lineIndex() + Tokenizer.MAX_ERROR_LINE_LENGTH);
+
+        // display the line of the error
+        System.err.println(ConsoleFormat.LIGHT_GRAY + line.substring(start, end));
+
+        // display the error pointer
+        System.err.print(ConsoleFormat.CYAN + " ".repeat(lineSize + 1));
+        String pointerPad = " ".repeat(lineSize + (meta.lineIndex() - start) - 1);
+        System.err.println(" | " + pointerPad + ConsoleFormat.RED + "^".repeat(meta.endIndex() - meta.beginIndex()));
+
+        // display the expected tokens below the pointer
+        System.err.print(ConsoleFormat.CYAN + " ".repeat(lineSize + 1));
+        System.err.println(" | " + pointerPad + ConsoleFormat.LIGHT_GRAY + message);
+
+        // display a final separator
+        System.err.print(ConsoleFormat.CYAN + " ".repeat(lineSize + 1));
+        System.err.println(" | ");
+
+        System.err.print(ConsoleFormat.DEFAULT);
+
+        // exit the program with the error code
+        System.exit(SyntaxError.UNEXPECTED_TOKEN.code());
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @UtilityClass
 public class Tokenizers {
     public List<Token> tokenizeSource(String source) {
-        Tokenizer tokenizer = new Tokenizer(new File(""), source);
+        Tokenizer tokenizer = new Tokenizer(new File("example.void"), source);
         List<Token> tokens = new ArrayList<>();
         Token token;
 

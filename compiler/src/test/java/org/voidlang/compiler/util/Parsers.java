@@ -12,7 +12,7 @@ import java.util.List;
 public class Parsers {
     public @NotNull AstParser of(@NotNull String source) {
         List<Token> tokens = Tokenizers.tokenizeSource(source);
-        ParserContext context = new ParserContext(tokens);
+        ParserContext context = new ParserContext(tokens, source);
 
         return new AstParser(context);
     }

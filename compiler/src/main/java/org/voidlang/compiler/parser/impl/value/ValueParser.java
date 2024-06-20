@@ -38,6 +38,7 @@ public class ValueParser extends ParserAlgorithm<Value> {
         else if (peek().is(TokenType.IDENTIFIER))
             return parser.nextAccess();
 
+        context.syntaxError(peek(), "Invalid value");
         throw new UnsupportedOperationException("Unsupported value type: " + peek());
     }
 }
