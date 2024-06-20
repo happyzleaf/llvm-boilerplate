@@ -3,7 +3,6 @@ package org.voidlang.compiler.parser.impl.scope;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.scope.Scope;
-import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.parser.AstParser;
 import org.voidlang.compiler.parser.ParserAlgorithm;
 import org.voidlang.compiler.parser.ParserContext;

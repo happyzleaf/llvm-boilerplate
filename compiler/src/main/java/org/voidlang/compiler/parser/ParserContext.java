@@ -1,6 +1,8 @@
 package org.voidlang.compiler.parser;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.exception.ParserException;
@@ -21,6 +23,7 @@ import java.util.stream.Stream;
  * The implementations of the {@link ParserAlgorithm} use this class to parse a part of the token stream.
  */
 @RequiredArgsConstructor
+@Accessors(fluent = true)
 public class ParserContext {
     /**
      * The list of tokens received by the {@link Tokenizer}, to be parsed to a tree of {@link Node}s.
@@ -35,6 +38,7 @@ public class ParserContext {
     /**
      * The index of the currently parsed token.
      */
+    @Getter
     private int cursor;
 
     /**

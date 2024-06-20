@@ -1,9 +1,12 @@
 package org.voidlang.compiler.parser;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.element.Method;
+import org.voidlang.compiler.ast.operator.Operator;
 import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.scope.Statement;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
@@ -18,6 +21,7 @@ import org.voidlang.compiler.parser.impl.access.AccessParser;
 import org.voidlang.compiler.parser.impl.control.ReturnParser;
 import org.voidlang.compiler.parser.impl.element.MethodParser;
 import org.voidlang.compiler.parser.impl.local.ImmutableLocalDeclarationParser;
+import org.voidlang.compiler.parser.impl.operator.OperatorParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
 import org.voidlang.compiler.parser.impl.type.*;
 import org.voidlang.compiler.parser.impl.value.LiteralParser;
@@ -30,6 +34,8 @@ import org.voidlang.compiler.parser.impl.value.ValueParser;
  * based on the parent context.
  */
 @RequiredArgsConstructor
+@Accessors(fluent = true)
+@Getter
 public class AstParser {
     /**
      * The context of the token stream parsing.
@@ -90,6 +96,10 @@ public class AstParser {
 
     public @NotNull Method nextMethod() {
         return parse(MethodParser.class, Method.class);
+    }
+
+    public @NotNull Operator nextOperator() {
+        return parse(OperatorParser.class, Operator.class);
     }
 
     /**

@@ -7,6 +7,7 @@ import org.voidlang.compiler.parser.impl.access.AccessParser;
 import org.voidlang.compiler.parser.impl.control.ReturnParser;
 import org.voidlang.compiler.parser.impl.element.MethodParser;
 import org.voidlang.compiler.parser.impl.local.ImmutableLocalDeclarationParser;
+import org.voidlang.compiler.parser.impl.operator.OperatorParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
 import org.voidlang.compiler.parser.impl.type.*;
 import org.voidlang.compiler.parser.impl.value.LiteralParser;
@@ -41,7 +42,8 @@ public class ParserRegistry {
             ValueParser.class,
             AccessParser.class,
             ImmutableLocalDeclarationParser.class,
-            ReturnParser.class
+            ReturnParser.class,
+            OperatorParser.class
         };
 
         for (Class<?> parser : parsers) {

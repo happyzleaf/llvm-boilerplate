@@ -32,7 +32,7 @@ public enum Operator {
     ADD_EQUAL("+=", 1, 0),
     INCREMENT("++", 1, 0),
 
-    SUBTRACT("-", 1, 0),
+    // SUBTRACT("-", 1, 0),
     SUBTRACT_EQUAL("-=", 1, 0),
     DECREMENT("--", 1, 0),
 

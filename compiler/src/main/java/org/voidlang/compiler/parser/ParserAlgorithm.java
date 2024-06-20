@@ -136,7 +136,7 @@ public abstract class ParserAlgorithm<T> {
      *
      * @throws UnsupportedOperationException if the parser context is not set
      */
-    private @NotNull ParserContext useContext() {
+    protected @NotNull ParserContext useContext() {
         if (context == null)
             throw new UnsupportedOperationException("Parser context is not set");
         return context;
