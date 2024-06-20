@@ -24,57 +24,55 @@ public class TokenTransformer {
     /**
      * The list of tokens required before the new line for the semicolon to be inserted.
      */
-    private static final @NotNull List<@NotNull Token> REQUIRED_BEFORE = new ArrayList<>();
-    static {
-        REQUIRED_BEFORE.add(Token.of(TokenType.IDENTIFIER));
-        REQUIRED_BEFORE.add(Token.of(TokenType.STRING));
-        REQUIRED_BEFORE.add(Token.of(TokenType.CHARACTER));
-        REQUIRED_BEFORE.add(Token.of(TokenType.BYTE));
-        REQUIRED_BEFORE.add(Token.of(TokenType.UBYTE));
-        REQUIRED_BEFORE.add(Token.of(TokenType.SHORT));
-        REQUIRED_BEFORE.add(Token.of(TokenType.USHORT));
-        REQUIRED_BEFORE.add(Token.of(TokenType.DOUBLE));
-        REQUIRED_BEFORE.add(Token.of(TokenType.FLOAT));
-        REQUIRED_BEFORE.add(Token.of(TokenType.LONG));
-        REQUIRED_BEFORE.add(Token.of(TokenType.ULONG));
-        REQUIRED_BEFORE.add(Token.of(TokenType.INT));
-        REQUIRED_BEFORE.add(Token.of(TokenType.UINT));
-        REQUIRED_BEFORE.add(Token.of(TokenType.HEXADECIMAL));
-        REQUIRED_BEFORE.add(Token.of(TokenType.BOOL));
-        REQUIRED_BEFORE.add(Token.of(TokenType.NULL));
-        REQUIRED_BEFORE.add(Token.of(TokenType.EXPRESSION, "break"));
-        REQUIRED_BEFORE.add(Token.of(TokenType.EXPRESSION, "continue"));
-        REQUIRED_BEFORE.add(Token.of(TokenType.EXPRESSION, "return"));
-        REQUIRED_BEFORE.add(Token.of(TokenType.OPERATOR, "++"));
-        REQUIRED_BEFORE.add(Token.of(TokenType.OPERATOR, "--"));
-        REQUIRED_BEFORE.add(Token.of(TokenType.CLOSE));
-        REQUIRED_BEFORE.add(Token.of(TokenType.STOP));
-        REQUIRED_BEFORE.add(Token.of(TokenType.END));
-    }
+    private static final @NotNull List<@NotNull Token> REQUIRED_BEFORE = List.of(
+        Token.of(TokenType.IDENTIFIER),
+        Token.of(TokenType.STRING),
+        Token.of(TokenType.CHARACTER),
+        Token.of(TokenType.BYTE),
+        Token.of(TokenType.UBYTE),
+        Token.of(TokenType.SHORT),
+        Token.of(TokenType.USHORT),
+        Token.of(TokenType.DOUBLE),
+        Token.of(TokenType.FLOAT),
+        Token.of(TokenType.LONG),
+        Token.of(TokenType.ULONG),
+        Token.of(TokenType.INT),
+        Token.of(TokenType.UINT),
+        Token.of(TokenType.HEXADECIMAL),
+        Token.of(TokenType.BOOL),
+        Token.of(TokenType.NULL),
+        Token.of(TokenType.EXPRESSION, "break"),
+        Token.of(TokenType.EXPRESSION, "continue"),
+        Token.of(TokenType.EXPRESSION, "return"),
+        Token.of(TokenType.OPERATOR, "++"),
+        Token.of(TokenType.OPERATOR, "--"),
+        Token.of(TokenType.CLOSE),
+        Token.of(TokenType.STOP),
+        Token.of(TokenType.END)
+    );
 
     /**
      * The list of tokens forbidden after the new line for the semicolon to be inserted.
      */
-    private static final @NotNull List<@NotNull Token> FORBIDDEN_AFTER = new ArrayList<>();
-    static {
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "="));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "+"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "-"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "*"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "/"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "<"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, ">"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "?"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "!"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "^"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "&"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "~"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "$"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "."));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "%"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.OPERATOR, "|"));
-        FORBIDDEN_AFTER.add(Token.of(TokenType.EXPRESSION, "where"));
-    }
+    private static final @NotNull List<@NotNull Token> FORBIDDEN_AFTER = List.of(
+        Token.of(TokenType.OPERATOR, "="),
+        Token.of(TokenType.OPERATOR, "+"),
+        Token.of(TokenType.OPERATOR, "-"),
+        Token.of(TokenType.OPERATOR, "*"),
+        Token.of(TokenType.OPERATOR, "/"),
+        Token.of(TokenType.OPERATOR, "<"),
+        Token.of(TokenType.OPERATOR, ">"),
+        Token.of(TokenType.OPERATOR, "?"),
+        Token.of(TokenType.OPERATOR, "!"),
+        Token.of(TokenType.OPERATOR, "^"),
+        Token.of(TokenType.OPERATOR, "&"),
+        Token.of(TokenType.OPERATOR, "~"),
+        Token.of(TokenType.OPERATOR, "$"),
+        Token.of(TokenType.OPERATOR, "."),
+        Token.of(TokenType.OPERATOR, "%"),
+        Token.of(TokenType.OPERATOR, "|"),
+        Token.of(TokenType.EXPRESSION, "where")
+    );
 
     /**
      * The list of the input tokens to be transformed.
