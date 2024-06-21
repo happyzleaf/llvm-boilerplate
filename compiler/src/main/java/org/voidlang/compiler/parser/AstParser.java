@@ -103,7 +103,7 @@ public class AstParser {
         return parse(OperatorParser.class, Operator.class);
     }
 
-    public @NotNull Value makeBinaryOperation(@NotNull Value lhs, @NotNull Operator operator, @NotNull Value rhs) {
+    public @NotNull Value nextBinaryOperation(@NotNull Value lhs, @NotNull Operator operator, @NotNull Value rhs) {
         return BinaryOperatorTree.makeBinaryOperator(lhs, operator, rhs);
     }
 

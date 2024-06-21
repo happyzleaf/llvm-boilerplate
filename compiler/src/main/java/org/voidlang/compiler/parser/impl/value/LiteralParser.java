@@ -2,6 +2,7 @@ package org.voidlang.compiler.parser.impl.value;
 
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.common.Error;
+import org.voidlang.compiler.ast.operator.Operator;
 import org.voidlang.compiler.ast.value.ConstantLiteral;
 import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.parser.AstParser;
@@ -9,7 +10,6 @@ import org.voidlang.compiler.parser.ParserAlgorithm;
 import org.voidlang.compiler.parser.ParserContext;
 import org.voidlang.compiler.token.Token;
 import org.voidlang.compiler.token.TokenType;
-import org.voidlang.compiler.util.console.ConsoleFormat;
 
 /**
  * Represents a parser algorithm that parses value nodes in the Abstract Syntax Tree.
@@ -51,7 +51,16 @@ public class LiteralParser extends ParserAlgorithm<Value> {
         if (peek().is(TokenType.COLON))
             return literal;
 
-        // TODO handle operators
+        // handle operation between two expressions
+        // let var = 100 +
+        //               ^ the operator after a literal indicates, that there are more expressions to be parsed
+        //                 the two operands are grouped together by an Operation node
+        if (peek().is(TokenType.OPERATOR)) {
+            // parse the target operator of the operation
+            Operator operator = parser.nextOperator();
+            // TODO handle non-binary operators
+            return parser.nextBinaryOperation(literal, operator, parser.nextValue());
+        }
 
         // handle group closing
         // let val = (1 + 2) / 3
