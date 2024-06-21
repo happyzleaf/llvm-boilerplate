@@ -19,7 +19,6 @@ import org.voidlang.llvm.module.IRModule;
 import org.voidlang.llvm.type.IRTypes;
 import org.voidlang.llvm.value.IRFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.bytedeco.llvm.global.LLVM.*;
@@ -35,7 +34,7 @@ public class JitMethodTest {
             }
             """;
 
-        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, new ArrayList<>()));
+        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, List.of()));
         assertEquals(1337, result.toInt());
     }
 
@@ -49,7 +48,7 @@ public class JitMethodTest {
             }
             """;
 
-        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, new ArrayList<>()));
+        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, List.of()));
         assertEquals(10, result.toInt());
     }
 
@@ -65,6 +64,19 @@ public class JitMethodTest {
         IRGenericValue param = IRGenericValue.ofInt(IRTypes.ofInt32(), 69, true);
         IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, List.of(param)));
         assertEquals(69, result.toInt());
+    }
+
+    @Test
+    public void test_method_return_operator() {
+        String source =
+            """
+            int foo() {
+                return 10 + 5
+            }
+            """;
+
+        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, List.of()));
+        assertEquals(15, result.toInt());
     }
 
     private @NotNull IRGenericValue compileAndRunMethod(
