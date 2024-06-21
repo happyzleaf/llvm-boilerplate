@@ -419,6 +419,182 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
     }
 
     /**
+     * Perform a multiplication operation. It is used for integer multiplication with optional overflow checking.
+     * <br>
+     * This function is used to create an instruction that performs integer multiplication. It can be used for both
+     * signed and unsigned integer multiplication. The behavior of the multiplication operation depends on the types
+     * of the operands and the specific rules of the programming language or context in which LLVM is being used.
+     * <br>
+     * If you want to perform multiplication with specific overflow behavior, LLVM provides additional functions such as
+     * {@link #multiplyNoUnsignedWrap(IRValue, IRValue, String)} and {@link #multiplyNoSignedWrap(IRValue, IRValue, String)}
+     * for controlling overflow checking during multiplication.
+     * <br>
+     * For more information on the multiplication instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#mul-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be multiplied
+     * @param right the right-hand side integer value to be multiplied
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the multiplication operation
+     */
+    public @NotNull IRValue multiply(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildMul(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform a multiplication operation. It is used for integer multiplication with optional overflow checking.
+     * <br>
+     * This function is used to create an instruction that performs integer multiplication. It can be used for both
+     * signed and unsigned integer multiplication. The behavior of the multiplication operation depends on the types
+     * of the operands and the specific rules of the programming language or context in which LLVM is being used.
+     * <br>
+     * If you want to perform multiplication with specific overflow behavior, LLVM provides additional functions such as
+     * {@link #multiplyNoUnsignedWrap(IRValue, IRValue)} and {@link #multiplyNoSignedWrap(IRValue, IRValue)}
+     * for controlling overflow checking during multiplication.
+     * <br>
+     * For more information on the multiplication instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#mul-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be multiplied
+     * @param right the right-hand side integer value to be multiplied
+     * @return an IRValue that represents the result of the multiplication operation
+     */
+    public @NotNull IRValue multiply(@NotNull IRValue left, @NotNull IRValue right) {
+        return multiply(left, right, "");
+    }
+
+    /**
+     * Perform a floating-point multiplication operation. It is used to generate LLVM IR code for multiplying
+     * two floating-point values.
+     * <br>
+     * Note that the LLVMBuildFMul function is specific to floating-point multiplication.
+     * For integer multiplication, you would use {@link #multiply(IRValue, IRValue, String)} instead.
+     * <br>
+     * For more information on the multiplication instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#mul-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side floating-point value to be multiplied
+     * @param right the right-hand side floating-point value to be multiplied
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the multiplication operation
+     */
+    public @NotNull IRValue multiplyFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildFMul(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform a floating-point multiplication operation. It is used to generate LLVM IR code for multiplying
+     * two floating-point values.
+     * <br>
+     * Note that the LLVMBuildFMul function is specific to floating-point multiplication.
+     * For integer multiplication, you would use {@link #multiply(IRValue, IRValue)} instead.
+     * <br>
+     * For more information on the multiplication instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#mul-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side floating-point value to be multiplied
+     * @param right the right-hand side floating-point value to be multiplied
+     * @return an IRValue that represents the result of the multiplication operation
+     */
+    public @NotNull IRValue multiplyFloat(@NotNull IRValue left, @NotNull IRValue right) {
+        return multiplyFloat(left, right, "");
+    }
+
+    /**
+     * Perform a signed integer multiplication with no signed overflow checking.
+     * <br>
+     * This function is used when you want to perform signed integer multiplication and explicitly disable
+     * signed overflow checking. This means that if the multiplication operation results in a signed overflow
+     * (e.g., multiplying two large numbers and the result exceeds the maximum value that can be represented),
+     * the behavior is undefined.
+     * <br>
+     * Note that there are similar functions for other types of overflow checking, such as multiplyNoUnsignedWarp
+     * (unsigned integer multiplication with no unsigned overflow checking) and LLVMBuildMul for general multiplication
+     * without overflow checking.
+     * <br>
+     * For more information on the multiplication instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#mul-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be multiplied
+     * @param right the right-hand side integer value to be multiplied
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the multiplication operation
+     */
+    public @NotNull IRValue multiplyNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildNSWMul(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform a signed integer multiplication with no signed overflow checking.
+     * <br>
+     * This function is used when you want to perform signed integer multiplication and explicitly disable
+     * signed overflow checking. This means that if the multiplication operation results in a signed overflow
+     * (e.g., multiplying two large numbers and the result exceeds the maximum value that can be represented),
+     * the behavior is undefined.
+     * <br>
+     * Note that there are similar functions for other types of overflow checking, such as multiplyNoUnsignedWarp
+     * (unsigned integer multiplication with no unsigned overflow checking) and LLVMBuildMul for general multiplication
+     * without overflow checking.
+     * <br>
+     * For more information on the multiplication instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#mul-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be multiplied
+     * @param right the right-hand side integer value to be multiplied
+     * @return an IRValue that represents the result of the multiplication operation
+     */
+    public @NotNull IRValue multiplyNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
+        return multiplyNoSignedWrap(left, right, "");
+    }
+
+    /**
+     * Perform an unsigned integer multiplication with no unsigned overflow checking.
+     * <br>
+     * This function is used when you want to perform unsigned integer multiplication and explicitly disable
+     * unsigned overflow checking. This means that if the multiplication operation results in an unsigned overflow
+     * (e.g., multiplying two large numbers and the result exceeds the maximum value that can be represented),
+     * the behavior is undefined.
+     * <br>
+     * Note that there are similar functions for other types of overflow checking, such as multiplyNoSignedWarp
+     * (signed integer multiplication with no signed overflow checking) and LLVMBuildMul for general multiplication
+     * without overflow checking.
+     * <br>
+     * For more information on the multiplication instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#mul-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be multiplied
+     * @param right the right-hand side integer value to be multiplied
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the multiplication operation
+     */
+    public @NotNull IRValue multiplyNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildNUWMul(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform an unsigned integer multiplication with no unsigned overflow checking.
+     * <br>
+     * This function is used when you want to perform unsigned integer multiplication and explicitly disable
+     * unsigned overflow checking. This means that if the multiplication operation results in an unsigned overflow
+     * (e.g., multiplying two large numbers and the result exceeds the maximum value that can be represented),
+     * the behavior is undefined.
+     * <br>
+     * Note that there are similar functions for other types of overflow checking, such as multiplyNoSignedWarp
+     * (signed integer multiplication with no signed overflow checking) and LLVMBuildMul for general multiplication
+     * without overflow checking.
+     * <br>
+     * For more information on the multiplication instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#mul-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be multiplied
+     * @param right the right-hand side integer value to be multiplied
+     * @return an IRValue that represents the result of the multiplication operation
+     */
+    public @NotNull IRValue multiplyNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
+        return multiplyNoUnsignedWrap(left, right, "");
+    }
+
+    /**
      * Allocate memory on the stack for a new variable. It is used to create a new stack-allocated variable
      * of the specified type.
      * <br>
