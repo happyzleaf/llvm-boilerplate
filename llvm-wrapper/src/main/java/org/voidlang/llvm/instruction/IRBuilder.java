@@ -784,6 +784,125 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
     }
 
     /**
+     * Perform a remainder operation. It is used for integer remainder with optional signed or unsigned behavior.
+     * <br>
+     * This function is used to create an instruction that computes the remainder of an integer division operation.
+     * It can be used for both signed and unsigned integer remainder. The behavior of the remainder operation depends
+     * on the types of the operands and the specific rules of the programming language or context in which LLVM is being used.
+     * <br>
+     * If you want to perform remainder with specific signed or unsigned behavior, LLVM provides additional functions
+     * such as {@link #remainderUnsigned(IRValue, IRValue, String)} and {@link #remainderSigned(IRValue, IRValue, String)}
+     * for controlling the behavior of the remainder operation.
+     * <br>
+     * For more information on the remainder instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#srem-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the remainder of the division operation
+     */
+    public @NotNull IRValue remainderFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildFRem(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform a remainder operation. It is used for integer remainder with optional signed or unsigned behavior.
+     * <br>
+     * This function is used to create an instruction that computes the remainder of an integer division operation.
+     * It can be used for both signed and unsigned integer remainder. The behavior of the remainder operation depends
+     * on the types of the operands and the specific rules of the programming language or context in which LLVM is being used.
+     * <br>
+     * If you want to perform remainder with specific signed or unsigned behavior, LLVM provides additional functions
+     * such as {@link #remainderUnsigned(IRValue, IRValue)} and {@link #remainderSigned(IRValue, IRValue)}
+     * for controlling the behavior of the remainder operation.
+     * <br>
+     * For more information on the remainder instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#srem-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @return an IRValue that represents the remainder of the division operation
+     */
+    public @NotNull IRValue remainderFloat(@NotNull IRValue left, @NotNull IRValue right) {
+        return remainderFloat(left, right, "");
+    }
+
+    /**
+     * Perform a signed integer remainder. It is used to generate LLVM IR code for computing the remainder of
+     * two signed integer values.
+     * <br>
+     * Note that the LLVMBuildSRem function is specific to signed integer remainder.
+     * For unsigned integer remainder, you would use {@link #remainderUnsigned(IRValue, IRValue, String)} instead.
+     * <br>
+     * For more information on the remainder instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#srem-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the remainder of the division operation
+     */
+    public @NotNull IRValue remainderSigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildSRem(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform a signed integer remainder. It is used to generate LLVM IR code for computing the remainder of
+     * two signed integer values.
+     * <br>
+     * Note that the LLVMBuildSRem function is specific to signed integer remainder.
+     * For unsigned integer remainder, you would use {@link #remainderUnsigned(IRValue, IRValue)} instead.
+     * <br>
+     * For more information on the remainder instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#srem-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @return an IRValue that represents the remainder of the division operation
+     */
+    public @NotNull IRValue remainderSigned(@NotNull IRValue left, @NotNull IRValue right) {
+        return remainderSigned(left, right, "");
+    }
+
+    /**
+     * Perform an unsigned integer remainder. It is used to generate LLVM IR code for computing the remainder of
+     * two unsigned integer values.
+     * <br>
+     * Note that the LLVMBuildURem function is specific to unsigned integer remainder.
+     * For signed integer remainder, you would use {@link #remainderSigned(IRValue, IRValue, String)} instead.
+     * <br>
+     * For more information on the remainder instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#urem-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the remainder of the division operation
+     */
+    public @NotNull IRValue remainderUnsigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildURem(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform an unsigned integer remainder. It is used to generate LLVM IR code for computing the remainder of
+     * two unsigned integer values.
+     * <br>
+     * Note that the LLVMBuildURem function is specific to unsigned integer remainder.
+     * For signed integer remainder, you would use {@link #remainderSigned(IRValue, IRValue)} instead.
+     * <br>
+     * For more information on the remainder instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#urem-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @return an IRValue that represents the remainder of the division operation
+     */
+    public @NotNull IRValue remainderUnsigned(@NotNull IRValue left, @NotNull IRValue right) {
+        return remainderUnsigned(left, right, "");
+    }
+
+    /**
      * Allocate memory on the stack for a new variable. It is used to create a new stack-allocated variable
      * of the specified type.
      * <br>
