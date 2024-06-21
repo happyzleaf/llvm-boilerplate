@@ -595,6 +595,195 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
     }
 
     /**
+     * Perform a division operation. It is used for integer division with optional signed or unsigned behavior.
+     * <br>
+     * This function is used to create an instruction that performs integer division. It can be used for both
+     * signed and unsigned integer division. The behavior of the division operation depends on the types of the
+     * operands and the specific rules of the programming language or context in which LLVM is being used.
+     * <br>
+     * If you want to perform division with specific signed or unsigned behavior, LLVM provides additional functions
+     * such as {@link #divideUnsigned(IRValue, IRValue, String)} and {@link #divideSigned(IRValue, IRValue, String)}
+     * for controlling the behavior of the division operation.
+     * <br>
+     * For more information on the division instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sdiv-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the division operation
+     */
+    public @NotNull IRValue divideFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildFDiv(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform a division operation. It is used for integer division with optional signed or unsigned behavior.
+     * <br>
+     * This function is used to create an instruction that performs integer division. It can be used for both
+     * signed and unsigned integer division. The behavior of the division operation depends on the types of the
+     * operands and the specific rules of the programming language or context in which LLVM is being used.
+     * <br>
+     * If you want to perform division with specific signed or unsigned behavior, LLVM provides additional functions
+     * such as {@link #divideUnsigned(IRValue, IRValue)} and {@link #divideSigned(IRValue, IRValue)}
+     * for controlling the behavior of the division operation.
+     * <br>
+     * For more information on the division instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sdiv-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @return an IRValue that represents the result of the division operation
+     */
+    public @NotNull IRValue divideFloat(@NotNull IRValue left, @NotNull IRValue right) {
+        return divideFloat(left, right, "");
+    }
+
+    /**
+     * Perform a signed integer division. It is used to generate LLVM IR code for dividing two signed integer values.
+     * <br>
+     * Note that the LLVMBuildSDiv function is specific to signed integer division.
+     * For unsigned integer division, you would use {@link #divideUnsigned(IRValue, IRValue, String)} instead.
+     * <br>
+     * For more information on the division instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sdiv-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the division operation
+     */
+    public @NotNull IRValue divideSigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildSDiv(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform a signed integer division. It is used to generate LLVM IR code for dividing two signed integer values.
+     * <br>
+     * Note that the LLVMBuildSDiv function is specific to signed integer division.
+     * For unsigned integer division, you would use {@link #divideUnsigned(IRValue, IRValue)} instead.
+     * <br>
+     * For more information on the division instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sdiv-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @return an IRValue that represents the result of the division operation
+     */
+    public @NotNull IRValue divideSigned(@NotNull IRValue left, @NotNull IRValue right) {
+        return divideSigned(left, right, "");
+    }
+
+    /**
+     * Perform an unsigned integer division. It is used to generate LLVM IR code for dividing two unsigned integer values.
+     * <br>
+     * Note that the LLVMBuildUDiv function is specific to unsigned integer division.
+     * For signed integer division, you would use {@link #divideSigned(IRValue, IRValue, String)} instead.
+     * <br>
+     * For more information on the division instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#udiv-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the division operation
+     */
+    public @NotNull IRValue divideUnsigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildUDiv(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform an unsigned integer division. It is used to generate LLVM IR code for dividing two unsigned integer values.
+     * <br>
+     * Note that the LLVMBuildUDiv function is specific to unsigned integer division.
+     * For signed integer division, you would use {@link #divideSigned(IRValue, IRValue)} instead.
+     * <br>
+     * For more information on the division instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#udiv-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @return an IRValue that represents the result of the division operation
+     */
+    public @NotNull IRValue divideUnsigned(@NotNull IRValue left, @NotNull IRValue right) {
+        return divideUnsigned(left, right, "");
+    }
+
+    /**
+     * Perform a signed integer division with exact result. It is used to generate LLVM IR code for dividing two
+     * signed integer values and ensuring that the result is exact.
+     * <br>
+     * Note that the LLVMBuildExactSDiv function is specific to signed integer division with exact result.
+     * For general signed integer division, you would use {@link #divideSigned(IRValue, IRValue, String)} instead.
+     * <br>
+     * For more information on the division instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sdiv-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the division operation
+     */
+    public @NotNull IRValue divideExactSigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildExactSDiv(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform a signed integer division with exact result. It is used to generate LLVM IR code for dividing two
+     * signed integer values and ensuring that the result is exact.
+     * <br>
+     * Note that the LLVMBuildExactSDiv function is specific to signed integer division with exact result.
+     * For general signed integer division, you would use {@link #divideSigned(IRValue, IRValue)} instead.
+     * <br>
+     * For more information on the division instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sdiv-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @return an IRValue that represents the result of the division operation
+     */
+    public @NotNull IRValue divideExactSigned(@NotNull IRValue left, @NotNull IRValue right) {
+        return divideExactSigned(left, right, "");
+    }
+
+    /**
+     * Perform an unsigned integer division with exact result. It is used to generate LLVM IR code for dividing two
+     * unsigned integer values and ensuring that the result is exact.
+     * <br>
+     * Note that the LLVMBuildExactUDiv function is specific to unsigned integer division with exact result.
+     * For general unsigned integer division, you would use {@link #divideUnsigned(IRValue, IRValue, String)} instead.
+     * <br>
+     * For more information on the division instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#udiv-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the division operation
+     */
+    public @NotNull IRValue divideExactUnsigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildExactUDiv(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform an unsigned integer division with exact result. It is used to generate LLVM IR code for dividing two
+     * unsigned integer values and ensuring that the result is exact.
+     * <br>
+     * Note that the LLVMBuildExactUDiv function is specific to unsigned integer division with exact result.
+     * For general unsigned integer division, you would use {@link #divideUnsigned(IRValue, IRValue)} instead.
+     * <br>
+     * For more information on the division instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#udiv-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be divided
+     * @param right the right-hand side integer value to be divided
+     * @return an IRValue that represents the result of the division operation
+     */
+    public @NotNull IRValue divideExactUnsigned(@NotNull IRValue left, @NotNull IRValue right) {
+        return divideExactUnsigned(left, right, "");
+    }
+
+    /**
      * Allocate memory on the stack for a new variable. It is used to create a new stack-allocated variable
      * of the specified type.
      * <br>
