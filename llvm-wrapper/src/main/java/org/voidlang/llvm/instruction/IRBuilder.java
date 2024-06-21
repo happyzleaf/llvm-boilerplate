@@ -247,6 +247,178 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
     }
 
     /**
+     * Perform a subtraction operation. It is used for integer subtraction with optional overflow checking.
+     * <br>
+     * This function is used to create an instruction that performs integer subtraction. It can be used for both
+     * signed and unsigned integer subtraction. The behavior of the subtraction operation depends on the types of
+     * the operands and the specific rules of the programming language or context in which LLVM is being used.
+     * <br>
+     * If you want to perform subtraction with specific overflow behavior, LLVM provides additional functions such as
+     * {@link #subtractNoUnsignedWrap(IRValue, IRValue, String)} and {@link #subtractNoSignedWrap(IRValue, IRValue, String)}
+     * for controlling overflow checking during subtraction.
+     * <br>
+     * For more information on the subtraction instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sub-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be subtracted
+     * @param right the right-hand side integer value to be subtracted
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the subtraction operation
+     */
+    public @NotNull IRValue subtract(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildSub(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform a subtraction operation. It is used for integer subtraction with optional overflow checking.
+     * <br>
+     * This function is used to create an instruction that performs integer subtraction. It can be used for both
+     * signed and unsigned integer subtraction. The behavior of the subtraction operation depends on the types of
+     * the operands and the specific rules of the programming language or context in which LLVM is being used.
+     * <br>
+     * If you want to perform subtraction with specific overflow behavior, LLVM provides additional functions such as
+     * {@link #subtractNoUnsignedWrap(IRValue, IRValue)} and {@link #subtractNoSignedWrap(IRValue, IRValue)}
+     * for controlling overflow checking during subtraction.
+     * <br>
+     * For more information on the subtraction instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sub-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be subtracted
+     * @param right the right-hand side integer value to be subtracted
+     * @return an IRValue that represents the result of the subtraction operation
+     */
+    public @NotNull IRValue subtract(@NotNull IRValue left, @NotNull IRValue right) {
+        return subtract(left, right, "");
+    }
+
+    /**
+     * Perform a floating-point subtraction operation. It is used to generate LLVM IR code for subtracting
+     * two floating-point values.
+     * <br>
+     * Note that the LLVMBuildFSub function is specific to floating-point subtraction.
+     * For integer subtraction, you would use {@link #subtract(IRValue, IRValue, String)} instead.
+     * <br>
+     * For more information on the subtraction instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sub-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side floating-point value to be subtracted
+     * @param right the right-hand side floating-point value to be subtracted
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the subtraction operation
+     */
+    public @NotNull IRValue subtractFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildFSub(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform a floating-point subtraction operation. It is used to generate LLVM IR code for subtracting
+     * two floating-point values.
+     * <br>
+     * Note that the LLVMBuildFSub function is specific to floating-point subtraction.
+     * For integer subtraction, you would use {@link #subtract(IRValue, IRValue)} instead.
+     * <br>
+     * For more information on the subtraction instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sub-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side floating-point value to be subtracted
+     * @param right the right-hand side floating-point value to be subtracted
+     * @return an IRValue that represents the result of the subtraction operation
+     */
+    public @NotNull IRValue subtractFloat(@NotNull IRValue left, @NotNull IRValue right) {
+        return subtractFloat(left, right, "");
+    }
+
+    /**
+     * Perform a signed integer subtraction with no signed overflow checking.
+     * <br>
+     * This function is used when you want to perform signed integer subtraction and explicitly disable
+     * signed overflow checking. This means that if the subtraction operation results in a signed overflow
+     * (e.g., subtracting a larger number from a smaller number and the result is negative), the behavior is undefined.
+     * <br>
+     * Note that there are similar functions for other types of overflow checking, such as subtractNoUnsignedWarp
+     * (unsigned integer subtraction with no unsigned overflow checking) and LLVMBuildSub for general subtraction
+     * without overflow checking.
+     * <br>
+     * For more information on the subtraction instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sub-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be subtracted
+     * @param right the right-hand side integer value to be subtracted
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the subtraction operation
+     */
+    public @NotNull IRValue subtractNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildNSWSub(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform a signed integer subtraction with no signed overflow checking.
+     * <br>
+     * This function is used when you want to perform signed integer subtraction and explicitly disable
+     * signed overflow checking. This means that if the subtraction operation results in a signed overflow
+     * (e.g., subtracting a larger number from a smaller number and the result is negative), the behavior is undefined.
+     * <br>
+     * Note that there are similar functions for other types of overflow checking, such as subtractNoUnsignedWarp
+     * (unsigned integer subtraction with no unsigned overflow checking) and LLVMBuildSub for general subtraction
+     * without overflow checking.
+     * <br>
+     * For more information on the subtraction instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sub-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be subtracted
+     * @param right the right-hand side integer value to be subtracted
+     * @return an IRValue that represents the result of the subtraction operation
+     */
+    public @NotNull IRValue subtractNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
+        return subtractNoSignedWrap(left, right, "");
+    }
+
+    /**
+     * Perform an unsigned integer subtraction with no unsigned overflow checking.
+     * <br>
+     * This function is used when you want to perform unsigned integer subtraction and explicitly disable
+     * unsigned overflow checking. This means that if the subtraction operation results in an unsigned overflow
+     * (e.g., subtracting a larger number from a smaller number and the result is negative), the behavior is undefined.
+     * <br>
+     * Note that there are similar functions for other types of overflow checking, such as subtractNoSignedWarp
+     * (signed integer subtraction with no signed overflow checking) and LLVMBuildSub for general subtraction without
+     * overflow checking.
+     * <br>
+     * For more information on the subtraction instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sub-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be subtracted
+     * @param right the right-hand side integer value to be subtracted
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     * @return an IRValue that represents the result of the subtraction operation
+     */
+    public @NotNull IRValue subtractNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
+        return new IRValue(LLVMBuildNUWSub(handle, left.handle(), right.handle(), name));
+    }
+
+    /**
+     * Perform an unsigned integer subtraction with no unsigned overflow checking.
+     * <br>
+     * This function is used when you want to perform unsigned integer subtraction and explicitly disable
+     * unsigned overflow checking. This means that if the subtraction operation results in an unsigned overflow
+     * (e.g., subtracting a larger number from a smaller number and the result is negative), the behavior is undefined.
+     * <br>
+     * Note that there are similar functions for other types of overflow checking, such as subtractNoSignedWarp
+     * (signed integer subtraction with no signed overflow checking) and LLVMBuildSub for general subtraction without
+     * overflow checking.
+     * <br>
+     * For more information on the subtraction instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#sub-instruction">LLVM documentation</a>
+     *
+     * @param left the left-hand side integer value to be subtracted
+     * @param right the right-hand side integer value to be subtracted
+     * @return an IRValue that represents the result of the subtraction operation
+     */
+    public @NotNull IRValue subtractNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
+        return subtractNoUnsignedWrap(left, right, "");
+    }
+
+    /**
      * Allocate memory on the stack for a new variable. It is used to create a new stack-allocated variable
      * of the specified type.
      * <br>
