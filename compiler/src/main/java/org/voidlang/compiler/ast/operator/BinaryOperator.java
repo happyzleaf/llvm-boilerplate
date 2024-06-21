@@ -2,6 +2,7 @@ package org.voidlang.compiler.ast.operator;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,6 +35,7 @@ public class BinaryOperator extends Value {
     /**
      * The left-hand side value of the operation.
      */
+    @Setter
     private @NotNull Value lhs;
 
     /**
@@ -44,6 +46,7 @@ public class BinaryOperator extends Value {
     /**
      * The right-hand side value of the operation.
      */
+    @Setter
     private @NotNull Value rhs;
 
     /**
