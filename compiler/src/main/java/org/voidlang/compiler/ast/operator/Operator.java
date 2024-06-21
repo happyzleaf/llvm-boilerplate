@@ -24,7 +24,7 @@ public enum Operator {
     AND("&&", 0, 0),
     OR("||", 0, 0),
 
-    NEGATE("-", 0, 0),
+    NEGATE_OR_SUBTRACT("-", 0, 0),
     NOT("!", 0, 0),
     QUESTION("?", 0, 0),
 

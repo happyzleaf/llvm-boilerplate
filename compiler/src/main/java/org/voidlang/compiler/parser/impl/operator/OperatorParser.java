@@ -80,7 +80,7 @@ public class OperatorParser extends ParserAlgorithm<Operator> {
      * @param operator the target operator
      * @return {@code true} if the operator parsing should terminate, {@code false} otherwise
      */
-    private boolean shouldOperatorTerminate(String operator) {
+    private boolean shouldOperatorTerminate(@NotNull String operator) {
         return switch (operator) {
             case "&&", "||", "??", "?.", "++", "--", "==", "!=" -> true;
             default -> false;

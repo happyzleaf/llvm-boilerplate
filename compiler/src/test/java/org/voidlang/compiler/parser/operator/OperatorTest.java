@@ -16,7 +16,7 @@ public class OperatorTest {
     @Test
     public void test_single_operators() {
         assertIterableEquals(List.of(Operator.ADD), parseOperators("+"));
-        assertIterableEquals(List.of(Operator.NEGATE), parseOperators("-"));
+        assertIterableEquals(List.of(Operator.NEGATE_OR_SUBTRACT), parseOperators("-"));
         assertIterableEquals(List.of(Operator.MULTIPLY), parseOperators("*"));
         assertIterableEquals(List.of(Operator.DIVIDE), parseOperators("/"));
         assertIterableEquals(List.of(Operator.REMAINDER), parseOperators("%"));
@@ -40,7 +40,7 @@ public class OperatorTest {
         assertIterableEquals(List.of(Operator.ASSIGN, Operator.INCREMENT), parseOperators("=++"));
         assertIterableEquals(List.of(Operator.ASSIGN, Operator.DECREMENT), parseOperators("=--"));
         assertIterableEquals(List.of(Operator.ASSIGN, Operator.ADD), parseOperators("=+"));
-        assertIterableEquals(List.of(Operator.ASSIGN, Operator.NEGATE), parseOperators("=-"));
+        assertIterableEquals(List.of(Operator.ASSIGN, Operator.NEGATE_OR_SUBTRACT), parseOperators("=-"));
         assertIterableEquals(List.of(Operator.ASSIGN, Operator.NOT), parseOperators("=!"));
         assertIterableEquals(List.of(Operator.AND, Operator.NOT), parseOperators("&&!"));
 
