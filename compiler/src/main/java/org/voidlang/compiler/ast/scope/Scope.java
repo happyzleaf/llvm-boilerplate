@@ -73,7 +73,7 @@ public class Scope extends ScopeContainer {
     /**
      * Resolve a local variable or a global constant by its specified name.
      * <p>
-     * If a node does not override this logic, by default it will try to resolve the value from the {@link #parent}
+     * If a node does not override this logic, by default it will try to resolve the value from the {@link #parent()}
      * node.
      * <p>
      * A {@link Scope} will initially try to resolve the value from itself, and then from the parent scope.

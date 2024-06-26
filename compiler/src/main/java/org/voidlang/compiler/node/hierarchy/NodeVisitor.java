@@ -81,7 +81,8 @@ public class NodeVisitor {
 
         else
             throw new IllegalStateException(
-                "Children field `" + field.getName() + "` of node `" + parent + "` must be a node or a list of nodes"
+                "Children field `" + field.getName() + "` of node `" + parent +
+                "` must be a node or a list of nodes, not " + children
             );
     }
 

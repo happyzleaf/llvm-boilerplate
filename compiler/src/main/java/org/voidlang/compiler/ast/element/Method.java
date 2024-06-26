@@ -8,13 +8,14 @@ import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.element.parameter.ImmutableParameterAccess;
 import org.voidlang.compiler.ast.local.Variable;
 import org.voidlang.compiler.ast.scope.ScopeContainer;
-import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.hierarchy.Children;
+import org.voidlang.compiler.util.console.ConsoleFormat;
+import org.voidlang.compiler.util.debug.Printable;
 import org.voidlang.llvm.type.IRFunctionType;
 import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRFunction;
@@ -29,7 +30,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class Method extends ScopeContainer {
+public class Method extends ScopeContainer implements Printable {
     private final @NotNull Map<@NotNull String, @NotNull Variable> parameterAccessors = new HashMap<>();
 
     /**
@@ -99,7 +100,7 @@ public class Method extends ScopeContainer {
     /**
      * Resolve a local variable or a global constant by its specified name.
      * <p>
-     * If a node does not override this logic, by default it will try to resolve the value from the {@link #parent}
+     * If a node does not override this logic, by default it will try to resolve the value from the {@link #parent()}
      * node.
      * <p>
      * A {@link Scope} will initially try to resolve the value from itself, and then from the parent scope.
@@ -149,5 +150,26 @@ public class Method extends ScopeContainer {
     @Override
     public @NotNull List<@NotNull ScopeContainer> getChildrenScopes() {
         return List.of(body);
+    }
+
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        StringBuilder builder = new StringBuilder(ConsoleFormat.RED + returnType.print() + " " + ConsoleFormat.BLUE + name);
+        builder.append(ConsoleFormat.CYAN).append('(');
+        for (int i = 0; i < parameters.size(); i++) {
+            builder.append(parameters.get(i).print());
+            if (i < parameters.size() - 1)
+                builder.append(ConsoleFormat.CYAN).append(", ");
+        }
+        builder.append(ConsoleFormat.CYAN).append(')');
+        builder.append(ConsoleFormat.LIGHT_GRAY).append(" {");
+
+        builder.append(ConsoleFormat.LIGHT_GRAY).append('}');
+        return builder.toString();
     }
 }

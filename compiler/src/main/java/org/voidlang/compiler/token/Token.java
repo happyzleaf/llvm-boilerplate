@@ -2,6 +2,8 @@ package org.voidlang.compiler.token;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.voidlang.compiler.util.console.ConsoleFormat;
+import org.voidlang.compiler.util.debug.Printable;
 
 import java.util.Objects;
 
@@ -11,7 +13,7 @@ import java.util.Objects;
  * @param type the type of the token
  * @param value the value of the token
  */
-public record Token(@NotNull TokenType type, @NotNull String value, @NotNull TokenMeta meta) {
+public record Token(@NotNull TokenType type, @NotNull String value, @NotNull TokenMeta meta) implements Printable {
     /**
      * Indicate, whether this token is of the specified type.
      *
@@ -147,5 +149,17 @@ public record Token(@NotNull TokenType type, @NotNull String value, @NotNull Tok
      */
     public static @NotNull Token of(@NotNull TokenType type) {
         return new Token(type, "", TokenMeta.EMPTY);
+    }
+
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        return ConsoleFormat.YELLOW + type.name() + ConsoleFormat.DARK_GRAY + '|'
+            + ConsoleFormat.WHITE + value + ConsoleFormat.DARK_GRAY + '|'
+            + ConsoleFormat.WHITE;
     }
 }
