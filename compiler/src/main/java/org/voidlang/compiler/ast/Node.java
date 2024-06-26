@@ -12,10 +12,14 @@ import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
+import org.voidlang.compiler.node.hierarchy.Children;
 import org.voidlang.compiler.node.hierarchy.NodeVisitor;
 import org.voidlang.compiler.node.hierarchy.Parent;
 import org.voidlang.llvm.value.IRValue;
 
+import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -41,6 +45,16 @@ public abstract class Node {
      */
     @Parent
     private @Nullable Node parent;
+
+    /**
+     * The cache of the list of children nodes of the overriding node.
+     * <p>
+     * This field is initially {@code null}, and is resolved, when {@link #children()} is called.
+     * <p>
+     * Note that, this field is dynamically resolved later, and does not implicitly use the {@link NodeVisitor} class.
+     * Rather, it tries to access the children from the overriding node.
+     */
+    private @Nullable List<@NotNull Node> children;
 
     /**
      * Initialize the node and retrieve the type from the annotation.
@@ -69,7 +83,7 @@ public abstract class Node {
     /**
      * Resolve a local variable or a global constant by its specified name.
      * <p>
-     * If a node does not override this logic, by default it will try to resolve the value from the {@link #parent}
+     * If a node does not override this logic, by default it will try to resolve the value from the {@link #parent()}
      * node.
      * <p>
      * A {@link Scope} will initially try to resolve the value from itself, and then from the parent scope.
@@ -89,5 +103,48 @@ public abstract class Node {
     public boolean hasNext() {
         return !(this instanceof Error)
             && !(this instanceof EOF);
+    }
+
+    /**
+     * Retrieve the list of child nodes of the overriding node.
+     * <p>
+     * If the children are not resolved yet, it will try to resolve them by checking the fields of the node.
+     * Otherwise, it the children will be resolved from the cache.
+     *
+     * @return the list of child nodes of the overriding node
+     */
+    @SuppressWarnings("unchecked")
+    public @NotNull List<@NotNull Node> children() {
+        if (children != null)
+            return children;
+
+        for (Field field : NodeVisitor.getFields(getClass())) {
+            if (!field.isAnnotationPresent(Children.class))
+                continue;
+
+            Object children;
+            try {
+                children = field.get(this);
+            } catch (IllegalAccessException e) {
+                throw new IllegalStateException("Cannot access children field", e);
+            }
+
+            if (children instanceof Node child)
+                this.children = Collections.singletonList(child);
+
+            else if (children instanceof Iterable<?> iterable)
+                this.children = Collections.unmodifiableList((List<@NotNull Node>) iterable);
+
+            else
+                throw new IllegalStateException(
+                    "Children field `" + field.getName() + "` of node `" + this +
+                    "` must be a node or a list of nodes, not " + children
+                );
+        }
+
+        if (children == null)
+            throw new IllegalStateException("Children field of node `" + this + "` could not be resolved");
+
+        return this.children;
     }
 }
