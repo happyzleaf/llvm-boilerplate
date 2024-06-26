@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.local.AccessStrategy;
 import org.voidlang.compiler.ast.local.Variable;
 import org.voidlang.compiler.ast.type.Type;
@@ -28,6 +29,8 @@ import java.util.Optional;
 public class NameAccess extends Value {
     private final @NotNull String name;
 
+    private @Nullable Variable variable;
+
     /**
      * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
      * <p>
@@ -38,7 +41,7 @@ public class NameAccess extends Value {
      */
     @Override
     public @NotNull Optional<@NotNull IRValue> codegen(@NotNull Generator generator) {
-        Variable variable = resolveName(name);
+        variable = resolveName(name);
         if (variable == null)
             throw new IllegalStateException("Cannot resolve variable `" + name + "`");
 
@@ -54,6 +57,8 @@ public class NameAccess extends Value {
      */
     @Override
     public @NotNull Type getValueType() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (variable == null)
+            throw new IllegalStateException("Variable `" + name + "` has not been resolved yet");
+        return variable.getValueType();
     }
 }
