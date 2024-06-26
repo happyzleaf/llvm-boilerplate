@@ -79,6 +79,20 @@ public class JitMethodTest {
         assertEquals(15, result.toInt());
     }
 
+    @Test
+    public void test_method_return_constant_and_immutable() {
+        String source =
+            """
+            int foo() {
+                let x = 2
+                return x + 3
+            }
+            """;
+
+        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, List.of()));
+        assertEquals(5, result.toInt());
+    }
+
     private @NotNull IRGenericValue compileAndRunMethod(
         @NotNull String source, @NotNull List<@NotNull IRGenericValue> parameters
     ) {
@@ -99,6 +113,7 @@ public class JitMethodTest {
         Method method = parser.nextMethod();
 
         NodeVisitor.initHierarchy();
+        NodeVisitor.initLifecycle(generator);
         method.codegen(generator);
 
         BytePointer error = new BytePointer((Pointer) null);

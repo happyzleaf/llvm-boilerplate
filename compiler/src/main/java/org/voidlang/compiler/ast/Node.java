@@ -15,10 +15,12 @@ import org.voidlang.compiler.node.hierarchy.Children;
 import org.voidlang.compiler.node.hierarchy.NodeVisitor;
 import org.voidlang.compiler.node.hierarchy.Parent;
 import org.voidlang.compiler.util.annotation.SoftOverride;
+import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRValue;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Stream;
 
 /**
@@ -70,6 +72,49 @@ public abstract class Node {
     }
 
     /**
+     * Initialize node logic before the nodes are visited and the code is generated.
+     * <p>
+     * This method is called before the initialization methods and the {@link #codegen(Generator)} method.
+     */
+    @SoftOverride
+    public void init() {
+    }
+
+    /**
+     * Initialize all type declarations of the overriding node.
+     * <p>
+     * The overriding node may output a {@link IRType} that is used by other nodes, before {@code this} node's
+     * {@link #codegen(Generator)} is called.
+     *
+     * @param generator the generation context to use for the code generation
+     */
+    @SoftOverride
+    public void initTypes(@NotNull Generator generator) {
+    }
+
+    /**
+     * Initialize all class member declarations for the overriding node.
+     * <p>
+     * This method is called after the type declarations are initialized, and before the {@link #codegen(Generator)}.
+     *
+     * @param generator the generation context to use for the code generation
+     */
+    @SoftOverride
+    public void initMembers(@NotNull Generator generator) {
+    }
+
+    /**
+     * Initialize all variable uses of the overriding node.
+     * <p>
+     * This method is called after the member declarations are initialized, and before the {@link #codegen(Generator)}.
+     *
+     * @param generator the generation context to use for the code generation
+     */
+    @SoftOverride
+    public void initUses(@NotNull Generator generator) {
+    }
+
+    /**
      * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
      * <p>
      * This method should return {@link Optional#empty()}, if the parent node should not use the result of this node.
@@ -117,11 +162,13 @@ public abstract class Node {
         if (children != null)
             return children;
 
-        Set<@NotNull Node> result = new HashSet<>();
+        Set<@NotNull Node> result = new CopyOnWriteArraySet<>();
 
         for (Field field : NodeVisitor.getFields(getClass())) {
             if (!field.isAnnotationPresent(Children.class))
                 continue;
+
+            field.setAccessible(true);
 
             Object children;
             try {

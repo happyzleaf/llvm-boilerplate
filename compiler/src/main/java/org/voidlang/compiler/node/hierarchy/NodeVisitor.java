@@ -3,9 +3,12 @@ package org.voidlang.compiler.node.hierarchy;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.Node;
+import org.voidlang.compiler.node.Generator;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
 /**
@@ -19,7 +22,7 @@ public class NodeVisitor {
     /**
      * The set of nodes that are registered for the node hierarchy.
      */
-    private final @NotNull Set<@NotNull Node> NODES = new HashSet<>();
+    private final @NotNull Set<@NotNull Node> NODES = new CopyOnWriteArraySet<>();
 
     /**
      * Register the node to the node hierarchy.
@@ -47,6 +50,18 @@ public class NodeVisitor {
                 processField(node, field);
             }
         }
+    }
+
+    /**
+     * Initialize the lifecycle of each node in the node hierarchy.
+     *
+     * @param generator the LLVM code generation context
+     */
+    public void initLifecycle(@NotNull Generator generator) {
+        visit(Node::init);
+        visit(node -> node.initTypes(generator));
+        visit(node -> node.initMembers(generator));
+        visit(node -> node.initUses(generator));
     }
 
     /**
