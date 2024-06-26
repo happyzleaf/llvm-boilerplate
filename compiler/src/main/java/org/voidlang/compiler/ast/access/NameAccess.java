@@ -32,6 +32,20 @@ public class NameAccess extends Value {
     private @Nullable Variable variable;
 
     /**
+     * Initialize all variable uses of the overriding node.
+     * <p>
+     * This method is called after the member declarations are initialized, and before the {@link #codegen(Generator)}.
+     *
+     * @param generator the generation context to use for the code generation
+     */
+    @Override
+    public void initUses(@NotNull Generator generator) {
+        variable = resolveName(name);
+        if (variable == null)
+            throw new IllegalStateException("Cannot resolve variable `" + name + "`");
+    }
+
+    /**
      * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
      * <p>
      * This method should return {@link Optional#empty()}, if the parent node should not use the result of this node.
@@ -41,10 +55,7 @@ public class NameAccess extends Value {
      */
     @Override
     public @NotNull Optional<@NotNull IRValue> codegen(@NotNull Generator generator) {
-        variable = resolveName(name);
-        if (variable == null)
-            throw new IllegalStateException("Cannot resolve variable `" + name + "`");
-
+        assert variable != null : "Variable `" + name + "` has not been resolved yet";
         IRValue load = variable.load(generator, AccessStrategy.LOAD_POINTER, "access " + name);
 
         return Optional.of(load);
