@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import org.voidlang.compiler.ast.element.Method;
 import org.voidlang.compiler.ast.local.AccessStrategy;
 import org.voidlang.compiler.ast.local.Variable;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
+import org.voidlang.llvm.value.IRFunction;
 import org.voidlang.llvm.value.IRValue;
 
 import java.util.Optional;
@@ -19,7 +21,9 @@ import java.util.Optional;
 @Getter
 @NodeInfo(type = NodeType.IMMUTABLE_PARAMETER_ACCESS)
 public class ImmutableParameterAccess extends Variable {
-    private final @NotNull IRValue parameter;
+    private final @NotNull Method method;
+
+    private final int index;
 
     private final @NotNull String name;
 
@@ -35,7 +39,9 @@ public class ImmutableParameterAccess extends Variable {
      */
     @Override
     public @NotNull Optional<@NotNull IRValue> codegen(@NotNull Generator generator) {
-        return Optional.of(parameter);
+        IRFunction function = method.function();
+        assert function != null : "Function is not defined for method: " + method.name();
+        return Optional.of(function.parameter(index));
     }
 
     /**
@@ -48,7 +54,9 @@ public class ImmutableParameterAccess extends Variable {
      */
     @Override
     public @NotNull IRValue load(@NotNull Generator generator, @NotNull AccessStrategy strategy, @NotNull String name) {
-        return parameter;
+        IRFunction function = method.function();
+        assert function != null : "Function is not defined for method: " + method.name();
+        return function.parameter(index);
     }
 
     /**
