@@ -6,6 +6,7 @@ import org.voidlang.compiler.ast.Node;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Represents a utility class that visits the node hierarchy and initializes the parent-child relationships.
@@ -45,6 +46,34 @@ public class NodeVisitor {
                 field.setAccessible(true);
                 processField(node, field);
             }
+        }
+    }
+
+    /**
+     * Recursively visit each node in the node hierarchy, and apply the {@param visitor} function to each node.
+     * <p>
+     * The nodes are visited in the depth-first order, starting from the root node and recursively visiting each
+     * child node of the parent node.
+     *
+     * @param visitor the function to apply to each node
+     */
+    public void visit(@NotNull Consumer<@NotNull Node> visitor) {
+        visitChildren(NODES, visitor);
+    }
+
+    /**
+     * Recursively visit each node in the {@param nodes} list, and apply the {@param visitor} function to each node.
+     * <p>
+     * The nodes are visited in the depth-first order, starting from the root node and recursively visiting each
+     * child node of the parent node.
+     *
+     * @param nodes the list of nodes to visit
+     * @param visitor the function to apply to each node
+     */
+    private void visitChildren(@NotNull Set<@NotNull Node> nodes, @NotNull Consumer<@NotNull Node> visitor) {
+        for (Node node : nodes) {
+            visitor.accept(node);
+            visitChildren(node.children(), visitor);
         }
     }
 

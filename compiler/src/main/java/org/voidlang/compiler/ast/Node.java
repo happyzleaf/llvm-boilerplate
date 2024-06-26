@@ -8,19 +8,18 @@ import org.voidlang.compiler.ast.common.EOF;
 import org.voidlang.compiler.ast.common.Error;
 import org.voidlang.compiler.ast.local.Variable;
 import org.voidlang.compiler.ast.scope.Scope;
-import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.node.hierarchy.Children;
 import org.voidlang.compiler.node.hierarchy.NodeVisitor;
 import org.voidlang.compiler.node.hierarchy.Parent;
+import org.voidlang.compiler.util.annotation.SoftOverride;
 import org.voidlang.llvm.value.IRValue;
 
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Represents the base class for all element of the Abstract Syntax Tree.
@@ -54,7 +53,7 @@ public abstract class Node {
      * Note that, this field is dynamically resolved later, and does not implicitly use the {@link NodeVisitor} class.
      * Rather, it tries to access the children from the overriding node.
      */
-    private @Nullable List<@NotNull Node> children;
+    private @Nullable Set<@NotNull Node> children;
 
     /**
      * Initialize the node and retrieve the type from the annotation.
@@ -111,12 +110,14 @@ public abstract class Node {
      * If the children are not resolved yet, it will try to resolve them by checking the fields of the node.
      * Otherwise, it the children will be resolved from the cache.
      *
-     * @return the list of child nodes of the overriding node
+     * @return the set of child nodes of the overriding node
      */
     @SuppressWarnings("unchecked")
-    public @NotNull List<@NotNull Node> children() {
+    public @NotNull Set<@NotNull Node> children() {
         if (children != null)
             return children;
+
+        Set<@NotNull Node> result = new HashSet<>();
 
         for (Field field : NodeVisitor.getFields(getClass())) {
             if (!field.isAnnotationPresent(Children.class))
@@ -130,10 +131,10 @@ public abstract class Node {
             }
 
             if (children instanceof Node child)
-                this.children = Collections.singletonList(child);
+                result.add(child);
 
-            else if (children instanceof Iterable<?> iterable)
-                this.children = Collections.unmodifiableList((List<@NotNull Node>) iterable);
+            else if (children instanceof Collection<?> iterable)
+                result.addAll((Collection<? extends Node>) iterable);
 
             else
                 throw new IllegalStateException(
@@ -142,9 +143,6 @@ public abstract class Node {
                 );
         }
 
-        if (children == null)
-            throw new IllegalStateException("Children field of node `" + this + "` could not be resolved");
-
-        return this.children;
+        return this.children = result;
     }
 }
