@@ -14,6 +14,7 @@ import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
+import org.voidlang.compiler.node.hierarchy.Children;
 import org.voidlang.llvm.value.IRValue;
 
 import java.util.Optional;
@@ -36,6 +37,7 @@ public class BinaryOperator extends Value {
      * The left-hand side value of the operation.
      */
     @Setter
+    @Children
     private @NotNull Value lhs;
 
     /**
@@ -47,6 +49,7 @@ public class BinaryOperator extends Value {
      * The right-hand side value of the operation.
      */
     @Setter
+    @Children
     private @NotNull Value rhs;
 
     /**
