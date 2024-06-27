@@ -106,9 +106,8 @@ public class JitMethodTest {
         IRModule module = IRModule.create(context, "test_module");
         IRBuilder builder = IRBuilder.create(context);
 
-        Generator generator = new Generator(context, module, builder);
-
         AstParser parser = assertDoesNotThrow(() -> Parsers.of(source));
+        Generator generator = new Generator(context, module, builder, parser.context());
 
         Method method = parser.nextMethod();
 

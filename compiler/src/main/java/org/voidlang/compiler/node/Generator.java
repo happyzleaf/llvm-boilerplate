@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.voidlang.compiler.parser.ParserContext;
 import org.voidlang.llvm.behaviour.Disposable;
 import org.voidlang.llvm.instruction.IRBuilder;
 import org.voidlang.llvm.module.IRContext;
@@ -35,6 +36,11 @@ public class Generator implements Disposable {
      * The LLVM instruction builder to generate code with.
      */
     private final @NotNull IRBuilder builder;
+
+    /**
+     * The context of the parser of the current source file.
+     */
+    private final @NotNull ParserContext parser;
 
     /**
      * The current function that is being generated.

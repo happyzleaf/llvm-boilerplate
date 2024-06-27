@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.exception.ParserException;
-import org.voidlang.compiler.exception.SyntaxError;
+import org.voidlang.compiler.exception.ErrorCode;
 import org.voidlang.compiler.token.Token;
 import org.voidlang.compiler.token.TokenMeta;
 import org.voidlang.compiler.token.TokenType;
@@ -181,9 +181,14 @@ public class ParserContext {
     }
 
     public void syntaxError(@NotNull Token token, @NotNull String message) {
+        error(token, ErrorCode.UNEXPECTED_TOKEN, "Unexpected token: " + formatToken(token), message);
+    }
+
+    public void error(
+        @NotNull Token token, @NotNull ErrorCode error, @NotNull String title, @NotNull String message
+    ) {
         System.err.println(
-            ConsoleFormat.RED + "error[E" + SyntaxError.UNEXPECTED_TOKEN.code() + "]" + ConsoleFormat.WHITE + ": " +
-            "Unexpected token: " + formatToken(token)
+            ConsoleFormat.RED + "error[E" + error.code() + "]" + ConsoleFormat.WHITE + ": " + title
         );
         TokenMeta meta = token.meta();
         System.err.println(
@@ -225,6 +230,6 @@ public class ParserContext {
         System.err.print(ConsoleFormat.DEFAULT);
 
         // exit the program with the error code
-        System.exit(SyntaxError.UNEXPECTED_TOKEN.code());
+        System.exit(ErrorCode.UNEXPECTED_TOKEN.code());
     }
 }

@@ -9,9 +9,11 @@ import org.voidlang.compiler.ast.local.AccessStrategy;
 import org.voidlang.compiler.ast.local.Variable;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.ast.value.Value;
+import org.voidlang.compiler.exception.ErrorCode;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
+import org.voidlang.compiler.token.Token;
 import org.voidlang.llvm.value.IRValue;
 
 import java.util.Optional;
@@ -27,7 +29,7 @@ import java.util.Optional;
 @Getter
 @NodeInfo(type = NodeType.NAME_ACCESS)
 public class NameAccess extends Value {
-    private final @NotNull String name;
+    private final @NotNull Token name;
 
     private @Nullable Variable variable;
 
@@ -40,9 +42,12 @@ public class NameAccess extends Value {
      */
     @Override
     public void initUses(@NotNull Generator generator) {
-        variable = resolveName(name);
+        variable = resolveName(name.value());
         if (variable == null)
-            throw new IllegalStateException("Cannot resolve variable `" + name + "`");
+            generator.parser().error(
+                name, ErrorCode.UNKNOWN_VARIABLE, "Unknown variable: `" + name.value() + "`",
+            "Cannot resolve variable `" + name.value() + "`"
+            );
     }
 
     /**
@@ -55,8 +60,8 @@ public class NameAccess extends Value {
      */
     @Override
     public @NotNull Optional<@NotNull IRValue> codegen(@NotNull Generator generator) {
-        assert variable != null : "Variable `" + name + "` has not been resolved yet";
-        IRValue load = variable.load(generator, AccessStrategy.LOAD_POINTER, "access " + name);
+        assert variable != null : "Variable `" + name.value() + "` has not been resolved yet";
+        IRValue load = variable.load(generator, AccessStrategy.LOAD_POINTER, "access " + name.value());
 
         return Optional.of(load);
     }
@@ -69,7 +74,7 @@ public class NameAccess extends Value {
     @Override
     public @NotNull Type getValueType() {
         if (variable == null)
-            throw new IllegalStateException("Variable `" + name + "` has not been resolved yet");
+            throw new IllegalStateException("Variable `" + name.value() + "` has not been resolved yet");
         return variable.getValueType();
     }
 }

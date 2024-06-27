@@ -2,7 +2,7 @@ package org.voidlang.compiler.token;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.voidlang.compiler.exception.SyntaxError;
+import org.voidlang.compiler.exception.ErrorCode;
 import org.voidlang.compiler.util.console.ConsoleFormat;
 
 import java.io.File;
@@ -144,7 +144,7 @@ public class Tokenizer {
         else if (isCharStart(peek()))
             return nextChar();
 
-        syntaxError(SyntaxError.UNEXPECTED_CHARACTER, "unexpected character: `" + peek() + "`");
+        syntaxError(ErrorCode.UNEXPECTED_CHARACTER, "unexpected character: `" + peek() + "`");
         return makeToken(TokenType.UNEXPECTED);
     }
 
@@ -177,7 +177,7 @@ public class Tokenizer {
                 case LONG -> TokenType.ULONG;
                 default -> {
                     syntaxError(
-                        SyntaxError.UNEXPECTED_CHARACTER, "invalid unsigned number literal: `" + value + "`"
+                        ErrorCode.UNEXPECTED_CHARACTER, "invalid unsigned number literal: `" + value + "`"
                     );
                     yield TokenType.UNEXPECTED;
                 }
@@ -326,7 +326,7 @@ public class Tokenizer {
                 if (!integer) {
                     tokenLineIndex += cursor - begin;
                     syntaxError(
-                        SyntaxError.MULTIPLE_DECIMAL_POINTS,
+                        ErrorCode.MULTIPLE_DECIMAL_POINTS,
                         "floating point number cannot have multiple dot symbols"
                     );
                     return makeToken(TokenType.UNEXPECTED);
@@ -361,7 +361,7 @@ public class Tokenizer {
                 ) {
                     tokenLineIndex += cursor - begin - 2;
                     syntaxError(
-                        SyntaxError.CANNOT_HAVE_DECIMAL_POINT,
+                        ErrorCode.CANNOT_HAVE_DECIMAL_POINT,
                         "`" + type.name().toLowerCase() + "` type cannot have floating-point data"
                     );
                     return makeToken(TokenType.UNEXPECTED);
@@ -452,7 +452,7 @@ public class Tokenizer {
                         else {
                             tokenLineIndex += content.length() + 1;
                             syntaxError(
-                                SyntaxError.INVALID_ESCAPE_SEQUENCE, "invalid escape sequence: `\\" + peek() +
+                                ErrorCode.INVALID_ESCAPE_SEQUENCE, "invalid escape sequence: `\\" + peek() +
                                 "`"
                             );
                         }
@@ -489,7 +489,7 @@ public class Tokenizer {
 
         // handle unexpected end of a string literal
         syntaxError(
-            SyntaxError.MISSING_STRING_TERMINATOR,
+            ErrorCode.MISSING_STRING_TERMINATOR,
             "missing trailing `" + (string ? '"' : '\'') + "` symbol to terminate the " + (string ? "string" : "char") + " literal"
         );
         return makeToken(TokenType.UNEXPECTED);
@@ -840,7 +840,7 @@ public class Tokenizer {
      * @param error the token error
      * @param message the short error message
      */
-    private void syntaxError(@NotNull SyntaxError error, @NotNull String message) {
+    private void syntaxError(@NotNull ErrorCode error, @NotNull String message) {
         System.err.println(ConsoleFormat.RED + "error[E" + error.code() + "]" + ConsoleFormat.WHITE + ": " + message);
         System.err.println(
             ConsoleFormat.CYAN + " --> " + ConsoleFormat.LIGHT_GRAY + file.getName() + ":" + tokenLineNumber + ":" +

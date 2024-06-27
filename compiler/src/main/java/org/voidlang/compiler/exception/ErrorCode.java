@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public enum SyntaxError {
+public enum ErrorCode {
     /**
      * `UNEXPECTED_CHARACTER` indicates, that the tokenizer encountered an unexpected character.
      */
@@ -46,7 +46,12 @@ public enum SyntaxError {
     /**
      * `UNEXPECTED_TOKEN` indicates, that the tokenizer encountered an unexpected token.
      */
-    UNEXPECTED_TOKEN(107);
+    UNEXPECTED_TOKEN(107),
+
+    /**
+     * `UNKNOWN_VARIABLE` indicates, that a variable is being accessed that is not found.
+     */
+    UNKNOWN_VARIABLE(108);
 
     /**
      * The error code of the token error.

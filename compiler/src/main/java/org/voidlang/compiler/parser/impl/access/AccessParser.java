@@ -27,7 +27,7 @@ public class AccessParser extends ParserAlgorithm<Value> {
 
         // TODO handle the rest of the access chain
 
-        NameAccess access = new NameAccess(first.value());
+        NameAccess access = new NameAccess(first);
 
         // handle operation between two expressions
         // let var = foo +
