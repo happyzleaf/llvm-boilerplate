@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.node.Generator;
+import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRValue;
 
 /**
@@ -46,4 +47,18 @@ public abstract class Variable extends Node {
      * @return the resolved value of the type
      */
     public abstract @NotNull Type getValueType();
+
+    /**
+     * Retrieve the LLVM value for the pointer that points to the allocated data.
+     *
+     * @return the pointer to the variable data
+     */
+    public abstract @NotNull IRValue pointer();
+
+    /**
+     * Retrieve the LLVM type of the pointer that points to the allocated data.
+     *
+     * @return the type of the variable data
+     */
+    public abstract @NotNull IRType pointerType();
 }

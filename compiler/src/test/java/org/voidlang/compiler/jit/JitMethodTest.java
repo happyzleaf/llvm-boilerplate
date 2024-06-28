@@ -93,6 +93,21 @@ public class JitMethodTest {
         assertEquals(5, result.toInt());
     }
 
+    @Test
+    public void test_method_return_mutable_variable() {
+        String source =
+            """
+            int foo() {
+                mut x = 10
+                x = 20
+                return x
+            }
+            """;
+
+        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, List.of()));
+        assertEquals(20, result.toInt());
+    }
+
     private @NotNull IRGenericValue compileAndRunMethod(
         @NotNull String source, @NotNull List<@NotNull IRGenericValue> parameters
     ) {

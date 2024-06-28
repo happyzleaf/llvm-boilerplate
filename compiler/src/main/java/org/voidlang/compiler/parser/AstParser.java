@@ -21,6 +21,8 @@ import org.voidlang.compiler.parser.impl.access.AccessParser;
 import org.voidlang.compiler.parser.impl.control.ReturnParser;
 import org.voidlang.compiler.parser.impl.element.MethodParser;
 import org.voidlang.compiler.parser.impl.local.ImmutableLocalDeclarationParser;
+import org.voidlang.compiler.parser.impl.local.LocalAssignParser;
+import org.voidlang.compiler.parser.impl.local.MutableLocalDeclarationParser;
 import org.voidlang.compiler.parser.impl.operator.BinaryOperatorTree;
 import org.voidlang.compiler.parser.impl.operator.OperatorParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
@@ -85,6 +87,14 @@ public class AstParser {
 
     public @NotNull Node nextImmutableLocalDeclaration() {
         return parse(ImmutableLocalDeclarationParser.class, Node.class);
+    }
+
+    public @NotNull Node nextMutableLocalDeclaration() {
+        return parse(MutableLocalDeclarationParser.class, Node.class);
+    }
+
+    public @NotNull Node nextLocalAssignation() {
+        return parse(LocalAssignParser.class, Node.class);
     }
 
     public @NotNull Value nextAccess() {

@@ -25,9 +25,23 @@ public class StatementParser extends ParserAlgorithm<Node> {
     public @NotNull Node parse(@NotNull AstParser parser, @NotNull ParserContext context) {
         // handle immutable local variable declaration
         // let name = "John Doe"
-        // ^^^ the let keyword indicates, that a local variable is declared
+        // ^^^ the `let` keyword indicates, that a local variable is declared
         if (peek().is(TokenType.TYPE, "let"))
             return parser.nextImmutableLocalDeclaration();
+
+        // mut balance = 3200
+        // ^^^ the `mut` keyword indicates, that a mutable local variable is declared
+        if (peek().is(TokenType.TYPE, "mut"))
+            return parser.nextMutableLocalDeclaration();
+
+        // handle variable assignation
+        // foo = 123
+        //     ^ the `=` symbol after an identifier indicates, that a variable is assigned
+        // ^^^ the identifier must be followed by a `=`
+        //       ^ the `=` symbol must not follow another `=`, as that would be a comparing binary operator
+        if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.OPERATOR, "=")
+            && !at(cursor() + 2).is(TokenType.OPERATOR, "="))
+            return parser.nextLocalAssignation();
 
         // handle return statement
         // return 42

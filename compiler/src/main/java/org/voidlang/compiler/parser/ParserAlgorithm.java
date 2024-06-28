@@ -130,6 +130,15 @@ public abstract class ParserAlgorithm<T> {
     }
 
     /**
+     * Retrieve the index of the currently parsed token.
+     *
+     * @return the index of the currently parsed token
+     */
+    public int cursor() {
+        return useContext().cursor();
+    }
+
+    /**
      * Retrieve the currently using parser context.
      *
      * @return the parser context implementation

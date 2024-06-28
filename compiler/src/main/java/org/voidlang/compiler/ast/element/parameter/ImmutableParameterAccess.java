@@ -11,6 +11,7 @@ import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
+import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRFunction;
 import org.voidlang.llvm.value.IRValue;
 
@@ -67,5 +68,25 @@ public class ImmutableParameterAccess extends Variable {
     @Override
     public @NotNull Type getValueType() {
         return type;
+    }
+
+    /**
+     * Retrieve the LLVM value for the pointer that points to the allocated data.
+     *
+     * @return the pointer to the variable data
+     */
+    @Override
+    public @NotNull IRValue pointer() {
+        throw new UnsupportedOperationException("Cannot access pointer of immutable parameter access.");
+    }
+
+    /**
+     * Retrieve the LLVM type of the pointer that points to the allocated data.
+     *
+     * @return the type of the variable data
+     */
+    @Override
+    public @NotNull IRType pointerType() {
+        throw new UnsupportedOperationException("Cannot access pointer type of immutable parameter access.");
     }
 }
