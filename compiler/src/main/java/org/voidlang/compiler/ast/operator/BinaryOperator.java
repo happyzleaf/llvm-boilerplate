@@ -61,15 +61,14 @@ public class BinaryOperator extends Value {
     private @Nullable Type resultType;
 
     /**
-     * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
+     * Initialize all variable uses of the overriding node.
      * <p>
-     * This method should return {@link Optional#empty()}, if the parent node should not use the result of this node.
+     * This method is called after the member declarations are initialized, and before the {@link #codegen(Generator)}.
      *
      * @param generator the generation context to use for the code generation
-     * @return the LLVM IR value representing the result of the node, that is empty if the result is not used
      */
     @Override
-    public @NotNull Optional<@NotNull IRValue> codegen(@NotNull Generator generator) {
+    public void initUses(@NotNull Generator generator) {
         // resolve the scalar types of the operation targets
         ScalarType lhsType = unwrapType(lhs);
         ScalarType rhsType = unwrapType(rhs);
@@ -80,7 +79,18 @@ public class BinaryOperator extends Value {
 
         // resolve the result type of the operation
         resultType = lhsPrimitive.precedence() > rhsPrimitive.precedence() ? lhsType : rhsType;
+    }
 
+    /**
+     * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
+     * <p>
+     * This method should return {@link Optional#empty()}, if the parent node should not use the result of this node.
+     *
+     * @param generator the generation context to use for the code generation
+     * @return the LLVM IR value representing the result of the node, that is empty if the result is not used
+     */
+    @Override
+    public @NotNull Optional<@NotNull IRValue> codegen(@NotNull Generator generator) {
         // TODO handle implicit casting of types, if they are different
 
         // generate the left and right values
