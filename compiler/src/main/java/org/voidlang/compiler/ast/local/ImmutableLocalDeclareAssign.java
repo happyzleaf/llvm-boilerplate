@@ -11,6 +11,7 @@ import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.node.Generator;
+import org.voidlang.compiler.token.Token;
 import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRValue;
 
@@ -31,7 +32,7 @@ public class ImmutableLocalDeclareAssign extends Variable {
     /**
      * The unique name of the variable.
      */
-    private final @NotNull String name;
+    private final @NotNull Token name;
 
     /**
      * The value assigned to the variable.
@@ -66,12 +67,12 @@ public class ImmutableLocalDeclareAssign extends Variable {
         pointerType = value.getValueType().codegen(generator.context());
 
         // allocate memory on the stack of the size of the value type
-        pointer = generator.builder().alloc(pointerType, "let (ptr) " + name);
+        pointer = generator.builder().alloc(pointerType, "let (ptr) " + name.value());
 
         // generate the LLVM value of the held value
         Optional<IRValue> value = value().codegen(generator);
         if (value.isEmpty())
-            throw new IllegalStateException("Unable to generate value for local variable: " + name);
+            throw new IllegalStateException("Unable to generate value for immutable local variable: " + name.value());
 
         // store the value in the allocated memory
         assert pointer != null;
@@ -106,5 +107,24 @@ public class ImmutableLocalDeclareAssign extends Variable {
     @Override
     public @NotNull Type getValueType() {
         return value.getValueType();
+    }
+
+    /**
+     * Retrieve the name of the local variable.
+     *
+     * @return the name of the local variable
+     */
+    public @NotNull String name() {
+        return name.value();
+    }
+
+    /**
+     * Retrieve the token that was used to declare the name of the local variable.
+     *
+     * @return the token of the variable's name
+     */
+    @Override
+    public @NotNull Token declaredName() {
+        return name;
     }
 }

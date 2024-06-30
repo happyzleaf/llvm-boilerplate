@@ -9,7 +9,7 @@ import org.voidlang.compiler.ast.local.AccessStrategy;
 import org.voidlang.compiler.ast.local.Variable;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.ast.value.Value;
-import org.voidlang.compiler.exception.ErrorCode;
+import org.voidlang.compiler.error.ErrorCode;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
@@ -45,8 +45,8 @@ public class NameAccess extends Value {
         variable = resolveName(name.value());
         if (variable == null)
             generator.parser().error(
-                name, ErrorCode.UNKNOWN_VARIABLE, "Unknown variable: `" + name.value() + "`",
-            "Cannot resolve variable `" + name.value() + "`"
+                ErrorCode.UNKNOWN_VARIABLE, "Unknown variable: `" + name.value() + "`", name,
+                "Cannot resolve variable `" + name.value() + "`"
             );
     }
 

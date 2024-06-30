@@ -2,7 +2,7 @@ package org.voidlang.compiler.parser.impl.operator;
 
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.operator.Operator;
-import org.voidlang.compiler.exception.ParserException;
+import org.voidlang.compiler.error.ParserException;
 import org.voidlang.compiler.parser.AstParser;
 import org.voidlang.compiler.parser.ParserAlgorithm;
 import org.voidlang.compiler.parser.ParserContext;

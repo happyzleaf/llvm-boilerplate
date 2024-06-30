@@ -16,7 +16,7 @@ import org.voidlang.compiler.ast.type.array.Array;
 import org.voidlang.compiler.ast.type.name.TypeName;
 import org.voidlang.compiler.ast.type.referencing.Referencing;
 import org.voidlang.compiler.ast.value.Value;
-import org.voidlang.compiler.exception.ParserException;
+import org.voidlang.compiler.error.ParserException;
 import org.voidlang.compiler.parser.impl.access.AccessParser;
 import org.voidlang.compiler.parser.impl.control.ReturnParser;
 import org.voidlang.compiler.parser.impl.element.MethodParser;

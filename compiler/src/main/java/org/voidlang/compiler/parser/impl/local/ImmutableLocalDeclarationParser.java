@@ -9,6 +9,7 @@ import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.parser.AstParser;
 import org.voidlang.compiler.parser.ParserAlgorithm;
 import org.voidlang.compiler.parser.ParserContext;
+import org.voidlang.compiler.token.Token;
 import org.voidlang.compiler.token.TokenType;
 
 /**
@@ -36,7 +37,7 @@ public class ImmutableLocalDeclarationParser extends ParserAlgorithm<Node> {
         // parse the local variable name
         // let msg = "Hello, World!"
         //     ^^^ the name of the local variable
-        String name = get(TokenType.IDENTIFIER).value();
+        Token name = get(TokenType.IDENTIFIER);
 
         // TODO handle non-initialized local variable declaration
 

@@ -1,4 +1,4 @@
-package org.voidlang.compiler.exception;
+package org.voidlang.compiler.error;
 
 import org.jetbrains.annotations.NotNull;
 

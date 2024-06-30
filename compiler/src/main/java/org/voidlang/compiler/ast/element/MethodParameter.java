@@ -2,10 +2,13 @@ package org.voidlang.compiler.ast.element;
 
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
+import org.voidlang.compiler.token.Token;
 import org.voidlang.compiler.util.console.ConsoleFormat;
 import org.voidlang.compiler.util.debug.Printable;
 
-public record MethodParameter(@NotNull AnonymousType type, @NotNull String name) implements Printable {
+public record MethodParameter(
+    @NotNull AnonymousType type, @NotNull Token declaredName, @NotNull String name
+) implements Printable {
     /**
      * Returns a string representation of the implementing class.
      *

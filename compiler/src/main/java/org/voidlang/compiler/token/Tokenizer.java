@@ -2,7 +2,7 @@ package org.voidlang.compiler.token;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.voidlang.compiler.exception.ErrorCode;
+import org.voidlang.compiler.error.ErrorCode;
 import org.voidlang.compiler.util.console.ConsoleFormat;
 
 import java.io.File;

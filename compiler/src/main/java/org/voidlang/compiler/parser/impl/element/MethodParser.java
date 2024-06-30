@@ -8,6 +8,7 @@ import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
 import org.voidlang.compiler.parser.AstParser;
 import org.voidlang.compiler.parser.ParserAlgorithm;
 import org.voidlang.compiler.parser.ParserContext;
+import org.voidlang.compiler.token.Token;
 import org.voidlang.compiler.token.TokenType;
 
 import java.util.ArrayList;
@@ -76,10 +77,10 @@ public class MethodParser extends ParserAlgorithm<Method> {
             // parse the name of the parameter
             // int multiply(int i, int j)
             //                  ^ the name of the parameter
-            String paramName = get(TokenType.IDENTIFIER).value();
+            Token paramName = get(TokenType.IDENTIFIER);
 
             // add the parameter to the list
-            parameters.add(new MethodParameter(paramType, paramName));
+            parameters.add(new MethodParameter(paramType, paramName, paramName.value()));
 
             // check if there are more parameters to be parsed
             // int multiply(int i, int j)

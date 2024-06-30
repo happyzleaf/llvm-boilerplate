@@ -28,7 +28,7 @@ public class LocalAssignParser extends ParserAlgorithm<Node> {
         // handle the equals sign
         // val = newVal
         //     ^ the `=` symbol indicates, that an assignation is expected
-        get(TokenType.OPERATOR, "=");
+        Token operator = get(TokenType.OPERATOR, "=");
 
         // parse the value of the local variable
         Value value = parser.nextValue();
@@ -37,6 +37,6 @@ public class LocalAssignParser extends ParserAlgorithm<Node> {
         if (peek().is(TokenType.SEMICOLON))
             get();
 
-        return new LocalAssign(name, value);
+        return new LocalAssign(name, operator, value);
     }
 }

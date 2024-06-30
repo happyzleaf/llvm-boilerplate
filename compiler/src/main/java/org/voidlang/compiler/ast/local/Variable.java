@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.Node;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.node.Generator;
+import org.voidlang.compiler.token.Token;
 import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRValue;
 
@@ -17,6 +18,13 @@ public abstract class Variable extends Node {
      * @return the name of the local variable
      */
     public abstract @NotNull String name();
+
+    /**
+     * Retrieve the token that was used to declare the name of the local variable.
+     *
+     * @return the token of the variable's name
+     */
+    public abstract @NotNull Token declaredName();
 
     /**
      * Load the value of the local variable.

@@ -122,7 +122,7 @@ public class Method extends ScopeContainer implements Printable {
             // TODO instead of letting the parameter accessor access the IRFunction, lets just initialize
             //  the function before, the accessor requests it
             return parameterAccessors.computeIfAbsent(name, k -> new ImmutableParameterAccess(
-                this, index, parameter.name(), parameter.type()
+                this, index, parameter.declaredName(), parameter.type()
             ));
         }
 

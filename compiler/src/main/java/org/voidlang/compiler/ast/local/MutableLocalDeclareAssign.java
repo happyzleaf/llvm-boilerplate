@@ -7,10 +7,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.ast.type.anonymous.AnonymousType;
+import org.voidlang.compiler.ast.type.anonymous.ScalarType;
+import org.voidlang.compiler.ast.type.anonymous.TupleType;
+import org.voidlang.compiler.ast.type.referencing.Referencing;
 import org.voidlang.compiler.ast.value.Value;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
+import org.voidlang.compiler.token.Token;
 import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRValue;
 
@@ -31,7 +35,7 @@ public class MutableLocalDeclareAssign extends Variable {
     /**
      * The unique name of the variable.
      */
-    private final @NotNull String name;
+    private final @NotNull Token name;
 
     /**
      * The value assigned to the variable.
@@ -55,6 +59,31 @@ public class MutableLocalDeclareAssign extends Variable {
     private @Nullable IRValue pointer;
 
     /**
+     * Initialize node logic before the nodes are visited and the code is generated.
+     * <p>
+     * This method is called before the initialization methods and the {@link #codegen(Generator)} method.
+     */
+    @Override
+    public void init() {
+        // convert the type referencing to mutable, in order to allow modifications on it
+        resolvedType = switch (value.getValueType()) {
+            case ScalarType scalar -> new ScalarType(
+                Referencing.mut(),
+                scalar.name(),
+                scalar.array(),
+                scalar.memberName()
+            );
+            case TupleType tuple -> new TupleType(
+                Referencing.mut(),
+                tuple.members(),
+                tuple.array(),
+                tuple.memberName()
+            );
+            default -> throw new IllegalStateException("Unexpected value: " + type);
+        };
+    }
+
+    /**
      * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
      * <p>
      * This method should return {@link Optional#empty()}, if the parent node should not use the result of this node.
@@ -68,12 +97,12 @@ public class MutableLocalDeclareAssign extends Variable {
         pointerType = value.getValueType().codegen(generator.context());
 
         // allocate memory on the stack of the size of the value type
-        pointer = generator.builder().alloc(pointerType, "mut (ptr) " + name);
+        pointer = generator.builder().alloc(pointerType, "mut (ptr) " + name.value());
 
         // generate the LLVM value of the held value
         Optional<IRValue> value = value().codegen(generator);
         if (value.isEmpty())
-            throw new IllegalStateException("Unable to generate value for local variable: " + name);
+            throw new IllegalStateException("Unable to generate value for mutable local variable: " + name.value());
 
         // store the value in the allocated memory
         assert pointer != null;
@@ -107,6 +136,26 @@ public class MutableLocalDeclareAssign extends Variable {
      */
     @Override
     public @NotNull Type getValueType() {
-        return value.getValueType();
+        return resolvedType;
+    }
+
+    /**
+     * Retrieve the name of the local variable.
+     *
+     * @return the name of the local variable
+     */
+    @Override
+    public @NotNull String name() {
+        return name.value();
+    }
+
+    /**
+     * Retrieve the token that was used to declare the name of the local variable.
+     *
+     * @return the token of the variable's name
+     */
+    @Override
+    public @NotNull Token declaredName() {
+        return name;
     }
 }

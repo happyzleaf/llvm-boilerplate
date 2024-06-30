@@ -3,7 +3,7 @@ package org.voidlang.compiler.parser;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.voidlang.compiler.exception.ParserException;
+import org.voidlang.compiler.error.ParserException;
 import org.voidlang.compiler.token.Token;
 import org.voidlang.compiler.token.TokenType;
 

@@ -5,8 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.compiler.ast.Node;
-import org.voidlang.compiler.exception.ParserException;
-import org.voidlang.compiler.exception.ErrorCode;
+import org.voidlang.compiler.error.ParserException;
+import org.voidlang.compiler.error.ErrorCode;
+import org.voidlang.compiler.error.TokenError;
 import org.voidlang.compiler.token.Token;
 import org.voidlang.compiler.token.TokenMeta;
 import org.voidlang.compiler.token.TokenType;
@@ -181,50 +182,71 @@ public class ParserContext {
     }
 
     public void syntaxError(@NotNull Token token, @NotNull String message) {
-        error(token, ErrorCode.UNEXPECTED_TOKEN, "Unexpected token: " + formatToken(token), message);
+        error(ErrorCode.UNEXPECTED_TOKEN, "Unexpected token: " + formatToken(token), token, message);
     }
 
     public void error(
-        @NotNull Token token, @NotNull ErrorCode error, @NotNull String title, @NotNull String message
+        @NotNull ErrorCode code, @NotNull String title, @NotNull Token token, @NotNull String message
     ) {
+        error(code, title, new TokenError(token, message));
+    }
+
+    public void error(
+        @NotNull ErrorCode code, @NotNull String title, @NotNull TokenError... errors
+    ) {
+        assert errors.length > 0 : "Must specify at least 1 token error";
+
+        TokenError first = errors[0];
+
         System.err.println(
-            ConsoleFormat.RED + "error[E" + error.code() + "]" + ConsoleFormat.WHITE + ": " + title
+            ConsoleFormat.RED + "error[E" + code.code() + "]" + ConsoleFormat.WHITE + ": " + title
         );
-        TokenMeta meta = token.meta();
+        TokenMeta firstMeta = first.token().meta();
         System.err.println(
-            ConsoleFormat.CYAN + " --> " + ConsoleFormat.LIGHT_GRAY + "filename.void" + ":" + meta.lineNumber() + ":" +
-            meta.lineIndex()
+            ConsoleFormat.CYAN + " --> " + ConsoleFormat.LIGHT_GRAY + "filename.void" + ":" + firstMeta.lineNumber() +
+            ":" + firstMeta.lineIndex()
         );
 
-        int lineSize = String.valueOf(meta.lineNumber()).length();
+        int longestSize = Stream.of(errors)
+            .map(e -> e.token().meta().lineNumber())
+            .map(n -> String.valueOf(n).length())
+            .max(Integer::compare)
+            .orElse(0);
 
-        // display the line number
-        System.err.print(ConsoleFormat.CYAN + " ".repeat(lineSize + 1));
-        System.err.println(" | ");
+        for (TokenError error : errors) {
+            TokenMeta meta = error.token().meta();
 
-        System.err.print(" " + meta.lineNumber() + " | ");
+            int lineSize = String.valueOf(meta.lineNumber()).length();
+            int padding = lineSize < longestSize ? longestSize - (longestSize - lineSize) : lineSize;
 
-        // get the line of the error
-        String line = data.split("\n")[meta.lineNumber() - 1];
+            // display the line number
+            System.err.print(ConsoleFormat.CYAN + " ".repeat(padding + 1));
+            System.err.println(" | ");
 
-        // get the start and end index of the line
-        int start = Math.max(0, meta.lineIndex() - Tokenizer.MAX_ERROR_LINE_LENGTH);
-        int end = Math.min(line.length(), meta.lineIndex() + Tokenizer.MAX_ERROR_LINE_LENGTH);
+            System.err.print(" " + meta.lineNumber() + " | ");
 
-        // display the line of the error
-        System.err.println(ConsoleFormat.LIGHT_GRAY + line.substring(start, end));
+            // get the line of the error
+            String line = data.split("\n")[meta.lineNumber() - 1];
 
-        // display the error pointer
-        System.err.print(ConsoleFormat.CYAN + " ".repeat(lineSize + 1));
-        String pointerPad = " ".repeat(lineSize + (meta.lineIndex() - start) - 1);
-        System.err.println(" | " + pointerPad + ConsoleFormat.RED + "^".repeat(meta.endIndex() - meta.beginIndex()));
+            // get the start and end index of the line
+            int start = Math.max(0, meta.lineIndex() - Tokenizer.MAX_ERROR_LINE_LENGTH);
+            int end = Math.min(line.length(), firstMeta.lineIndex() + Tokenizer.MAX_ERROR_LINE_LENGTH);
 
-        // display the expected tokens below the pointer
-        System.err.print(ConsoleFormat.CYAN + " ".repeat(lineSize + 1));
-        System.err.println(" | " + pointerPad + ConsoleFormat.LIGHT_GRAY + message);
+            // display the line of the error
+            System.err.println(ConsoleFormat.LIGHT_GRAY + line.substring(start, end));
+
+            // display the error pointer
+            System.err.print(ConsoleFormat.CYAN + " ".repeat(lineSize + 1));
+            String pointerPad = " ".repeat(lineSize + (meta.lineIndex() - start) - 1);
+            System.err.println(" | " + pointerPad + ConsoleFormat.RED + "^".repeat(meta.endIndex() - meta.beginIndex()));
+
+            // display the expected tokens below the pointer
+            System.err.print(ConsoleFormat.CYAN + " ".repeat(lineSize + 1));
+            System.err.println(" | " + pointerPad + ConsoleFormat.LIGHT_GRAY + error.message());
+        }
 
         // display a final separator
-        System.err.print(ConsoleFormat.CYAN + " ".repeat(lineSize + 1));
+        System.err.print(ConsoleFormat.CYAN + " ".repeat(longestSize + 1));
         System.err.println(" | ");
 
         System.err.print(ConsoleFormat.DEFAULT);

@@ -1,4 +1,4 @@
-package org.voidlang.compiler.exception;
+package org.voidlang.compiler.error;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,12 @@ public enum ErrorCode {
     /**
      * `UNKNOWN_VARIABLE` indicates, that a variable is being accessed that is not found.
      */
-    UNKNOWN_VARIABLE(108);
+    UNKNOWN_VARIABLE(108),
+
+    /**
+     * `IMMUTABLE_ASSIGN` indicates, that a variable is being assigned even though it is immutable.
+     */
+    IMMUTABLE_ASSIGN(109);
 
     /**
      * The error code of the token error.

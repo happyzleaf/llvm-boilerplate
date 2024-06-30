@@ -11,6 +11,7 @@ import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
+import org.voidlang.compiler.token.Token;
 import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRFunction;
 import org.voidlang.llvm.value.IRValue;
@@ -26,7 +27,7 @@ public class ImmutableParameterAccess extends Variable {
 
     private final int index;
 
-    private final @NotNull String name;
+    private final @NotNull Token name;
 
     private final @NotNull Type type;
 
@@ -43,6 +44,26 @@ public class ImmutableParameterAccess extends Variable {
         IRFunction function = method.function();
         assert function != null : "Function is not defined for method: " + method.name();
         return Optional.of(function.parameter(index));
+    }
+
+    /**
+     * Retrieve the name of the local variable.
+     *
+     * @return the name of the local variable
+     */
+    @Override
+    public @NotNull String name() {
+        return name.value();
+    }
+
+    /**
+     * Retrieve the token that was used to declare the name of the local variable.
+     *
+     * @return the token of the variable's name
+     */
+    @Override
+    public @NotNull Token declaredName() {
+        return name;
     }
 
     /**

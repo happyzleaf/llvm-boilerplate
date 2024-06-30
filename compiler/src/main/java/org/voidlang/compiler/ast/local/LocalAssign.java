@@ -7,11 +7,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.ast.value.Value;
-import org.voidlang.compiler.exception.ErrorCode;
+import org.voidlang.compiler.error.ErrorCode;
+import org.voidlang.compiler.error.TokenError;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.token.Token;
+import org.voidlang.compiler.token.TokenType;
 import org.voidlang.llvm.value.IRValue;
 
 import java.util.Optional;
@@ -25,6 +27,11 @@ public class LocalAssign extends Value {
      * The name of the variable to be assigned.
      */
     private final @NotNull Token name;
+
+    /**
+     * The operator that was used for the assignment. It should be {@code =}.
+     */
+    private final @NotNull Token operator;
 
     /**
      * The new value assigned to the variable.
@@ -46,11 +53,21 @@ public class LocalAssign extends Value {
     @Override
     public void initUses(@NotNull Generator generator) {
         target = resolveName(name.value());
-        if (target == null)
+        if (target == null) {
             generator.parser().error(
-                name, ErrorCode.UNKNOWN_VARIABLE, "Unknown variable: `" + name.value() + "`",
+                ErrorCode.UNKNOWN_VARIABLE, "Unknown variable: `" + name.value() + "`", name,
                 "Cannot resolve variable `" + name.value() + "`"
             );
+            return;
+        }
+
+        if (!target.getValueType().referencing().mutable()) {
+            generator.parser().error(
+                ErrorCode.IMMUTABLE_ASSIGN, "Cannot assign to immutable variable `" + name.value() + "`",
+                new TokenError(target.declaredName(), "Consider changing `let` to `mut`, to allow modifications on `" + name.value() + "`"),
+                new TokenError(operator, "Cannot assign to immutable variable `" + name.value() + "`")
+            );
+        }
     }
 
     /**
