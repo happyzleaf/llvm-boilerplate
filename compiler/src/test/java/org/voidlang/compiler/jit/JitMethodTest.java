@@ -108,6 +108,19 @@ public class JitMethodTest {
         assertEquals(20, result.toInt());
     }
 
+    @Test
+    public void test_method_return_math_operation() {
+        String source =
+            """
+            int foo() {
+                return 1 + 2 * 3
+            }
+            """;
+
+        IRGenericValue result = assertDoesNotThrow(() -> compileAndRunMethod(source, List.of()));
+        assertEquals(7, result.toInt());
+    }
+
     private @NotNull IRGenericValue compileAndRunMethod(
         @NotNull String source, @NotNull List<@NotNull IRGenericValue> parameters
     ) {
