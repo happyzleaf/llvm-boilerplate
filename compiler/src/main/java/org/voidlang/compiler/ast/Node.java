@@ -8,6 +8,7 @@ import org.voidlang.compiler.ast.common.EOF;
 import org.voidlang.compiler.ast.common.Error;
 import org.voidlang.compiler.ast.local.Variable;
 import org.voidlang.compiler.ast.scope.Scope;
+import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.node.Generator;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
@@ -19,6 +20,7 @@ import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRValue;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Stream;
@@ -137,6 +139,19 @@ public abstract class Node {
      */
     public @Nullable Variable resolveName(@NotNull String name) {
         return parent != null ? parent.resolveName(name) : null;
+    }
+
+    /**
+     * Resolve a method from this node context by its name and parameter types. If the method is unresolved locally,
+     * the parent element tries to resolve it.
+     * <p>
+     * Note that, a method name may be overloaded, and the parameter types are used to resolve the correct method.
+     *
+     * @param name target type name
+     * @return resolved type or null if it was not found
+     */
+    public @Nullable Method resolveMethod(@NotNull String name, @NotNull List<@NotNull Type> types) {
+        return parent != null ? parent.resolveMethod(name, types) : null;
     }
 
     /**
