@@ -27,8 +27,11 @@ import org.voidlang.compiler.parser.impl.operator.BinaryOperatorTree;
 import org.voidlang.compiler.parser.impl.operator.OperatorParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
 import org.voidlang.compiler.parser.impl.type.*;
+import org.voidlang.compiler.parser.impl.value.ArgumentListParser;
 import org.voidlang.compiler.parser.impl.value.LiteralParser;
 import org.voidlang.compiler.parser.impl.value.ValueParser;
+
+import java.util.List;
 
 /**
  * Represents a class that simplifies calls for specific parser algorithms.
@@ -115,6 +118,11 @@ public class AstParser {
 
     public @NotNull Value nextBinaryOperation(@NotNull Value lhs, @NotNull Operator operator, @NotNull Value rhs) {
         return BinaryOperatorTree.makeBinaryOperator(lhs, operator, rhs);
+    }
+
+    @SuppressWarnings("unchecked")
+    public @NotNull List<@NotNull Value> nextArgumentList() {
+        return parse(ArgumentListParser.class, List.class);
     }
 
     /**

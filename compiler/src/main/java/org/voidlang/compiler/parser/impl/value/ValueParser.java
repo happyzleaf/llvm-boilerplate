@@ -33,7 +33,7 @@ public class ValueParser extends ParserAlgorithm<Value> {
         //            ^^^^^^^^^ the identifier token indicates, that a value is expected
         // let value = outer.inner
         //                  ^ identifiers may be chained to access nested values
-        // TODO foo()
+        // foo()
         //    ^^ function calls have a similar signature, except there are parentheses at the end
         else if (peek().is(TokenType.IDENTIFIER))
             return parser.nextAccess();

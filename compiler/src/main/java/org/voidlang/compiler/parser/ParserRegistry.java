@@ -12,6 +12,7 @@ import org.voidlang.compiler.parser.impl.local.MutableLocalDeclarationParser;
 import org.voidlang.compiler.parser.impl.operator.OperatorParser;
 import org.voidlang.compiler.parser.impl.scope.ScopeParser;
 import org.voidlang.compiler.parser.impl.type.*;
+import org.voidlang.compiler.parser.impl.value.ArgumentListParser;
 import org.voidlang.compiler.parser.impl.value.LiteralParser;
 import org.voidlang.compiler.parser.impl.value.ValueParser;
 
@@ -47,7 +48,8 @@ public class ParserRegistry {
             MutableLocalDeclarationParser.class,
             LocalAssignParser.class,
             ReturnParser.class,
-            OperatorParser.class
+            OperatorParser.class,
+            ArgumentListParser.class
         };
 
         for (Class<?> parser : parsers) {
