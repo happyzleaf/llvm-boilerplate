@@ -38,16 +38,9 @@ public class NodeVisitor {
     public void initHierarchy() {
         // iterate each node registered in the hierarchy
         for (Node node : NODES) {
-            // iterate each field of the node, including the inherited fields
-            for (Field field : getFields(node.getClass())) {
-                // check if the field is annotated with the children annotation
-                if (!field.isAnnotationPresent(Children.class))
-                    continue;
-
-                // process the children field of the node
-                field.setAccessible(true);
-                processField(node, field);
-            }
+            // resolve the child nodes of the node, that is now considered a parent
+            for (Node child : node.children())
+                processParent(node, child);
         }
     }
 
@@ -89,44 +82,6 @@ public class NodeVisitor {
             visitor.accept(node);
             visitChildren(node.children(), visitor);
         }
-    }
-
-    /**
-     * Process a field of the node that is annotated with {@link Children}.
-     *
-     * @param parent the node that contains the children field
-     * @param field the children field to process
-     */
-    private void processField(@NotNull Node parent, @NotNull Field field) {
-        // try to resolve the value of the children field
-        Object children;
-        try {
-            children = field.get(parent);
-        } catch (IllegalAccessException e) {
-            throw new IllegalStateException("Cannot access children field", e);
-        }
-
-        // handle single-children and case
-        if (children instanceof Node child)
-            processParent(parent, child);
-
-        // handle multi-children case
-        else if (children instanceof Iterable<?>) {
-            for (Object element : (Iterable<?>) children) {
-                if (!(element instanceof Node child))
-                    throw new IllegalStateException(
-                        "Children field `" + field.getName() + "` of node `" + parent +
-                        "` must be a node or a list of nodes"
-                    );
-                processParent(parent, child);
-            }
-        }
-
-        else
-            throw new IllegalStateException(
-                "Children field `" + field.getName() + "` of node `" + parent +
-                "` must be a node or a list of nodes, not " + children
-            );
     }
 
     /**
