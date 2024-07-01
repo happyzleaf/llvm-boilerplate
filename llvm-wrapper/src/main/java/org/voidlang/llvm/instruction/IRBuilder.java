@@ -1,12 +1,18 @@
 package org.voidlang.llvm.instruction;
 
+import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
+import org.bytedeco.llvm.LLVM.LLVMValueRef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import org.voidlang.llvm.behaviour.Disposable;
 import org.voidlang.llvm.module.IRContext;
 import org.voidlang.llvm.type.IRType;
+import org.voidlang.llvm.value.IRFunction;
 import org.voidlang.llvm.value.IRValue;
+
+import java.util.List;
 
 import static org.bytedeco.llvm.global.LLVM.*;
 
@@ -263,6 +269,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be subtracted
      * @param right the right-hand side integer value to be subtracted
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the subtraction operation
      */
     public @NotNull IRValue subtract(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -285,6 +292,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be subtracted
      * @param right the right-hand side integer value to be subtracted
+     *
      * @return an IRValue that represents the result of the subtraction operation
      */
     public @NotNull IRValue subtract(@NotNull IRValue left, @NotNull IRValue right) {
@@ -304,6 +312,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side floating-point value to be subtracted
      * @param right the right-hand side floating-point value to be subtracted
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the subtraction operation
      */
     public @NotNull IRValue subtractFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -322,6 +331,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side floating-point value to be subtracted
      * @param right the right-hand side floating-point value to be subtracted
+     *
      * @return an IRValue that represents the result of the subtraction operation
      */
     public @NotNull IRValue subtractFloat(@NotNull IRValue left, @NotNull IRValue right) {
@@ -345,6 +355,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be subtracted
      * @param right the right-hand side integer value to be subtracted
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the subtraction operation
      */
     public @NotNull IRValue subtractNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -367,6 +378,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be subtracted
      * @param right the right-hand side integer value to be subtracted
+     *
      * @return an IRValue that represents the result of the subtraction operation
      */
     public @NotNull IRValue subtractNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
@@ -390,6 +402,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be subtracted
      * @param right the right-hand side integer value to be subtracted
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the subtraction operation
      */
     public @NotNull IRValue subtractNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -412,6 +425,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be subtracted
      * @param right the right-hand side integer value to be subtracted
+     *
      * @return an IRValue that represents the result of the subtraction operation
      */
     public @NotNull IRValue subtractNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
@@ -435,6 +449,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be multiplied
      * @param right the right-hand side integer value to be multiplied
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the multiplication operation
      */
     public @NotNull IRValue multiply(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -457,6 +472,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be multiplied
      * @param right the right-hand side integer value to be multiplied
+     *
      * @return an IRValue that represents the result of the multiplication operation
      */
     public @NotNull IRValue multiply(@NotNull IRValue left, @NotNull IRValue right) {
@@ -476,6 +492,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side floating-point value to be multiplied
      * @param right the right-hand side floating-point value to be multiplied
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the multiplication operation
      */
     public @NotNull IRValue multiplyFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -494,6 +511,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side floating-point value to be multiplied
      * @param right the right-hand side floating-point value to be multiplied
+     *
      * @return an IRValue that represents the result of the multiplication operation
      */
     public @NotNull IRValue multiplyFloat(@NotNull IRValue left, @NotNull IRValue right) {
@@ -518,6 +536,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be multiplied
      * @param right the right-hand side integer value to be multiplied
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the multiplication operation
      */
     public @NotNull IRValue multiplyNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -541,6 +560,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be multiplied
      * @param right the right-hand side integer value to be multiplied
+     *
      * @return an IRValue that represents the result of the multiplication operation
      */
     public @NotNull IRValue multiplyNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
@@ -565,6 +585,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be multiplied
      * @param right the right-hand side integer value to be multiplied
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the multiplication operation
      */
     public @NotNull IRValue multiplyNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -588,6 +609,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be multiplied
      * @param right the right-hand side integer value to be multiplied
+     *
      * @return an IRValue that represents the result of the multiplication operation
      */
     public @NotNull IRValue multiplyNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
@@ -611,6 +633,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the division operation
      */
     public @NotNull IRValue divideFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -633,6 +656,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
+     *
      * @return an IRValue that represents the result of the division operation
      */
     public @NotNull IRValue divideFloat(@NotNull IRValue left, @NotNull IRValue right) {
@@ -651,6 +675,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the division operation
      */
     public @NotNull IRValue divideSigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -668,6 +693,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
+     *
      * @return an IRValue that represents the result of the division operation
      */
     public @NotNull IRValue divideSigned(@NotNull IRValue left, @NotNull IRValue right) {
@@ -686,6 +712,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the division operation
      */
     public @NotNull IRValue divideUnsigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -703,6 +730,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
+     *
      * @return an IRValue that represents the result of the division operation
      */
     public @NotNull IRValue divideUnsigned(@NotNull IRValue left, @NotNull IRValue right) {
@@ -722,6 +750,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the division operation
      */
     public @NotNull IRValue divideExactSigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -740,6 +769,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
+     *
      * @return an IRValue that represents the result of the division operation
      */
     public @NotNull IRValue divideExactSigned(@NotNull IRValue left, @NotNull IRValue right) {
@@ -759,6 +789,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the result of the division operation
      */
     public @NotNull IRValue divideExactUnsigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -777,6 +808,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
+     *
      * @return an IRValue that represents the result of the division operation
      */
     public @NotNull IRValue divideExactUnsigned(@NotNull IRValue left, @NotNull IRValue right) {
@@ -800,6 +832,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the remainder of the division operation
      */
     public @NotNull IRValue remainderFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -822,6 +855,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
+     *
      * @return an IRValue that represents the remainder of the division operation
      */
     public @NotNull IRValue remainderFloat(@NotNull IRValue left, @NotNull IRValue right) {
@@ -841,6 +875,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the remainder of the division operation
      */
     public @NotNull IRValue remainderSigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -859,6 +894,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
+     *
      * @return an IRValue that represents the remainder of the division operation
      */
     public @NotNull IRValue remainderSigned(@NotNull IRValue left, @NotNull IRValue right) {
@@ -878,6 +914,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the remainder of the division operation
      */
     public @NotNull IRValue remainderUnsigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
@@ -896,6 +933,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param left the left-hand side integer value to be divided
      * @param right the right-hand side integer value to be divided
+     *
      * @return an IRValue that represents the remainder of the division operation
      */
     public @NotNull IRValue remainderUnsigned(@NotNull IRValue left, @NotNull IRValue right) {
@@ -920,6 +958,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param type the LLVM type of the variable to be allocated
      * @param name an optional name for the variable (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the pointer to the newly allocated variable
      */
     public @NotNull IRValue alloc(@NotNull IRType type, @NotNull String name) {
@@ -972,6 +1011,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param type the LLVM type of the value to be loaded
      * @param pointer an IRValue that represents the pointer to the memory location
      * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
      * @return an IRValue that represents the loaded value
      */
     public @NotNull IRValue load(@NotNull IRType type, @NotNull IRValue pointer, @NotNull String name) {
@@ -998,6 +1038,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param type the LLVM type of the value to be loaded
      * @param pointer an IRValue that represents the pointer to the memory location
+     *
      * @return an IRValue that represents the loaded value
      */
     public @NotNull IRValue load(@NotNull IRType type, @NotNull IRValue pointer) {
@@ -1024,10 +1065,78 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param value the value to be stored
      * @param pointer an IRValue that represents the pointer to the memory location
+     *
      * @return an IRValue that represents the stored value
      */
     public @NotNull IRValue store(@NotNull IRValue value, @Unmodifiable IRValue pointer) {
         return new IRValue(LLVMBuildStore(handle, value.handle(), pointer.handle()));
+    }
+
+    /**
+     * Perform a function call instruction. It is used to call a function with the specified signature and arguments.
+     * <br>
+     * The signature parameter specifies the type of the function being called. The function parameter is an IRFunction
+     * object that represents the function to be called. The arguments parameter is a list of IRValue objects that
+     * represent the arguments to the function.
+     * <br>
+     * The name parameter is an optional name for the instruction, which can be used for debugging purposes.
+     * <br>
+     * The function returns an IRValue that represents the result of the function call. You can use this value in
+     * subsequent instructions or store it in a variable.
+     * <br>
+     * Note that the function call instruction is used to call a function with the specified signature and arguments.
+     * The function must have the same signature as the one specified in the signature parameter.
+     * <br>
+     * For more information on the call instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#call-instruction">LLVM documentation</a>
+     *
+     * @param signature the LLVM type of the function being called
+     * @param function an IRFunction object that represents the function to be called
+     * @param arguments a list of IRValue objects that represent the arguments to the function
+     * @param name an optional name for the instruction (can be set to "" if not needed)
+     *
+     * @return an IRValue that represents the result of the function call
+     */
+    public @NotNull IRValue call(
+        @NotNull IRType signature, @NotNull IRFunction function, @NotNull List<@NotNull IRValue> arguments,
+        @NotNull String name
+    ) {
+        // unwrap the handles or the function call arguments
+        PointerPointer<Pointer> args = new PointerPointer<>(arguments.size());
+        for (int i = 0; i < arguments.size(); i++)
+            args.put(i, arguments.get(i).handle());
+        // create the function call instruction
+        LLVMValueRef call = LLVMBuildCall2(handle, signature.handle(), function.handle(), args, arguments.size(), name);
+        // wrap the function call instruction in an IRValue object
+        return new IRValue(call);
+    }
+
+    /**
+     * Perform a function call instruction. It is used to call a function with the specified signature and arguments.
+     * <br>
+     * The signature parameter specifies the type of the function being called. The function parameter is an IRFunction
+     * object that represents the function to be called. The arguments parameter is a list of IRValue objects that
+     * represent the arguments to the function.
+     * <br>
+     * The function returns an IRValue that represents the result of the function call. You can use this value in
+     * subsequent instructions or store it in a variable.
+     * <br>
+     * Note that the function call instruction is used to call a function with the specified signature and arguments.
+     * The function must have the same signature as the one specified in the signature parameter.
+     * <br>
+     * For more information on the call instruction, see the
+     * <a href="https://llvm.org/docs/LangRef.html#call-instruction">LLVM documentation</a>
+     *
+     * @param signature the LLVM type of the function being called
+     * @param function an IRFunction object that represents the function to be called
+     * @param arguments a list of IRValue objects that represent the arguments to the function
+     *
+     * @return an IRValue that represents the result of the function call
+     */
+    public @NotNull IRValue call(
+        @NotNull IRType signature, @NotNull IRFunction function, @NotNull List<@NotNull IRValue> arguments
+    ) {
+        return call(signature, function, arguments, "");
     }
 
     /**
