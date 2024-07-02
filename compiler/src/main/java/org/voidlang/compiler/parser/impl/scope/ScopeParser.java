@@ -72,6 +72,14 @@ public class ScopeParser extends ParserAlgorithm<Scope> {
         //                  ^ the `}` char indicates, that the parser should exit the current scope
         get(TokenType.END);
 
+
+        // skip the semicolon after the scope
+        // void foo() { ... };
+        //                   ^ the (auto-inserted) semicolon does not mean anything here, we just have to remove it
+        //                     because it will be an unexpected token in the next parsing step
+        if (peek().is(TokenType.SEMICOLON))
+            get();
+
         return new Scope(statements);
     }
 }

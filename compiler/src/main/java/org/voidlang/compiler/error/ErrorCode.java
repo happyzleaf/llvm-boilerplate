@@ -56,7 +56,12 @@ public enum ErrorCode {
     /**
      * `IMMUTABLE_ASSIGN` indicates, that a variable is being assigned even though it is immutable.
      */
-    IMMUTABLE_ASSIGN(109);
+    IMMUTABLE_ASSIGN(109),
+
+    /**
+     * `UNKNOWN_METHOD` indicates, that a method is being called that is not found.
+     */
+    UNKNOWN_METHOD(110);
 
     /**
      * The error code of the token error.

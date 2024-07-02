@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.common.EOF;
 import org.voidlang.compiler.ast.common.Error;
+import org.voidlang.compiler.ast.element.Method;
 import org.voidlang.compiler.ast.local.Variable;
 import org.voidlang.compiler.ast.scope.Scope;
 import org.voidlang.compiler.ast.type.Type;
@@ -20,10 +21,8 @@ import org.voidlang.llvm.type.IRType;
 import org.voidlang.llvm.value.IRValue;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.stream.Stream;
 
 /**
  * Represents the base class for all element of the Abstract Syntax Tree.
@@ -147,11 +146,11 @@ public abstract class Node {
      * <p>
      * Note that, a method name may be overloaded, and the parameter types are used to resolve the correct method.
      *
-     * @param name target type name
-     * @return resolved type or null if it was not found
+     * @param name the name of the method
+     * @return the resolved method, or {@link Optional#empty()} if the method was not found
      */
-    public @Nullable Method resolveMethod(@NotNull String name, @NotNull List<@NotNull Type> types) {
-        return parent != null ? parent.resolveMethod(name, types) : null;
+    public @NotNull Optional<Method> resolveMethod(@NotNull String name, @NotNull List<@NotNull Type> parameters) {
+        return parent != null ? parent.resolveMethod(name, parameters) : Optional.empty();
     }
 
     /**

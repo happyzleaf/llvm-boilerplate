@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import org.voidlang.compiler.ast.element.parameter.ImmutableParameterAccess;
 import org.voidlang.compiler.ast.local.Variable;
 import org.voidlang.compiler.ast.scope.ScopeContainer;
+import org.voidlang.compiler.ast.type.Type;
 import org.voidlang.compiler.node.NodeInfo;
 import org.voidlang.compiler.node.NodeType;
 import org.voidlang.compiler.ast.scope.Scope;
@@ -127,6 +128,27 @@ public class Method extends ScopeContainer implements Printable {
         }
 
         return super.resolveName(name);
+    }
+
+    /**
+     * Indicate, whether the signature of this method matches the specified parameter types.
+     *
+     * @param types the list of types to match against the method signature
+     * @return {@code true} if the method signature matches the specified types, {@code false} otherwise
+     */
+    public boolean matchTypes(@NotNull List<@NotNull Type> types) {
+        // if the number of parameters does not match, the method does not match
+        if (types.size() != parameters.size())
+            return false;
+
+        // check if the types of the parameters match
+        for (int i = 0; i < types.size(); i++) {
+            if (!parameters.get(i).type().matches(types.get(i)))
+                return false;
+        }
+
+        // signature seems to match, assume the method is the correct one
+        return true;
     }
 
     /**

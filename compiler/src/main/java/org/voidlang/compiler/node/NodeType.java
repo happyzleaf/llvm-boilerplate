@@ -16,6 +16,8 @@ public enum NodeType {
 
     NAME_ACCESS,
 
+    METHOD_CALL,
+
     IMMUTABLE_PARAMETER_ACCESS,
 
     BINARY_OPERATOR,
@@ -26,6 +28,7 @@ public enum NodeType {
     RETURN,
 
     METHOD,
+    PACKAGE,
 
     EMPTY,
     ERROR,
