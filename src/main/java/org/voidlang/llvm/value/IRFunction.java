@@ -1,7 +1,5 @@
 package org.voidlang.llvm.value;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
 import org.bytedeco.llvm.LLVM.LLVMValueRef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,8 +11,6 @@ import static org.bytedeco.llvm.global.LLVM.*;
 /**
  * Represents a wrapper for an LLVM function.
  */
-@Accessors(fluent = true)
-@Getter
 public class IRFunction extends IRValue {
     /**
      * The module in which the function is defined.
@@ -46,6 +42,18 @@ public class IRFunction extends IRValue {
         this.module = module;
         this.type = type;
         this.name = name;
+    }
+
+    public @NotNull IRModule module() {
+        return this.module;
+    }
+
+    public @NotNull IRFunctionType type() {
+        return this.type;
+    }
+
+    public @NotNull String name() {
+        return this.name;
     }
 
     /**

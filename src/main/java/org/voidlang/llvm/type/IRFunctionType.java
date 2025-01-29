@@ -1,6 +1,5 @@
 package org.voidlang.llvm.type;
 
-import lombok.Getter;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.LLVMTypeRef;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +12,6 @@ import static org.bytedeco.llvm.global.LLVM.LLVMFunctionType;
 /**
  * Represents a wrapper for an LLVM function type, which describes the type signature of a function.
  */
-@Getter
 public class IRFunctionType extends IRType {
     /**
      * The return type of the function.
@@ -47,6 +45,18 @@ public class IRFunctionType extends IRType {
         this.returnType = returnType;
         this.parameterTypes = parameterTypes;
         this.variadic = variadic;
+    }
+
+    public IRType returnType() {
+        return this.returnType;
+    }
+
+    public List<IRType> parameterTypes() {
+        return this.parameterTypes;
+    }
+
+    public boolean variadic() {
+        return this.variadic;
     }
 
     /**

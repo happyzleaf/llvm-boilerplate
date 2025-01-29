@@ -1,6 +1,5 @@
 package org.voidlang.llvm.type;
 
-import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.voidlang.llvm.module.IRContext;
 
@@ -9,7 +8,6 @@ import static org.bytedeco.llvm.global.LLVM.*;
 /**
  * Represents a utility class that creates wrappers for LLVM types.
  */
-@UtilityClass
 public class IRTypes {
     /**
      * Create a new 1-bit integer type for the specified context.
@@ -17,7 +15,7 @@ public class IRTypes {
      * @param context the context in which the type is defined
      * @return a new 1-bit integer type
      */
-    public @NotNull IRType ofInt1(@NotNull IRContext context) {
+    public static @NotNull IRType ofInt1(@NotNull IRContext context) {
         return new IRType(LLVMInt1TypeInContext(context.handle()), context);
     }
 
@@ -26,7 +24,7 @@ public class IRTypes {
      *
      * @return a new 1-bit integer type
      */
-    public @NotNull IRType ofInt1() {
+    public static @NotNull IRType ofInt1() {
         return new IRType(LLVMInt1Type(), IRContext.global());
     }
 
@@ -36,7 +34,7 @@ public class IRTypes {
      * @param context the context in which the type is defined
      * @return a new 8-bit integer type
      */
-    public @NotNull IRType ofInt8(@NotNull IRContext context) {
+    public static @NotNull IRType ofInt8(@NotNull IRContext context) {
         return new IRType(LLVMInt8TypeInContext(context.handle()), context);
     }
 
@@ -45,7 +43,7 @@ public class IRTypes {
      *
      * @return a new 8-bit integer type
      */
-    public @NotNull IRType ofInt8() {
+    public static @NotNull IRType ofInt8() {
         return new IRType(LLVMInt8Type(), IRContext.global());
     }
 
@@ -55,7 +53,7 @@ public class IRTypes {
      * @param context the context in which the type is defined
      * @return a new 16-bit integer type
      */
-    public @NotNull IRType ofInt16(@NotNull IRContext context) {
+    public static @NotNull IRType ofInt16(@NotNull IRContext context) {
         return new IRType(LLVMInt16TypeInContext(context.handle()), context);
     }
 
@@ -64,7 +62,7 @@ public class IRTypes {
      *
      * @return a new 16-bit integer type
      */
-    public @NotNull IRType ofInt16() {
+    public static @NotNull IRType ofInt16() {
         return new IRType(LLVMInt16Type(), IRContext.global());
     }
 
@@ -74,7 +72,7 @@ public class IRTypes {
      * @param context the context in which the type is defined
      * @return a new 32-bit integer type
      */
-    public @NotNull IRType ofInt32(@NotNull IRContext context) {
+    public static @NotNull IRType ofInt32(@NotNull IRContext context) {
         return new IRType(LLVMInt32TypeInContext(context.handle()), context);
     }
 
@@ -83,7 +81,7 @@ public class IRTypes {
      *
      * @return a new 32-bit integer type
      */
-    public @NotNull IRType ofInt32() {
+    public static @NotNull IRType ofInt32() {
         return new IRType(LLVMInt32Type(), IRContext.global());
     }
 
@@ -93,7 +91,7 @@ public class IRTypes {
      * @param context the context in which the type is defined
      * @return a new 64-bit integer type
      */
-    public @NotNull IRType ofInt64(@NotNull IRContext context) {
+    public static @NotNull IRType ofInt64(@NotNull IRContext context) {
         return new IRType(LLVMInt64TypeInContext(context.handle()), context);
     }
 
@@ -102,7 +100,7 @@ public class IRTypes {
      *
      * @return a new 64-bit integer type
      */
-    public @NotNull IRType ofInt64() {
+    public static @NotNull IRType ofInt64() {
         return new IRType(LLVMInt64Type(), IRContext.global());
     }
 
@@ -112,7 +110,7 @@ public class IRTypes {
      * @param context the context in which the type is defined
      * @return a new 128-bit integer type
      */
-    public @NotNull IRType ofInt128(@NotNull IRContext context) {
+    public static @NotNull IRType ofInt128(@NotNull IRContext context) {
         return new IRType(LLVMInt128TypeInContext(context.handle()), context);
     }
 
@@ -121,7 +119,7 @@ public class IRTypes {
      *
      * @return a new 128-bit integer type
      */
-    public @NotNull IRType ofInt128() {
+    public static @NotNull IRType ofInt128() {
         return new IRType(LLVMInt128Type(), IRContext.global());
     }
 
@@ -131,7 +129,7 @@ public class IRTypes {
      *
      * @return a new 32-bit floating-point type
      */
-    public @NotNull IRType ofFloat(@NotNull IRContext context) {
+    public static @NotNull IRType ofFloat(@NotNull IRContext context) {
         return new IRType(LLVMFloatTypeInContext(context.handle()), context);
     }
 
@@ -140,7 +138,7 @@ public class IRTypes {
      *
      * @return a new 32-bit floating-point type
      */
-    public @NotNull IRType ofFloat() {
+    public static @NotNull IRType ofFloat() {
         return new IRType(LLVMFloatType(), IRContext.global());
     }
 
@@ -150,7 +148,7 @@ public class IRTypes {
      *
      * @return a new 64-bit floating-point type
      */
-    public @NotNull IRType ofDouble(@NotNull IRContext context) {
+    public static @NotNull IRType ofDouble(@NotNull IRContext context) {
         return new IRType(LLVMDoubleTypeInContext(context.handle()), context);
     }
 
@@ -159,7 +157,7 @@ public class IRTypes {
      *
      * @return a new 64-bit floating-point type
      */
-    public @NotNull IRType ofDouble() {
+    public static @NotNull IRType ofDouble() {
         return new IRType(LLVMDoubleType(), IRContext.global());
     }
 
@@ -169,7 +167,7 @@ public class IRTypes {
      *
      * @return a new void type
      */
-    public @NotNull IRType ofVoid(@NotNull IRContext context) {
+    public static @NotNull IRType ofVoid(@NotNull IRContext context) {
         return new IRType(LLVMVoidTypeInContext(context.handle()), context);
     }
 
@@ -178,7 +176,7 @@ public class IRTypes {
      *
      * @return a new void type
      */
-    public @NotNull IRType ofVoid() {
+    public static @NotNull IRType ofVoid() {
         return new IRType(LLVMVoidType(), IRContext.global());
     }
 
@@ -190,7 +188,7 @@ public class IRTypes {
      *
      * @return a new pointer type
      */
-    public @NotNull IRType ofPointer(@NotNull IRType type, int addressSpace) {
+    public static @NotNull IRType ofPointer(@NotNull IRType type, int addressSpace) {
         return new IRType(LLVMPointerType(type.handle(), addressSpace), type.context());
     }
 
@@ -201,7 +199,7 @@ public class IRTypes {
      *
      * @return a new pointer type
      */
-    public @NotNull IRType ofPointer(@NotNull IRType type) {
+    public static @NotNull IRType ofPointer(@NotNull IRType type) {
         return ofPointer(type, 0);
     }
 
@@ -213,7 +211,7 @@ public class IRTypes {
      *
      * @return a new array type
      */
-    public @NotNull IRType ofArray(@NotNull IRType type, int size) {
+    public static @NotNull IRType ofArray(@NotNull IRType type, int size) {
         return new IRType(LLVMArrayType(type.handle(), size), type.context());
     }
 }
