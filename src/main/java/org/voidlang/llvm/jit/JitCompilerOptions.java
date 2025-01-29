@@ -1,14 +1,13 @@
 package org.voidlang.llvm.jit;
 
 import org.bytedeco.llvm.LLVM.LLVMMCJITCompilerOptions;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a wrapper for the options of an LLVM Just-In-Time (JIT) compiler.
  *
  * @param handle the handle to the LLVM JIT compiler options
  */
-public record JitCompilerOptions(@NotNull LLVMMCJITCompilerOptions handle) {
+public record JitCompilerOptions(LLVMMCJITCompilerOptions handle) {
     /**
      * Update the optimization level of the JIT compiler.
      *
@@ -86,7 +85,7 @@ public record JitCompilerOptions(@NotNull LLVMMCJITCompilerOptions handle) {
      *
      * @return the new JIT compiler options
      */
-    public static @NotNull JitCompilerOptions create() {
+    public static JitCompilerOptions create() {
         return new JitCompilerOptions(new LLVMMCJITCompilerOptions());
     }
 }

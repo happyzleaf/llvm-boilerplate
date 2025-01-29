@@ -2,11 +2,12 @@ package org.voidlang.llvm.module;
 
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.llvm.LLVM.LLVMModuleRef;
-import static org.bytedeco.llvm.global.LLVM.*;
 
-import org.jetbrains.annotations.NotNull;
 import org.voidlang.llvm.behaviour.Disposable;
 import org.voidlang.llvm.error.VerificationFailureAction;
+
+import static org.bytedeco.llvm.global.LLVM.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Represents an LLVM module that is associated with a source file.
@@ -15,9 +16,7 @@ import org.voidlang.llvm.error.VerificationFailureAction;
  * @param context the context in which the module is created.
  * @param name the name of the module.
  */
-public record IRModule(
-    @NotNull LLVMModuleRef handle, @NotNull IRContext context, @NotNull String name
-) implements Disposable {
+public record IRModule(LLVMModuleRef handle, IRContext context, String name) implements Disposable {
     /**
      * Dispose of the value handle held by this object.
      */
@@ -41,8 +40,8 @@ public record IRModule(
      * @param error the error message buffer
      * @return {@code true} if the verification was successful, otherwise {@code false}
      */
-    public boolean verify(@NotNull VerificationFailureAction action, @NotNull BytePointer error) {
-        return LLVMVerifyModule(handle, action.code(), error) == 0;
+    public boolean verify(VerificationFailureAction action, BytePointer error) {
+        return LLVMVerifyModule(handle, checkNotNull(action, "action").code(), error) == 0;
     }
 
     /**
@@ -52,7 +51,7 @@ public record IRModule(
      * @param name the name of the module
      * @return a new LLVM module
      */
-    public static @NotNull IRModule create(@NotNull IRContext context, @NotNull String name) {
-        return new IRModule(LLVMModuleCreateWithNameInContext(name, context.handle()), context, name);
+    public static IRModule create(IRContext context, String name) {
+        return new IRModule(LLVMModuleCreateWithNameInContext(checkNotNull(name, "name"), checkNotNull(context, "context").handle()), context, name);
     }
 }

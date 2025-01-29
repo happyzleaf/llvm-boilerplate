@@ -4,8 +4,6 @@ import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
 import org.bytedeco.llvm.LLVM.LLVMValueRef;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
 import org.voidlang.llvm.behaviour.Disposable;
 import org.voidlang.llvm.module.IRContext;
 import org.voidlang.llvm.type.IRType;
@@ -15,6 +13,7 @@ import org.voidlang.llvm.value.IRValue;
 import java.util.List;
 
 import static org.bytedeco.llvm.global.LLVM.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Represents a handle to an LLVM IR builder. It is a pointer to an opaque structure that represents the builder
@@ -26,7 +25,7 @@ import static org.bytedeco.llvm.global.LLVM.*;
  * This class type is typically used as a parameter type in various LLVM builder-related functions,
  * allowing you to pass and manipulate the builder object.
  */
-public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext context) implements Disposable {
+public record IRBuilder(LLVMBuilderRef handle, IRContext context) implements Disposable {
     /**
      * Position the LLVM IR builder at the end of a basic block. It is used to specify the insertion point for
      * new instructions within a basic block.
@@ -40,8 +39,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param block the LLVM basic block where the builder should be positioned
      */
-    public void positionAtEnd(@NotNull IRBlock block) {
-        LLVMPositionBuilderAtEnd(handle, block.handle());
+    public void positionAtEnd(IRBlock block) {
+        LLVMPositionBuilderAtEnd(handle, checkNotNull(block, "block").handle());
     }
 
     /**
@@ -55,8 +54,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @param value the LLVM instruction before which the builder should be positioned
      */
-    public void positionBefore(@NotNull IRValue value) {
-        LLVMPositionBuilderBefore(handle, value.handle());
+    public void positionBefore(IRValue value) {
+        LLVMPositionBuilderBefore(handle, checkNotNull(value, "value").handle());
     }
 
     /**
@@ -71,8 +70,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param value the value to be returned by the function
      * @return an IRValue that represents the return instruction
      */
-    public @NotNull IRValue returnValue(@NotNull IRValue value) {
-        return new IRValue(LLVMBuildRet(handle, value.handle()));
+    public IRValue returnValue(IRValue value) {
+        return new IRValue(LLVMBuildRet(handle, checkNotNull(value, "value").handle()));
     }
 
     /**
@@ -88,7 +87,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the return instruction
      */
-    public @NotNull IRValue returnVoid() {
+    public IRValue returnVoid() {
         return new IRValue(LLVMBuildRetVoid(handle));
     }
 
@@ -109,8 +108,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the addition operation
      */
-    public @NotNull IRValue add(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildAdd(handle, left.handle(), right.handle(), name));
+    public IRValue add(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildAdd(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -129,8 +128,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the addition operation
      */
-    public @NotNull IRValue add(@NotNull IRValue left, @NotNull IRValue right) {
-        return new IRValue(LLVMBuildAdd(handle, left.handle(), right.handle(), ""));
+    public IRValue add(IRValue left, IRValue right) {
+        return new IRValue(LLVMBuildAdd(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), ""));
     }
 
     /**
@@ -146,8 +145,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the addition operation
      */
-    public @NotNull IRValue addFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildFAdd(handle, left.handle(), right.handle(), name));
+    public IRValue addFloat(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildFAdd(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -162,8 +161,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the addition operation
      */
-    public @NotNull IRValue addFloat(@NotNull IRValue left, @NotNull IRValue right) {
-        return new IRValue(LLVMBuildFAdd(handle, left.handle(), right.handle(), ""));
+    public IRValue addFloat(IRValue left, IRValue right) {
+        return new IRValue(LLVMBuildFAdd(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), ""));
     }
 
     /**
@@ -184,8 +183,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the addition operation
      */
-    public @NotNull IRValue addNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildNSWAdd(handle, left.handle(), right.handle(), name));
+    public IRValue addNoSignedWrap(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildNSWAdd(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -205,8 +204,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the addition operation
      */
-    public @NotNull IRValue addNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
-        return new IRValue(LLVMBuildNSWAdd(handle, left.handle(), right.handle(), ""));
+    public IRValue addNoSignedWrap(IRValue left, IRValue right) {
+        return new IRValue(LLVMBuildNSWAdd(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), ""));
     }
 
     /**
@@ -227,8 +226,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the addition operation
      */
-    public @NotNull IRValue addNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildNUWAdd(handle, left.handle(), right.handle(), name));
+    public IRValue addNoUnsignedWrap(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildNUWAdd(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -248,8 +247,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the addition operation
      */
-    public @NotNull IRValue addNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
-        return new IRValue(LLVMBuildNUWAdd(handle, left.handle(), right.handle(), ""));
+    public IRValue addNoUnsignedWrap(IRValue left, IRValue right) {
+        return new IRValue(LLVMBuildNUWAdd(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), ""));
     }
 
     /**
@@ -272,8 +271,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the subtraction operation
      */
-    public @NotNull IRValue subtract(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildSub(handle, left.handle(), right.handle(), name));
+    public IRValue subtract(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildSub(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -295,7 +294,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the subtraction operation
      */
-    public @NotNull IRValue subtract(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue subtract(IRValue left, IRValue right) {
         return subtract(left, right, "");
     }
 
@@ -315,8 +314,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the subtraction operation
      */
-    public @NotNull IRValue subtractFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildFSub(handle, left.handle(), right.handle(), name));
+    public IRValue subtractFloat(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildFSub(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -334,7 +333,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the subtraction operation
      */
-    public @NotNull IRValue subtractFloat(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue subtractFloat(IRValue left, IRValue right) {
         return subtractFloat(left, right, "");
     }
 
@@ -358,8 +357,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the subtraction operation
      */
-    public @NotNull IRValue subtractNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildNSWSub(handle, left.handle(), right.handle(), name));
+    public IRValue subtractNoSignedWrap(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildNSWSub(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -381,7 +380,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the subtraction operation
      */
-    public @NotNull IRValue subtractNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue subtractNoSignedWrap(IRValue left, IRValue right) {
         return subtractNoSignedWrap(left, right, "");
     }
 
@@ -405,8 +404,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the subtraction operation
      */
-    public @NotNull IRValue subtractNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildNUWSub(handle, left.handle(), right.handle(), name));
+    public IRValue subtractNoUnsignedWrap(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildNUWSub(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -428,7 +427,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the subtraction operation
      */
-    public @NotNull IRValue subtractNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue subtractNoUnsignedWrap(IRValue left, IRValue right) {
         return subtractNoUnsignedWrap(left, right, "");
     }
 
@@ -452,8 +451,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the multiplication operation
      */
-    public @NotNull IRValue multiply(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildMul(handle, left.handle(), right.handle(), name));
+    public IRValue multiply(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildMul(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -475,7 +474,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the multiplication operation
      */
-    public @NotNull IRValue multiply(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue multiply(IRValue left, IRValue right) {
         return multiply(left, right, "");
     }
 
@@ -495,8 +494,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the multiplication operation
      */
-    public @NotNull IRValue multiplyFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildFMul(handle, left.handle(), right.handle(), name));
+    public IRValue multiplyFloat(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildFMul(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -514,7 +513,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the multiplication operation
      */
-    public @NotNull IRValue multiplyFloat(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue multiplyFloat(IRValue left, IRValue right) {
         return multiplyFloat(left, right, "");
     }
 
@@ -539,8 +538,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the multiplication operation
      */
-    public @NotNull IRValue multiplyNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildNSWMul(handle, left.handle(), right.handle(), name));
+    public IRValue multiplyNoSignedWrap(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildNSWMul(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -563,7 +562,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the multiplication operation
      */
-    public @NotNull IRValue multiplyNoSignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue multiplyNoSignedWrap(IRValue left, IRValue right) {
         return multiplyNoSignedWrap(left, right, "");
     }
 
@@ -588,8 +587,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the multiplication operation
      */
-    public @NotNull IRValue multiplyNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildNUWMul(handle, left.handle(), right.handle(), name));
+    public IRValue multiplyNoUnsignedWrap(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildNUWMul(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -612,7 +611,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the multiplication operation
      */
-    public @NotNull IRValue multiplyNoUnsignedWrap(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue multiplyNoUnsignedWrap(IRValue left, IRValue right) {
         return multiplyNoUnsignedWrap(left, right, "");
     }
 
@@ -636,8 +635,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the division operation
      */
-    public @NotNull IRValue divideFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildFDiv(handle, left.handle(), right.handle(), name));
+    public IRValue divideFloat(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildFDiv(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -659,7 +658,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the division operation
      */
-    public @NotNull IRValue divideFloat(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue divideFloat(IRValue left, IRValue right) {
         return divideFloat(left, right, "");
     }
 
@@ -678,8 +677,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the division operation
      */
-    public @NotNull IRValue divideSigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildSDiv(handle, left.handle(), right.handle(), name));
+    public IRValue divideSigned(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildSDiv(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -696,7 +695,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the division operation
      */
-    public @NotNull IRValue divideSigned(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue divideSigned(IRValue left, IRValue right) {
         return divideSigned(left, right, "");
     }
 
@@ -715,8 +714,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the division operation
      */
-    public @NotNull IRValue divideUnsigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildUDiv(handle, left.handle(), right.handle(), name));
+    public IRValue divideUnsigned(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildUDiv(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -733,7 +732,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the division operation
      */
-    public @NotNull IRValue divideUnsigned(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue divideUnsigned(IRValue left, IRValue right) {
         return divideUnsigned(left, right, "");
     }
 
@@ -753,8 +752,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the division operation
      */
-    public @NotNull IRValue divideExactSigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildExactSDiv(handle, left.handle(), right.handle(), name));
+    public IRValue divideExactSigned(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildExactSDiv(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -772,7 +771,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the division operation
      */
-    public @NotNull IRValue divideExactSigned(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue divideExactSigned(IRValue left, IRValue right) {
         return divideExactSigned(left, right, "");
     }
 
@@ -792,8 +791,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the division operation
      */
-    public @NotNull IRValue divideExactUnsigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildExactUDiv(handle, left.handle(), right.handle(), name));
+    public IRValue divideExactUnsigned(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildExactUDiv(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -811,7 +810,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the division operation
      */
-    public @NotNull IRValue divideExactUnsigned(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue divideExactUnsigned(IRValue left, IRValue right) {
         return divideExactUnsigned(left, right, "");
     }
 
@@ -835,8 +834,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the remainder of the division operation
      */
-    public @NotNull IRValue remainderFloat(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildFRem(handle, left.handle(), right.handle(), name));
+    public IRValue remainderFloat(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildFRem(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -858,7 +857,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the remainder of the division operation
      */
-    public @NotNull IRValue remainderFloat(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue remainderFloat(IRValue left, IRValue right) {
         return remainderFloat(left, right, "");
     }
 
@@ -878,8 +877,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the remainder of the division operation
      */
-    public @NotNull IRValue remainderSigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildSRem(handle, left.handle(), right.handle(), name));
+    public IRValue remainderSigned(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildSRem(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -897,7 +896,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the remainder of the division operation
      */
-    public @NotNull IRValue remainderSigned(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue remainderSigned(IRValue left, IRValue right) {
         return remainderSigned(left, right, "");
     }
 
@@ -917,8 +916,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the remainder of the division operation
      */
-    public @NotNull IRValue remainderUnsigned(@NotNull IRValue left, @NotNull IRValue right, @NotNull String name) {
-        return new IRValue(LLVMBuildURem(handle, left.handle(), right.handle(), name));
+    public IRValue remainderUnsigned(IRValue left, IRValue right, String name) {
+        return new IRValue(LLVMBuildURem(handle, checkNotNull(left, "left").handle(), checkNotNull(right, "right").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -936,7 +935,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the remainder of the division operation
      */
-    public @NotNull IRValue remainderUnsigned(@NotNull IRValue left, @NotNull IRValue right) {
+    public IRValue remainderUnsigned(IRValue left, IRValue right) {
         return remainderUnsigned(left, right, "");
     }
 
@@ -961,8 +960,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the pointer to the newly allocated variable
      */
-    public @NotNull IRValue alloc(@NotNull IRType type, @NotNull String name) {
-        return new IRValue(LLVMBuildAlloca(handle, type.handle(), name));
+    public IRValue alloc(IRType type, String name) {
+        return new IRValue(LLVMBuildAlloca(handle, checkNotNull(type, "type").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -984,7 +983,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      * @param type the LLVM type of the variable to be allocated
      * @return an IRValue that represents the pointer to the newly allocated variable
      */
-    public @NotNull IRValue alloc(@NotNull IRType type) {
+    public IRValue alloc(IRType type) {
         return alloc(type, "");
     }
 
@@ -1014,8 +1013,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the loaded value
      */
-    public @NotNull IRValue load(@NotNull IRType type, @NotNull IRValue pointer, @NotNull String name) {
-        return new IRValue(LLVMBuildLoad2(handle, type.handle(), pointer.handle(), name));
+    public IRValue load(IRType type, IRValue pointer, String name) {
+        return new IRValue(LLVMBuildLoad2(handle, checkNotNull(type, "type").handle(), checkNotNull(pointer, "pointer").handle(), checkNotNull(name, "name")));
     }
 
     /**
@@ -1041,7 +1040,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the loaded value
      */
-    public @NotNull IRValue load(@NotNull IRType type, @NotNull IRValue pointer) {
+    public IRValue load(IRType type, IRValue pointer) {
         return load(type, pointer, "");
     }
 
@@ -1068,8 +1067,8 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the stored value
      */
-    public @NotNull IRValue store(@NotNull IRValue value, @Unmodifiable IRValue pointer) {
-        return new IRValue(LLVMBuildStore(handle, value.handle(), pointer.handle()));
+    public IRValue store(IRValue value, /*@Unmodifiable*/ IRValue pointer) {
+        return new IRValue(LLVMBuildStore(handle, value.handle(), checkNotNull(pointer, "pointer").handle()));
     }
 
     /**
@@ -1097,16 +1096,13 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the function call
      */
-    public @NotNull IRValue call(
-        @NotNull IRType signature, @NotNull IRFunction function, @NotNull List<@NotNull IRValue> arguments,
-        @NotNull String name
-    ) {
+    public IRValue call(IRType signature, IRFunction function, List<IRValue> arguments, String name) {
         // unwrap the handles or the function call arguments
-        PointerPointer<Pointer> args = new PointerPointer<>(arguments.size());
+        PointerPointer<Pointer> args = new PointerPointer<>(checkNotNull(arguments).size());
         for (int i = 0; i < arguments.size(); i++)
-            args.put(i, arguments.get(i).handle());
+            args.put(i, checkNotNull(arguments.get(i), "arguments.get(" + i + ")").handle());
         // create the function call instruction
-        LLVMValueRef call = LLVMBuildCall2(handle, signature.handle(), function.handle(), args, arguments.size(), name);
+        LLVMValueRef call = LLVMBuildCall2(handle, checkNotNull(signature, "signature").handle(), checkNotNull(function, "function").handle(), args, arguments.size(), checkNotNull(name, "name"));
         // wrap the function call instruction in an IRValue object
         return new IRValue(call);
     }
@@ -1133,9 +1129,7 @@ public record IRBuilder(@NotNull LLVMBuilderRef handle, @NotNull IRContext conte
      *
      * @return an IRValue that represents the result of the function call
      */
-    public @NotNull IRValue call(
-        @NotNull IRType signature, @NotNull IRFunction function, @NotNull List<@NotNull IRValue> arguments
-    ) {
+    public IRValue call(IRType signature, IRFunction function, List<IRValue> arguments) {
         return call(signature, function, arguments, "");
     }
 

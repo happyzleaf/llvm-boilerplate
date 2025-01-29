@@ -4,7 +4,6 @@ import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.LLVMExecutionEngineRef;
 import org.bytedeco.llvm.LLVM.LLVMGenericValueRef;
-import org.jetbrains.annotations.NotNull;
 import org.voidlang.llvm.behaviour.Disposable;
 import org.voidlang.llvm.module.IRModule;
 import org.voidlang.llvm.value.IRFunction;
@@ -12,13 +11,14 @@ import org.voidlang.llvm.value.IRFunction;
 import java.util.List;
 
 import static org.bytedeco.llvm.global.LLVM.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Represents a wrapper for an LLVM Just-In-Time (JIT) execution engine.
  *
  * @param handle the handle to the LLVM execution engine
  */
-public record ExecutionEngine(@NotNull LLVMExecutionEngineRef handle) implements Disposable {
+public record ExecutionEngine(LLVMExecutionEngineRef handle) implements Disposable {
     /**
      * Run the specified function with the specified arguments.
      *
@@ -26,12 +26,12 @@ public record ExecutionEngine(@NotNull LLVMExecutionEngineRef handle) implements
      * @param arguments the arguments to pass to the function
      * @return the result of the function
      */
-    public @NotNull IRGenericValue runFunction(@NotNull IRFunction function, @NotNull List<@NotNull IRGenericValue> arguments) {
+    public IRGenericValue runFunction(IRFunction function, List<IRGenericValue> arguments) {
         // unwrap the LLVM handles of the arguments
-        int argsLength = arguments.size();
+        int argsLength = checkNotNull(arguments, "arguments").size();
         PointerPointer<LLVMGenericValueRef> args = new PointerPointer<>(argsLength);
         for (int i = 0; i < argsLength; i++)
-            args.put(i, arguments.get(i).handle());
+            args.put(i, checkNotNull(arguments.get(i), "arguments.get(" + i + ")").handle());
         // run the function and return the result
         return new IRGenericValue(LLVMRunFunction(handle, function.handle(), argsLength, args));
     }
@@ -44,12 +44,8 @@ public record ExecutionEngine(@NotNull LLVMExecutionEngineRef handle) implements
      * @param error the error message buffer
      * @return {@code true} if the compiler was created successfully, otherwise {@code false}
      */
-    public boolean createMCJITCompilerForModule(
-        @NotNull IRModule module, @NotNull JitCompilerOptions options, @NotNull BytePointer error
-    ) {
-        return LLVMCreateMCJITCompilerForModule(
-            handle, module.handle(), options.handle(), options.handle().sizeof(), error
-        ) == 0;
+    public boolean createMCJITCompilerForModule(IRModule module, JitCompilerOptions options, BytePointer error) {
+        return LLVMCreateMCJITCompilerForModule(handle, checkNotNull(module, "module").handle(), checkNotNull(options, "options").handle(), options.handle().sizeof(), error) == 0;
     }
 
     /**
@@ -65,7 +61,7 @@ public record ExecutionEngine(@NotNull LLVMExecutionEngineRef handle) implements
      *
      * @return the new LLVM execution engine
      */
-    public static @NotNull ExecutionEngine create() {
+    public static ExecutionEngine create() {
         return new ExecutionEngine(new LLVMExecutionEngineRef());
     }
 }

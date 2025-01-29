@@ -1,12 +1,12 @@
 package org.voidlang.llvm.value;
 
+import com.google.common.base.Optional;
 import org.bytedeco.llvm.LLVM.LLVMValueRef;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.voidlang.llvm.module.IRModule;
 import org.voidlang.llvm.type.IRFunctionType;
 
 import static org.bytedeco.llvm.global.LLVM.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Represents a wrapper for an LLVM function.
@@ -15,17 +15,17 @@ public class IRFunction extends IRValue {
     /**
      * The module in which the function is defined.
      */
-    private final @NotNull IRModule module;
+    private final IRModule module;
 
     /**
      * The type signature of the function.
      */
-    private final @NotNull IRFunctionType type;
+    private final IRFunctionType type;
 
     /**
      * The name of the function.
      */
-    private final @NotNull String name;
+    private final String name;
 
     /**
      * Initialize the function with the specified handle, module, type and name.
@@ -35,24 +35,22 @@ public class IRFunction extends IRValue {
      * @param type the type signature of the function
      * @param name the name of the function
      */
-    public IRFunction(
-        @NotNull LLVMValueRef handle, @NotNull IRModule module, @NotNull IRFunctionType type, @NotNull String name
-    ) {
+    public IRFunction(LLVMValueRef handle, IRModule module, IRFunctionType type, String name) {
         super(handle);
-        this.module = module;
-        this.type = type;
-        this.name = name;
+        this.module = checkNotNull(module, "module");
+        this.type = checkNotNull(type, "type");
+        this.name = checkNotNull(name, "name");
     }
 
-    public @NotNull IRModule module() {
+    public IRModule module() {
         return this.module;
     }
 
-    public @NotNull IRFunctionType type() {
+    public IRFunctionType type() {
         return this.type;
     }
 
-    public @NotNull String name() {
+    public String name() {
         return this.name;
     }
 
@@ -62,8 +60,8 @@ public class IRFunction extends IRValue {
      * @param index the index of the parameter
      * @return the value of the parameter
      */
-    public @NotNull IRValue parameter(int index) {
-        return new IRValue(LLVMGetParam(handle(), index));
+    public IRValue parameter(int index) {
+        return new IRValue(LLVMGetParam(handle, index));
     }
 
     /**
@@ -75,10 +73,8 @@ public class IRFunction extends IRValue {
      *
      * @return a new function
      */
-    public static @NotNull IRFunction create(
-        @NotNull IRModule module, @NotNull String name, @NotNull IRFunctionType type
-    ) {
-        return new IRFunction(LLVMAddFunction(module.handle(), name, type.handle()), module, type, name);
+    public static IRFunction create(IRModule module, String name, IRFunctionType type) {
+        return new IRFunction(LLVMAddFunction(checkNotNull(module, "module").handle(), name, checkNotNull(type, "type").handle()), module, type, name);
     }
 
     /**
@@ -90,15 +86,12 @@ public class IRFunction extends IRValue {
      *
      * @return the function with the specified name, or null if no such function exists
      */
-    public static @Nullable IRFunction getByName(
-        @NotNull IRModule module, @NotNull String name, @NotNull IRFunctionType type
-    ) {
+    public static Optional<IRFunction> getByName(IRModule module, String name, IRFunctionType type) {
         // resolve the function from the module
-        LLVMValueRef handle = LLVMGetNamedFunction(module.handle(), name);
-        if (handle == null)
-            return null;
+        LLVMValueRef handle = LLVMGetNamedFunction(checkNotNull(module, "module").handle(), checkNotNull(name, "name"));
+        if (handle == null) return Optional.absent();
 
         // create a new wrapper for the function
-        return new IRFunction(handle, module, type, name);
+        return Optional.of(new IRFunction(handle, module, type, name));
     }
 }

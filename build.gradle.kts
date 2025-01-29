@@ -16,13 +16,9 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.jetbrains:annotations:24.0.1")
-    testCompileOnly("org.jetbrains:annotations:24.0.1")
-
     implementation("com.google.guava:guava:33.2.1-jre")
 
     implementation("org.bytedeco:llvm-platform:16.0.4-1.5.9")
     implementation("org.bytedeco:javacpp:1.5.9")
     implementation("org.bytedeco:llvm:16.0.4-1.5.9")
-    // implementation("org.bytedeco:libffi-platform:3.4.4-1.5.10-SNAPSHOT")
 }

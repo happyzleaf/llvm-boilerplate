@@ -2,12 +2,12 @@ package org.voidlang.llvm.type;
 
 import org.bytedeco.llvm.LLVM.LLVMTypeRef;
 
-import org.jetbrains.annotations.NotNull;
 import org.voidlang.llvm.module.IRContext;
 import org.voidlang.llvm.value.IRValue;
 
 import static org.bytedeco.llvm.global.LLVM.LLVMConstInt;
 import static org.bytedeco.llvm.global.LLVM.LLVMConstReal;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Represents an LLVM value type in a module context.
@@ -16,23 +16,23 @@ public class IRType {
     /**
      * The handle to the LLVM type.
      */
-    private final @NotNull LLVMTypeRef handle;
+    private final LLVMTypeRef handle;
 
     /**
      * The context in which the type is defined.
      */
-    private final @NotNull IRContext context;
+    private final IRContext context;
 
-    public IRType(@NotNull LLVMTypeRef handle, @NotNull IRContext context) {
-        this.handle = handle;
-        this.context = context;
+    public IRType(LLVMTypeRef handle, IRContext context) {
+        this.handle = checkNotNull(handle, "handle");
+        this.context = checkNotNull(context, "context");
     }
 
-    public @NotNull LLVMTypeRef handle() {
+    public LLVMTypeRef handle() {
         return this.handle;
     }
 
-    public @NotNull IRContext context() {
+    public IRContext context() {
         return this.context;
     }
 

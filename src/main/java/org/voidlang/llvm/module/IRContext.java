@@ -1,8 +1,6 @@
 package org.voidlang.llvm.module;
 
 import org.bytedeco.llvm.LLVM.LLVMContextRef;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.voidlang.llvm.behaviour.Disposable;
 import static org.bytedeco.llvm.global.LLVM.*;
 
@@ -11,11 +9,11 @@ import static org.bytedeco.llvm.global.LLVM.*;
  *
  * @param handle the handle to the LLVM context.
  */
-public record IRContext(@NotNull LLVMContextRef handle) implements Disposable {
+public record IRContext(LLVMContextRef handle) implements Disposable {
     /**
      * The global LLVM context.
      */
-    private static @Nullable IRContext global;
+    private static IRContext global = null;
 
     /**
      * Retrieve the indication, whether {@code this} context is the global context.
@@ -39,7 +37,7 @@ public record IRContext(@NotNull LLVMContextRef handle) implements Disposable {
      *
      * @return a new LLVM context
      */
-    public static @NotNull IRContext create() {
+    public static IRContext create() {
         return new IRContext(LLVMContextCreate());
     }
 
@@ -48,7 +46,7 @@ public record IRContext(@NotNull LLVMContextRef handle) implements Disposable {
      *
      * @return the global LLVM context
      */
-    public static @NotNull IRContext global() {
+    public static IRContext global() {
         return global != null ? global : (global = new IRContext(LLVMGetGlobalContext()));
     }
 }

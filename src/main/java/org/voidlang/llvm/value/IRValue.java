@@ -1,11 +1,12 @@
 package org.voidlang.llvm.value;
 
 import org.bytedeco.llvm.LLVM.LLVMValueRef;
-import static org.bytedeco.llvm.global.LLVM.*;
 
-import org.jetbrains.annotations.NotNull;
 import org.voidlang.llvm.module.IRContext;
 import org.voidlang.llvm.type.IRType;
+
+import static org.bytedeco.llvm.global.LLVM.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Represents an LLVM value in a module context.
@@ -14,13 +15,13 @@ public class IRValue {
     /**
      * The handle to the LLVM value.
      */
-    private final @NotNull LLVMValueRef handle;
+    protected final LLVMValueRef handle;
 
-    public IRValue(@NotNull LLVMValueRef handle) {
-        this.handle = handle;
+    public IRValue(LLVMValueRef handle) {
+        this.handle = checkNotNull(handle, "handle");
     }
 
-    public @NotNull LLVMValueRef handle() {
+    public LLVMValueRef handle() {
         return handle;
     }
 
@@ -30,7 +31,7 @@ public class IRValue {
      * @param context the context in which the type is defined
      * @return the LLVM type of the value
      */
-    public @NotNull IRType typeOf(@NotNull IRContext context) {
+    public IRType typeOf(IRContext context) {
         return new IRType(LLVMTypeOf(handle), context);
     }
 
@@ -39,7 +40,7 @@ public class IRValue {
      *
      * @return the LLVM type of the value
      */
-    public @NotNull IRType typeOf() {
+    public IRType typeOf() {
         return typeOf(IRContext.global());
     }
 
@@ -57,8 +58,8 @@ public class IRValue {
      *
      * @param name the new name of the value
      */
-    public void setName(@NotNull String name) {
-        LLVMSetValueName(handle, name);
+    public void setName(String name) {
+        LLVMSetValueName(handle, checkNotNull(name, "name"));
     }
 
     /**
@@ -66,7 +67,7 @@ public class IRValue {
      *
      * @return the name of the value
      */
-    public @NotNull String getName() {
-        return LLVMGetValueName(handle).getString();
+    public String getName() {
+        return checkNotNull(LLVMGetValueName(handle).getString(), "name");
     }
 }
