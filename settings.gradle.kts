@@ -1,3 +1,1 @@
-rootProject.name = "void"
-include("llvm-wrapper")
-include("compiler")
+rootProject.name = "llvm-boilerplate"
