@@ -10,7 +10,7 @@ java {
 }
 
 group = "org.voidlang"
-version = System.getenv("VERSION") ?: "1.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
