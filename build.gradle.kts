@@ -23,3 +23,11 @@ dependencies {
     implementation("org.bytedeco:javacpp:1.5.9")
     implementation("org.bytedeco:llvm:16.0.4-1.5.9")
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
+    }
+}
