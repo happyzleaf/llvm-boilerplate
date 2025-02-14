@@ -19,9 +19,9 @@ repositories {
 dependencies {
     implementation("com.google.guava:guava:33.2.1-jre")
 
-    implementation("org.bytedeco:llvm-platform:16.0.4-1.5.9")
-    implementation("org.bytedeco:javacpp:1.5.9")
-    implementation("org.bytedeco:llvm:16.0.4-1.5.9")
+    api("org.bytedeco:llvm-platform:16.0.4-1.5.9")
+    api("org.bytedeco:javacpp:1.5.9")
+    api("org.bytedeco:llvm:16.0.4-1.5.9")
 }
 
 publishing {
