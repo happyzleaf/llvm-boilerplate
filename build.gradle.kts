@@ -10,7 +10,7 @@ java {
 }
 
 group = "org.voidlang"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
@@ -25,6 +25,8 @@ dependencies {
 }
 
 publishing {
+    group = "com.github.happyzleaf"
+
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
